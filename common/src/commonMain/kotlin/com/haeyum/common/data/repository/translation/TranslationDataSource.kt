@@ -5,7 +5,7 @@ import com.haeyum.common.data.model.languages.LanguagesResponse
 import com.haeyum.common.data.model.translate.TranslateResponse
 
 interface TranslationDataSource {
-    suspend fun getTranslate(q: String, target: String, source: String, key: String): TranslateResponse
-    suspend fun getDetect(q: String, key: String): DetectionsResponse
+    suspend fun translate(q: String, target: String, source: String, key: String): TranslateResponse
+    suspend fun detectLanguage(q: String, key: String): DetectionsResponse
     suspend fun getLanguages(target: String, key: String) : LanguagesResponse
 }

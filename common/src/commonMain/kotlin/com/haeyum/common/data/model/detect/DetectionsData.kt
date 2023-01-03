@@ -1,5 +1,8 @@
 package com.haeyum.common.data.model.detect
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DetectionsData(
-    val detections: List<Detection>
+    val detections: List<List<Detection>>
 )
