@@ -1,6 +1,5 @@
 package com.haeyum.android
 
-import com.haeyum.common.App
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                App()
+//                App()
             }
         }
     }

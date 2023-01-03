@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.haeyum.common
+package com.haeyum.common.presentation
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -30,40 +30,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
-import com.haeyum.common.domain.usecase.TranslateUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
-import org.koin.java.KoinJavaComponent.inject
-
-val translateUseCase: TranslateUseCase by inject(TranslateUseCase::class.java)
-val getSupportedLanguagesUseCase: GetSupportedLanguagesUseCase by inject(GetSupportedLanguagesUseCase::class.java)
 
 @Composable
-fun App(onMinimize: () -> Unit = {}) {
-    var translatedText by remember { mutableStateOf("") }
-    var query by remember { mutableStateOf("") }
-
-    var isRequesting by remember { mutableStateOf(false) }
+fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
+    val query by viewModel.query.collectAsState()
+    val translatedText by viewModel.translatedText.collectAsState()
+    val isRequesting by viewModel.isRequesting.collectAsState()
 
     val focusRequester = remember { FocusRequester() }
     val infiniteTransition = rememberInfiniteTransition()
 
     val clipboardManager = LocalClipboardManager.current
 
-    val colors: List<Color> = listOf(
-        Color(0xFF5851D8),
-        Color(0xFF833AB4),
-        Color(0xFFC13584),
-        Color(0xFFE1306C),
-        Color(0xFFFD1D1D),
-        Color(0xFFF56040),
-        Color(0xFFF77737),
-        Color(0xFFFCAF45),
-        Color(0xFFFFDC80),
-        Color(0xFF5851D8)
-    )
+    val colors: List<Color> = remember {
+        listOf(
+            Color(0xFF5851D8),
+            Color(0xFF833AB4),
+            Color(0xFFC13584),
+            Color(0xFFE1306C),
+            Color(0xFFFD1D1D),
+            Color(0xFFF56040),
+            Color(0xFFF77737),
+            Color(0xFFFCAF45),
+            Color(0xFFFFDC80),
+            Color(0xFF5851D8)
+        )
+    }
 
     val rotateAnimation by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -87,7 +79,7 @@ fun App(onMinimize: () -> Unit = {}) {
         ) {
             BasicTextField(
                 value = query,
-                onValueChange = { query = it.take(1000) },
+                onValueChange = { viewModel.setQuery(it.take(1000)) },
                 modifier = Modifier.weight(1f).focusRequester(focusRequester).onKeyEvent { keyEvent ->
                     if (keyEvent.key == Key.Enter) {
                         onMinimize()
@@ -96,6 +88,7 @@ fun App(onMinimize: () -> Unit = {}) {
                     true
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
+                singleLine = true,
                 maxLines = 1,
                 decorationBox = { innerTextField ->
                     if (query.isEmpty()) {
@@ -165,7 +158,7 @@ fun App(onMinimize: () -> Unit = {}) {
             if (translatedText.isBlank() || isRequesting) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(10.dp)
+                        .padding(top = 96.dp)
                         .size(64.dp)
                         .rotate(rotateAnimation)
                         .border(width = 4.dp, brush = Brush.sweepGradient(colors), shape = CircleShape),
@@ -218,62 +211,10 @@ fun App(onMinimize: () -> Unit = {}) {
                     }
                 }
             }
-
-//        Text(
-//            text = "You typed: $inputText",
-//            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-//            style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 14.sp, fontWeight = FontWeight.Medium)
-//        )
-//        Text(
-//            text = "Translate Result: $translatedText",
-//            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-//            style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 14.sp, fontWeight = FontWeight.Medium)
-//        )
         }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
-        }
-
-        LaunchedEffect(Unit) {
-            snapshotFlow { query }
-                .filter { it.isNotEmpty() }
-                .debounce(1000)
-                .onEach {
-                    isRequesting = true
-                }
-                .mapLatest { query ->
-//                    KtorClient.fetchTranslate(q = query, source = "en", target = "ko")
-                    translateUseCase(q = query, source = "en", target = "ko", key = "")
-//                    KtorClient.fetchTranslate(q = query, source = "en", target = "ko")
-                }
-                .flowOn(Dispatchers.IO)
-                .catch {
-                    isRequesting = false
-                    it.printStackTrace()
-                }
-                .collectLatest { response ->
-                    isRequesting = false
-                    println("Response: $response")
-                    translatedText = response.translatedText
-//                        response.data?.translations?.first()?.translatedText ?: "ERROR" // TODO: Error Handling
-                }
-        }
-
-        LaunchedEffect(query) {
-            if (query.isBlank())
-                translatedText = ""
-        }
-
-        LaunchedEffect(Unit) {
-            delay(2000)
-            kotlin.runCatching {
-                getSupportedLanguagesUseCase("en", "")
-            }.onSuccess {
-                println("Supported Languages: $it")
-            }.onFailure {
-                it.printStackTrace()
-            }
         }
     }
 }

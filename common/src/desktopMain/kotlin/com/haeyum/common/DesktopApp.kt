@@ -3,9 +3,13 @@ package com.haeyum.common
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
+import com.haeyum.common.presentation.App
+import com.haeyum.common.presentation.DesktopViewModel
+import org.koin.java.KoinJavaComponent.inject
 
 @Preview
 @Composable
 fun AppPreview() {
-    App()
+    val desktopViewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
+    App(desktopViewModel)
 }
