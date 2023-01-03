@@ -1,6 +1,5 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -9,7 +8,6 @@ plugins {
 
 group = "com.haeyum"
 version = "1.0-SNAPSHOT"
-
 
 kotlin {
     jvm {
@@ -36,6 +34,12 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Transer"
             packageVersion = "1.0.0"
+            copyright = "HAEYUM"
+            description = "Translation utility made of kotlin multiplatform"
+            macOS {
+                dockName = "Transer"
+                appCategory = "public.app-category.utilities"
+            }
         }
     }
 }

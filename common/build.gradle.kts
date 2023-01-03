@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    id("kotlinx-serialization")
 }
 
 group = "com.haeyum"
@@ -22,6 +23,22 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+
+                // Ktor
+                api("io.ktor:ktor-client-core:${extra["ktor.version"]}")
+                api("io.ktor:ktor-client-cio:${extra["ktor.version"]}")
+                api("io.ktor:ktor-client-logging:${extra["ktor.version"]}")
+                api("io.ktor:ktor-client-content-negotiation:${extra["ktor.version"]}")
+                api("io.ktor:ktor-serialization-kotlinx-json:${extra["ktor.version"]}")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+                // Koin Core features
+                api("io.insert-koin:koin-core:${extra["koin.version"]}")
+                // Koin for Ktor
+                api("io.insert-koin:koin-ktor:${extra["koin.ktor"]}")
+                // SLF4J Logger
+                api("io.insert-koin:koin-logger-slf4j:${extra["koin.ktor"]}")
             }
         }
         val commonTest by getting {
@@ -33,6 +50,17 @@ kotlin {
             dependencies {
                 api("androidx.appcompat:appcompat:1.2.0")
                 api("androidx.core:core-ktx:1.3.1")
+
+                // Koin main features for Android
+                api("io.insert-koin:koin-android:${extra["koin.android.compose.version"]}")
+                // Java Compatibility
+                api("io.insert-koin:koin-android-compat:${extra["koin.android.compose.version"]}")
+                // Jetpack WorkManager
+                api("io.insert-koin:koin-androidx-workmanager:${extra["koin.android.compose.version"]}")
+                // Navigation Graph
+                api("io.insert-koin:koin-androidx-navigation:${extra["koin.android.compose.version"]}")
+                // Jetpack Compose
+                api("io.insert-koin:koin-androidx-compose:${extra["koin.android.compose.version"]}")
             }
         }
         val androidTest by getting {
@@ -50,11 +78,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdkVersion(33)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdkVersion(24)
-        targetSdkVersion(31)
+        targetSdkVersion(33)
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
