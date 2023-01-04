@@ -3,6 +3,7 @@
 package com.haeyum.common.presentation
 
 import androidx.compose.animation.*
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,10 +20,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.domain.model.translation.languages.Language
 import org.koin.java.KoinJavaComponent
 
 @Composable
-fun PreferencesScreen(viewModel: PreferencesViewModel, onCloseRequest: () -> Unit) {
+fun PreferencesScreen(
+    viewModel: PreferencesViewModel,
+    onCloseRequest: () -> Unit,
+    onSelectedNativeLanguage: (String) -> Unit,
+    onSelectedTargetLanguage: (String) -> Unit
+) {
     var isShowSelectNativeLanguage by remember { mutableStateOf(false) }
     var isShowSelectTargetLanguage by remember { mutableStateOf(false) }
 
@@ -77,6 +84,7 @@ fun PreferencesScreen(viewModel: PreferencesViewModel, onCloseRequest: () -> Uni
             },
             onSelectedLanguage = {
                 viewModel.setSelectedNativeLanguage(it)
+                onSelectedNativeLanguage(it)
                 isShowSelectNativeLanguage = false
             },
         )
@@ -95,6 +103,7 @@ fun PreferencesScreen(viewModel: PreferencesViewModel, onCloseRequest: () -> Uni
             },
             onSelectedLanguage = {
                 viewModel.setSelectedTargetLanguage(it)
+                onSelectedTargetLanguage(it)
                 isShowSelectTargetLanguage = false
             },
         )
@@ -157,11 +166,12 @@ private fun Item(
     }
 }
 
+@Preview
 @Composable
 private fun PreferencesPreviewScreen() {
     MaterialTheme {
         val preferencesViewModel by KoinJavaComponent.inject<PreferencesViewModel>(PreferencesViewModel::class.java)
 
-        PreferencesScreen(preferencesViewModel, {})
+        PreferencesScreen(preferencesViewModel, {}, {}, {})
     }
 }

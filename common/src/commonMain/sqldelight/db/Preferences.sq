@@ -1,0 +1,16 @@
+CREATE TABLE preferences (
+    nativeLanguage TEXT NOT NULL,
+    targetLanguage TEXT NOT NULL
+);
+
+select:
+SELECT * FROM preferences;
+
+insert:
+INSERT INTO preferences (nativeLanguage, targetLanguage) VALUES (?, ?);
+
+setNativeLanguage:
+UPDATE preferences SET nativeLanguage = ?;
+
+setTargetLanguage:
+UPDATE preferences SET targetLanguage = ?;

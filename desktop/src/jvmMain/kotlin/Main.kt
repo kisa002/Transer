@@ -22,6 +22,7 @@ import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.PreferencesScreen
 import com.haeyum.common.presentation.PreferencesViewModel
+import com.squareup.sqldelight.runtime.coroutines.asFlow
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDateTime
 
@@ -29,6 +30,18 @@ fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
     val preferencesViewModel by inject<PreferencesViewModel>(PreferencesViewModel::class.java)
+
+    var players by mutableStateOf(emptyList<String>())
+    val database = TranserDatabaseFactory.getDatabase()
+
+    TranserDatabaseFactory.getDatabase().preferencesQueries.select().executeAsOneOrNull().let { preferences ->
+        if (preferences == null) {
+            println("Preferences table is null -> Create table")
+            TranserDatabaseFactory.getDatabase().preferencesQueries.insert(nativeLanguage = "Korean", targetLanguage = "English")
+        } else {
+            println(preferences)
+        }
+    }
 
     application {
         val trayState = rememberTrayState()
@@ -112,6 +125,16 @@ fun main() {
                     viewModel = preferencesViewModel,
                     onCloseRequest = {
                         isShowPreferencesWindow = false
+                    },
+                    onSelectedNativeLanguage = { nativeLanguage ->
+                        database.preferencesQueries.setNativeLanguage(nativeLanguage)
+                        println("selected native language is $nativeLanguage")
+                        println("load table ${database.preferencesQueries.select().executeAsOneOrNull()}")
+                    },
+                    onSelectedTargetLanguage = { targetLanguage ->
+                        println("selected target language is $targetLanguage")
+                        database.preferencesQueries.setTargetLanguage(targetLanguage)
+                        println("load table ${database.preferencesQueries.select().executeAsOneOrNull()}")
                     }
                 )
 

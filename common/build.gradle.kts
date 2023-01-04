@@ -41,6 +41,9 @@ kotlin {
                 api("io.insert-koin:koin-ktor:${extra["koin.ktor"]}")
                 // SLF4J Logger
                 api("io.insert-koin:koin-logger-slf4j:${extra["koin.ktor"]}")
+
+                // SQLDelight
+                api("com.squareup.sqldelight:coroutines-extensions:1.5.4")
             }
         }
         val commonTest by getting {

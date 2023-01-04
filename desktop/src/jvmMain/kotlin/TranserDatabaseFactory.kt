@@ -3,7 +3,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import java.io.File
 
-class TranserDatabaseFactory {
+object TranserDatabaseFactory {
     fun createInMemoryDriver(): SqlDriver =
         JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also(TranserDatabase.Schema::create)
 

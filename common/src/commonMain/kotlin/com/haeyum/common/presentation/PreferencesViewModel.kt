@@ -1,5 +1,6 @@
 package com.haeyum.common.presentation
 
+import com.haeyum.common.TranserDatabase
 import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
