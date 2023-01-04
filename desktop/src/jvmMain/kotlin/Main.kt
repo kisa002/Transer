@@ -15,6 +15,7 @@ import androidx.compose.ui.window.*
 import com.haeyum.common.di.DesktopKoin
 import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
+import com.haeyum.common.presentation.PreferencesScreen
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,7 +35,8 @@ fun main() {
     application {
         val windowState = rememberWindowState(
             position = WindowPosition(BiasAlignment(0f, -.3f)),
-            size = DpSize(width = 720.dp, height = 400.dp)
+            size = DpSize(width = 400.dp, height = 560.dp)
+//            size = DpSize(width = 720.dp, height = 400.dp)
         )
         Window(
             onCloseRequest = ::exitApplication,
@@ -51,6 +53,8 @@ fun main() {
                     Item("Exit", onClick = ::exitApplication)
                 }
             }
+            PreferencesScreen()
+            return@Window
             App(
                 viewModel = viewModel,
                 onMinimize = {
