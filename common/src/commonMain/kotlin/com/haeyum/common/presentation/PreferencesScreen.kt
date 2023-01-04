@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import org.koin.java.KoinJavaComponent
 
 @Composable
-fun PreferencesScreen(viewModel: PreferencesViewModel) {
+fun PreferencesScreen(viewModel: PreferencesViewModel, onCloseRequest: () -> Unit) {
     var isShowSelectNativeLanguage by remember { mutableStateOf(false) }
     var isShowSelectTargetLanguage by remember { mutableStateOf(false) }
 
@@ -36,7 +36,7 @@ fun PreferencesScreen(viewModel: PreferencesViewModel) {
         modifier = Modifier.fillMaxSize().background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .border(width = 1.dp, color = Color(0xFFE5E5E5), shape = RoundedCornerShape(8.dp))
     ) {
-        Header(title = "Preferences", imageVector = Icons.Default.Close, onClick = { })
+        Header(title = "Preferences", imageVector = Icons.Default.Close, onClick = onCloseRequest)
 
         Section(text = "Language") {
             Item(
@@ -162,6 +162,6 @@ private fun PreferencesPreviewScreen() {
     MaterialTheme {
         val preferencesViewModel by KoinJavaComponent.inject<PreferencesViewModel>(PreferencesViewModel::class.java)
 
-        PreferencesScreen(preferencesViewModel)
+        PreferencesScreen(preferencesViewModel, {})
     }
 }

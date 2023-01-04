@@ -45,14 +45,14 @@ class DesktopViewModel(
     }
 
     init {
-        ioScope.launch {
-            kotlin.runCatching {
-                getSupportedLanguagesUseCase(target = "en", key = "")
-            }.onSuccess {
-                println("Languages size: ${it.size}")
-            }.onFailure {
-                it.printStackTrace()
-            }
-        }
+//        ioScope.launch {
+//            kotlin.runCatching {
+//                getSupportedLanguagesUseCase(target = "en", key = "")
+//            }.onSuccess {
+//                println("Languages size: ${it.size}")
+//            }.onFailure {
+//                it.printStackTrace()
+//            }
+//        }
     }
 }
