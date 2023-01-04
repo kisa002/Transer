@@ -16,6 +16,7 @@ import com.haeyum.common.di.DesktopKoin
 import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.PreferencesScreen
+import com.haeyum.common.presentation.PreferencesViewModel
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,6 +25,7 @@ import kotlin.random.Random
 fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
+    val preferencesViewModel by inject<PreferencesViewModel>(PreferencesViewModel::class.java)
     var players by mutableStateOf(emptyList<String>())
 
     val database = TranserDatabaseFactory().getDatabase()
@@ -53,37 +55,12 @@ fun main() {
                     Item("Exit", onClick = ::exitApplication)
                 }
             }
-            PreferencesScreen()
+            PreferencesScreen(preferencesViewModel)
             return@Window
             App(
                 viewModel = viewModel,
                 onMinimize = {
                     windowState.isMinimized = true
-                }
-            )
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text("Title") },
-                text = { Text(text = players.toString()) },
-                confirmButton = {
-                    Button(onClick = {
-                        database.playerQueries.insert(
-                            query = Random(System.currentTimeMillis()).nextLong().toString(),
-                            translatedText = LocalDateTime.now().format(
-                                DateTimeFormatter.ISO_DATE_TIME
-                            )
-                        )
-                        players = database.playerQueries.selectAll().executeAsList().map {
-                            it.translatedText
-                        }
-                    }) {
-                        Text("Add")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = {}) {
-                        Text("Dismiss")
-                    }
                 }
             )
         }
