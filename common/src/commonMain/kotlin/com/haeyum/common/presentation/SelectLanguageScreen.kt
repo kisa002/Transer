@@ -1,0 +1,91 @@
+package com.haeyum.common.presentation
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun SelectLanguageScreen(
+    title: String,
+    languages: List<String>,
+    onDismissRequest: () -> Unit,
+    onSelectedLanguage: (String) -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+    var keyword by remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+            .border(width = 1.dp, color = Color(0xFFE5E5E5), shape = RoundedCornerShape(8.dp))
+    ) {
+        Header(title = title, imageVector = Icons.Default.ArrowDropDown, onClick = onDismissRequest)
+        BasicTextField(
+            value = keyword,
+            onValueChange = { keyword = it },
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+                .background(
+                    color = Color(0xFFEFEFEF),
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .padding(12.dp),
+            textStyle = TextStyle(color = Color.Black, fontSize = 14.sp)
+        ) { innerTextField ->
+            if (keyword.isEmpty())
+                Text(text = "Search language", color = Color(0xFFADADAD), fontSize = 14.sp)
+
+            innerTextField()
+        }
+        LazyColumn(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
+            items(languages) { language ->
+                if (language.contains(keyword, true)) {
+                    LanguageItem(language = language, onSelectedLanguage = onSelectedLanguage)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+}
+
+@Composable
+private fun LanguageItem(onSelectedLanguage: (String) -> Unit, language: String) {
+    TextButton(
+        onClick = {
+            onSelectedLanguage(language)
+        }
+    ) {
+        Text(
+            text = language,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            color = Color.Black,
+            fontSize = 14.sp
+        )
+    }
+}
