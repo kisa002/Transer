@@ -1,33 +1,46 @@
-package com.haeyum.common.presentation
+package com.haeyum.common.presentation.preferences
 
-import com.haeyum.common.TranserDatabase
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
+import com.haeyum.common.domain.usecase.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.SetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class PreferencesViewModel(ioScope: CoroutineScope, languagesUseCase: GetSupportedLanguagesUseCase) {
-//    val languages = flow {
-//        emit(languagesUseCase(target = "en", key = ""))
-//    }.map {
-//        it.map {
-//            it.name
-//        }
-//    }.catch {
-//        emit(emptyList())
-//    }.stateIn(scope = ioScope, started = SharingStarted.Eagerly, emptyList())
+class PreferencesViewModel(
+    private val ioScope: CoroutineScope,
+    private val getPreferencesUseCase: GetPreferencesUseCase,
+    private val setPreferencesUseCase: SetPreferencesUseCase
+) {
+    val preferences = channelFlow {
+        getPreferencesUseCase().collectLatest { preferences ->
+            send(preferences)
+        }
+    }.shareIn(ioScope, SharingStarted.Eagerly, 1)
 
-    private val _selectedNativeLanguage = MutableStateFlow("")
-    val selectedNativeLanguage: StateFlow<String> = _selectedNativeLanguage
+    val selectedNativeLanguage = preferences.map {
+        it?.nativeLanguage ?: "-"
+    }.stateIn(scope = ioScope, started = SharingStarted.Eagerly, "-")
 
-    private val _selectedTargetLanguage = MutableStateFlow("")
-    val selectedTargetLanguage: StateFlow<String> = _selectedTargetLanguage
+    val selectedTargetLanguage = preferences.map {
+        it?.targetLanguage ?: "-"
+    }.stateIn(scope = ioScope, started = SharingStarted.Eagerly, "-")
 
     fun setSelectedNativeLanguage(language: String) {
-        _selectedNativeLanguage.value = language
+        ioScope.launch {
+            setPreferencesUseCase(nativeLanguage = language, targetLanguage = selectedTargetLanguage.value)
+        }
     }
 
     fun setSelectedTargetLanguage(language: String) {
-        _selectedTargetLanguage.value = language
+        ioScope.launch {
+            setPreferencesUseCase(nativeLanguage = selectedNativeLanguage.value, targetLanguage = language)
+        }
+    }
+
+    fun onDestroy() {
+        ioScope.cancel()
     }
 
     val testLanguageDataset = listOf(

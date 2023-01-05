@@ -2,10 +2,7 @@
 @file:OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.geometry.Size
@@ -17,31 +14,28 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import com.haeyum.common.di.DesktopKoin
 import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
-import com.haeyum.common.presentation.PreferencesScreen
-import com.haeyum.common.presentation.PreferencesViewModel
-import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.haeyum.common.presentation.preferences.PreferencesScreen
+import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import org.koin.java.KoinJavaComponent.inject
-import java.time.LocalDateTime
 
 fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
-    val preferencesViewModel by inject<PreferencesViewModel>(PreferencesViewModel::class.java)
 
     var players by mutableStateOf(emptyList<String>())
-    val database = TranserDatabaseFactory.getDatabase()
+//    val database = TranserDatabaseFactory.getDatabase()
 
-    TranserDatabaseFactory.getDatabase().preferencesQueries.select().executeAsOneOrNull().let { preferences ->
-        if (preferences == null) {
-            println("Preferences table is null -> Create table")
-            TranserDatabaseFactory.getDatabase().preferencesQueries.insert(nativeLanguage = "Korean", targetLanguage = "English")
-        } else {
-            println(preferences)
-        }
-    }
+//    TranserDatabaseFactory.getDatabase().preferencesQueries.select().executeAsOneOrNull().let { preferences ->
+//        if (preferences == null) {
+//            println("Preferences table is null -> Create table")
+//            TranserDatabaseFactory.getDatabase().preferencesQueries.insert(nativeLanguage = "Korean", targetLanguage = "English")
+//        } else {
+//            println(preferences)
+//        }
+//    }
+//    preferencesDesktopViewModel.toString()
 
     application {
         val trayState = rememberTrayState()
@@ -121,20 +115,22 @@ fun main() {
                 transparent = true,
                 resizable = false
             ) {
+                val preferencesViewModel by remember {
+                    inject<PreferencesViewModel>(PreferencesViewModel::class.java)
+                }
+
                 PreferencesScreen(
-                    viewModel = preferencesViewModel,
+                    supportedLanguages = preferencesViewModel.testLanguageDataset,
+                    selectedNativeLanguage = preferencesViewModel.selectedNativeLanguage.collectAsState().value,
+                    selectedTargetLanguage = preferencesViewModel.selectedTargetLanguage.collectAsState().value,
                     onCloseRequest = {
                         isShowPreferencesWindow = false
                     },
                     onSelectedNativeLanguage = { nativeLanguage ->
-                        database.preferencesQueries.setNativeLanguage(nativeLanguage)
-                        println("selected native language is $nativeLanguage")
-                        println("load table ${database.preferencesQueries.select().executeAsOneOrNull()}")
+                        preferencesViewModel.setSelectedNativeLanguage(nativeLanguage)
                     },
                     onSelectedTargetLanguage = { targetLanguage ->
-                        println("selected target language is $targetLanguage")
-                        database.preferencesQueries.setTargetLanguage(targetLanguage)
-                        println("load table ${database.preferencesQueries.select().executeAsOneOrNull()}")
+                        preferencesViewModel.setSelectedTargetLanguage(targetLanguage)
                     }
                 )
 
@@ -149,7 +145,20 @@ fun main() {
                         )
                     }
                 }
+
+                DisposableEffect(Unit) {
+                    onDispose {
+                        preferencesViewModel.onDestroy()
+                    }
+                }
             }
+        }
+
+        LaunchedEffect(Unit) {
+//            database.preferencesQueries.select().asFlow().mapToOneOrNull().collect {
+//                println("Main.kt -> Detect : $it}")
+//                println("DETECT Main")
+//            }
         }
     }
 }

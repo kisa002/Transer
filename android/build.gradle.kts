@@ -17,11 +17,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdkVersion(33)
     defaultConfig {
         applicationId = "com.haeyum.android"
-        minSdkVersion(24)
-        targetSdkVersion(31)
+        minSdkVersion(28)
+        targetSdkVersion(33)
         versionCode = 1
         versionName = "1.0-SNAPSHOT"
     }

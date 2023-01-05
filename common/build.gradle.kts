@@ -1,6 +1,3 @@
-import org.jetbrains.compose.compose
-import sqldelight.com.squareup.sqlite.migrations.Database
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -57,15 +54,15 @@ kotlin {
                 api("androidx.core:core-ktx:1.3.1")
 
                 // Koin main features for Android
-//                api("io.insert-koin:koin-android:${extra["koin.android.compose.version"]}")
+                api("io.insert-koin:koin-android:${extra["koin.android.version"]}")
 //                // Java Compatibility
-//                api("io.insert-koin:koin-android-compat:${extra["koin.android.compose.version"]}")
+                api("io.insert-koin:koin-android-compat:${extra["koin.android.version"]}")
 //                // Jetpack WorkManager
-//                api("io.insert-koin:koin-androidx-workmanager:${extra["koin.android.compose.version"]}")
+                api("io.insert-koin:koin-androidx-workmanager:${extra["koin.android.version"]}")
 //                // Navigation Graph
-//                api("io.insert-koin:koin-androidx-navigation:${extra["koin.android.compose.version"]}")
+                api("io.insert-koin:koin-androidx-navigation:${extra["koin.android.version"]}")
 //                // Jetpack Compose
-//                api("io.insert-koin:koin-androidx-compose:${extra["koin.android.compose.version"]}")
+                api("io.insert-koin:koin-androidx-compose:${extra["koin.android.compose.version"]}")
 
                 api("com.squareup.sqldelight:android-driver:${extra["sqldelight.version"]}")
             }
@@ -90,7 +87,7 @@ android {
     compileSdkVersion(33)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
+        minSdkVersion(28)
         targetSdkVersion(33)
     }
     compileOptions {

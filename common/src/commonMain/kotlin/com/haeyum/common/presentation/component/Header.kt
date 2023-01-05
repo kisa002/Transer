@@ -1,4 +1,4 @@
-package com.haeyum.common.presentation
+package com.haeyum.common.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
