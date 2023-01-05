@@ -1,5 +1,5 @@
 package com.haeyum.common
 
-actual fun getPlatformName(): String {
-    return "Desktop"
-}
+import com.haeyum.common.presentation.Platform
+
+actual fun getPlatform() = Platform.Desktop

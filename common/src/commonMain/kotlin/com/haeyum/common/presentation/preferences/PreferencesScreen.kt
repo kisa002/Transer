@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
+import com.haeyum.common.getPlatform
+import com.haeyum.common.presentation.Platform
 import com.haeyum.common.presentation.component.Header
 
 @Composable
@@ -55,7 +57,7 @@ fun PreferencesScreen(
                 value = selectedSourceLanguage,
                 iconVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Source Language",
-                visibileInfo = true,
+                visibleInfo = true,
                 onInfoClick = {
                     visibleSourceInfoAlert = true
                 },
@@ -69,7 +71,7 @@ fun PreferencesScreen(
                 value = selectedTargetLanguage,
                 iconVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Target Language",
-                visibileInfo = true,
+                visibleInfo = true,
                 onInfoClick = {
                     visibleTargetInfoAlert = true
                 },
@@ -84,6 +86,21 @@ fun PreferencesScreen(
             Item(key = "Version", value = "1.0.0")
         }
     }
+
+    // If the language you enter is a language other than the target language, it will be translated into the source language.
+    AlertDialog(
+        visible = visibleSourceInfoAlert,
+        onDismissRequest = { visibleSourceInfoAlert = false },
+        title = "What is Source Language?",
+        text = "The source language is basically the language of the text to be used for translation.",
+    )
+
+    AlertDialog(
+        visible = visibleTargetInfoAlert,
+        onDismissRequest = { visibleTargetInfoAlert = false },
+        title = "What is Target Language?",
+        text = "The target language is the language in which you want to translate the text you enter.",
+    )
 
     VisibilitySelectLanguageScreen(
         title = "Source Language",
@@ -109,21 +126,6 @@ fun PreferencesScreen(
             onSelectedTargetLanguage(it)
             isVisibleSelectTargetLanguage = false
         }
-    )
-
-    // If the language you enter is a language other than the target language, it will be translated into the source language.
-    AlertDialog(
-        visible = visibleSourceInfoAlert,
-        onDismissRequest = { visibleSourceInfoAlert = false },
-        title = "What is Source Language?",
-        text = "The source language is basically the language of the text to be used for translation.",
-    )
-
-    AlertDialog(
-        visible = visibleTargetInfoAlert,
-        onDismissRequest = { visibleTargetInfoAlert = false },
-        title = "What is Target Language?",
-        text = "The target language is the language in which you want to translate the text you enter.",
     )
 }
 
@@ -159,7 +161,13 @@ private fun AlertDialog(visible: Boolean, onDismissRequest: () -> Unit, title: S
                     Text(text = "OK")
                 }
             },
-            modifier = Modifier.fillMaxWidth(.8f),
+            modifier = Modifier.then(
+                if (getPlatform() == Platform.Desktop) {
+                    Modifier.fillMaxWidth(.8f)
+                } else {
+                    Modifier
+                }
+            ),
             title = {
                 Text(text = title)
             },
@@ -191,7 +199,7 @@ private fun Item(
     value: String = "",
     iconVector: ImageVector? = null,
     contentDescription: String? = null,
-    visibileInfo: Boolean = false,
+    visibleInfo: Boolean = false,
     onInfoClick: () -> Unit = {},
     onItemClick: () -> Unit = {},
 ) {
@@ -206,7 +214,7 @@ private fun Item(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = key, color = Color(0xFF333333), fontSize = 14.sp, fontWeight = FontWeight.Medium)
 
-                if (visibileInfo) {
+                if (visibleInfo) {
                     IconButton(onClick = onInfoClick) {
                         Icon(
                             imageVector = Icons.Default.Info,

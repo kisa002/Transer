@@ -17,6 +17,7 @@ import androidx.compose.ui.window.*
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
+import com.haeyum.common.getPlatform
 import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesScreen
