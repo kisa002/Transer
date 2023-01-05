@@ -14,28 +14,22 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import com.haeyum.common.domain.model.translation.languages.Language
+import com.haeyum.common.domain.usecase.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.SetPreferencesUseCase
 import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
 
 fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
-
-    var players by mutableStateOf(emptyList<String>())
-//    val database = TranserDatabaseFactory.getDatabase()
-
-//    TranserDatabaseFactory.getDatabase().preferencesQueries.select().executeAsOneOrNull().let { preferences ->
-//        if (preferences == null) {
-//            println("Preferences table is null -> Create table")
-//            TranserDatabaseFactory.getDatabase().preferencesQueries.insert(nativeLanguage = "Korean", targetLanguage = "English")
-//        } else {
-//            println(preferences)
-//        }
-//    }
-//    preferencesDesktopViewModel.toString()
+    val setPreferencesUseCase by inject<SetPreferencesUseCase>(SetPreferencesUseCase::class.java)
+    val getPreferencesUseCase by inject<GetPreferencesUseCase>(GetPreferencesUseCase::class.java)
 
     application {
         val trayState = rememberTrayState()
@@ -120,9 +114,11 @@ fun main() {
                 }
 
                 PreferencesScreen(
-                    supportedLanguages = preferencesViewModel.testLanguageDataset,
-                    selectedNativeLanguage = preferencesViewModel.selectedNativeLanguage.collectAsState().value,
-                    selectedTargetLanguage = preferencesViewModel.selectedTargetLanguage.collectAsState().value,
+                    supportedLanguages = preferencesViewModel.supportedLanguages.collectAsState().value,
+                    selectedNativeLanguage = preferencesViewModel.selectedNativeLanguage.collectAsState().value?.name
+                        ?: "-",
+                    selectedTargetLanguage = preferencesViewModel.selectedTargetLanguage.collectAsState().value?.name
+                        ?: "-",
                     onCloseRequest = {
                         isShowPreferencesWindow = false
                     },
@@ -155,15 +151,13 @@ fun main() {
         }
 
         LaunchedEffect(Unit) {
-//            database.preferencesQueries.select().asFlow().mapToOneOrNull().collect {
-//                println("Main.kt -> Detect : $it}")
-//                println("DETECT Main")
-//            }
+            if (getPreferencesUseCase().firstOrNull() == null)
+                setPreferencesUseCase(Language("en", "English"), Language("ko", "Korean"))
         }
     }
 }
 
-object TrayIcon: Painter() {
+object TrayIcon : Painter() {
     override val intrinsicSize: Size = Size(250f, 250f)
 
     override fun DrawScope.onDraw() {

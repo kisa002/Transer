@@ -5,7 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -17,16 +20,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.component.Header
 
 @Composable
 fun PreferencesScreen(
-    supportedLanguages: List<String>,
+    supportedLanguages: List<Language>,
     selectedNativeLanguage: String,
     selectedTargetLanguage: String,
     onCloseRequest: () -> Unit,
-    onSelectedNativeLanguage: (String) -> Unit,
-    onSelectedTargetLanguage: (String) -> Unit
+    onSelectedNativeLanguage: (Language) -> Unit,
+    onSelectedTargetLanguage: (Language) -> Unit
 ) {
     var isShowSelectNativeLanguage by remember { mutableStateOf(false) }
     var isShowSelectTargetLanguage by remember { mutableStateOf(false) }
@@ -75,7 +79,6 @@ fun PreferencesScreen(
                 isShowSelectNativeLanguage = false
             },
             onSelectedLanguage = {
-//                viewModel.setSelectedNativeLanguage(it)
                 onSelectedNativeLanguage(it)
                 isShowSelectNativeLanguage = false
             },

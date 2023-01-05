@@ -48,13 +48,7 @@ val desktopModule = module {
             get(named("IOScope")),
             get(),
             get(),
+            get()
         )
     }
-
-    factory {
-        PreferencesDesktopViewModel(get(), get(), get())
-    }
-
-//    singleOf(com.haeyum.common.data.repository.preferences::PreferencesDataSourceImpl) bind PreferencesDataSourceImpl::class
-//    singleOf(com.haeyum.common.data.repository::PreferencesRepositoryImpl) bind PreferencesRepository::class
 }

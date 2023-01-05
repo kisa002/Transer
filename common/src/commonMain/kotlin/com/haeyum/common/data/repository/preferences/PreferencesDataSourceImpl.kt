@@ -1,6 +1,7 @@
 package com.haeyum.common.data.repository.preferences
 
 import com.haeyum.common.TranserDatabase
+import com.haeyum.common.data.model.languages.Language
 import com.haeyum.common.data.model.preferences.Preferences
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -11,14 +12,16 @@ class PreferencesDataSourceImpl(private val database: TranserDatabase) : Prefere
     override suspend fun getPreferences(): Flow<Preferences?> =
         database.preferencesQueries.select().asFlow().mapToOneOrNull().map {
             it?.let {
-                Preferences(it.nativeLanguage, it.targetLanguage)
+                Preferences(Language(it.nativeLanguage, it.nativeName), Language(it.targetLanguage, it.targetName))
             }
         }
 
-    override suspend fun insertPreferences(nativeLanguage: String, targetLanguage: String) {
+    override suspend fun insertPreferences(nativeLanguage: Language, targetLanguage: Language) {
         database.preferencesQueries.set(
-            nativeLanguage = nativeLanguage,
-            targetLanguage = targetLanguage
+            nativeLanguage = nativeLanguage.language,
+            nativeName = nativeLanguage.name,
+            targetLanguage = targetLanguage.language,
+            targetName = targetLanguage.name
         )
     }
 }

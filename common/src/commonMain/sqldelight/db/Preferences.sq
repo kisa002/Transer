@@ -1,17 +1,13 @@
 CREATE TABLE preferences (
     id INTEGER NOT NULL PRIMARY KEY DEFAULT 0,
     nativeLanguage TEXT NOT NULL,
-    targetLanguage TEXT NOT NULL
+    nativeName TEXT NOT NULL,
+    targetLanguage TEXT NOT NULL,
+    targetName TEXT NOT NULL
 );
 
 select:
-SELECT nativeLanguage, targetLanguage FROM preferences;
+SELECT nativeLanguage, nativeName, targetLanguage, targetName FROM preferences;
 
 set:
-REPLACE INTO preferences (id, nativeLanguage, targetLanguage) VALUES (0, ?, ?);
-
-setNativeLanguage:
-UPDATE preferences SET nativeLanguage = ?;
-
-setTargetLanguage:
-UPDATE preferences SET targetLanguage = ?;
+REPLACE INTO preferences (id, nativeLanguage, nativeName, targetLanguage, targetName) VALUES (0, ?, ?, ?, ?);

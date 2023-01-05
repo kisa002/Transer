@@ -18,14 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.component.Header
 
 @Composable
 fun SelectLanguageScreen(
     title: String,
-    languages: List<String>,
+    languages: List<Language>,
     onDismissRequest: () -> Unit,
-    onSelectedLanguage: (String) -> Unit
+    onSelectedLanguage: (Language) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     var keyword by remember {
@@ -59,7 +60,7 @@ fun SelectLanguageScreen(
         }
         LazyColumn(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
             items(languages) { language ->
-                if (language.contains(keyword, true)) {
+                if (language.name.contains(keyword, true)) {
                     LanguageItem(language = language, onSelectedLanguage = onSelectedLanguage)
                 }
             }
@@ -72,14 +73,14 @@ fun SelectLanguageScreen(
 }
 
 @Composable
-private fun LanguageItem(onSelectedLanguage: (String) -> Unit, language: String) {
+private fun LanguageItem(onSelectedLanguage: (Language) -> Unit, language: Language) {
     TextButton(
         onClick = {
             onSelectedLanguage(language)
         }
     ) {
         Text(
-            text = language,
+            text = language.name,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 8.dp),
