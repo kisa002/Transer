@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.getPlatform
+import com.haeyum.common.getVersion
 import com.haeyum.common.presentation.Platform
 import com.haeyum.common.presentation.component.Header
 
@@ -83,7 +84,7 @@ fun PreferencesScreen(
 
         Section(text = "Information") {
             Item(key = "Contact", onItemClick = onClickContact)
-            Item(key = "Version", value = "1.0.0")
+            Item(key = "Version", value = getVersion())
         }
     }
 
