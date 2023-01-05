@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.component.Header
-import java.awt.Desktop
-import java.net.URI
 
 @Composable
 fun PreferencesScreen(
@@ -33,7 +31,8 @@ fun PreferencesScreen(
     selectedTargetLanguage: String,
     onCloseRequest: () -> Unit,
     onSelectedSourceLanguage: (Language) -> Unit,
-    onSelectedTargetLanguage: (Language) -> Unit
+    onSelectedTargetLanguage: (Language) -> Unit,
+    onClickContact: () -> Unit
 ) {
     var isVisibleSelectSourceLanguage by remember { mutableStateOf(false) }
     var isVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
@@ -81,7 +80,7 @@ fun PreferencesScreen(
         }
 
         Section(text = "Information") {
-            Item(key = "Contact")
+            Item(key = "Contact", onItemClick = onClickContact)
             Item(key = "Version", value = "1.0.0")
         }
     }

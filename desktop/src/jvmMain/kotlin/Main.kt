@@ -23,6 +23,8 @@ import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
+import java.awt.Desktop
+import java.net.URI
 
 fun main() {
     DesktopKoin.startKoin()
@@ -126,6 +128,9 @@ fun main() {
                     },
                     onSelectedTargetLanguage = { targetLanguage ->
                         preferencesViewModel.setSelectedTargetLanguage(targetLanguage)
+                    },
+                    onClickContact = {
+                        Desktop.getDesktop().browse(URI("mailto:vnycall74@naver.com"))
                     }
                 )
 
