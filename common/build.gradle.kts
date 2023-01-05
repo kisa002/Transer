@@ -1,10 +1,9 @@
-import org.jetbrains.compose.compose
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
     id("kotlinx-serialization")
+    id("com.squareup.sqldelight")
 }
 
 group = "com.haeyum"
@@ -39,6 +38,9 @@ kotlin {
                 api("io.insert-koin:koin-ktor:${extra["koin.ktor"]}")
                 // SLF4J Logger
                 api("io.insert-koin:koin-logger-slf4j:${extra["koin.ktor"]}")
+
+                // SQLDelight
+                api("com.squareup.sqldelight:coroutines-extensions:1.5.4")
             }
         }
         val commonTest by getting {
@@ -52,15 +54,17 @@ kotlin {
                 api("androidx.core:core-ktx:1.3.1")
 
                 // Koin main features for Android
-                api("io.insert-koin:koin-android:${extra["koin.android.compose.version"]}")
-                // Java Compatibility
-                api("io.insert-koin:koin-android-compat:${extra["koin.android.compose.version"]}")
-                // Jetpack WorkManager
-                api("io.insert-koin:koin-androidx-workmanager:${extra["koin.android.compose.version"]}")
-                // Navigation Graph
-                api("io.insert-koin:koin-androidx-navigation:${extra["koin.android.compose.version"]}")
-                // Jetpack Compose
+                api("io.insert-koin:koin-android:${extra["koin.android.version"]}")
+//                // Java Compatibility
+                api("io.insert-koin:koin-android-compat:${extra["koin.android.version"]}")
+//                // Jetpack WorkManager
+                api("io.insert-koin:koin-androidx-workmanager:${extra["koin.android.version"]}")
+//                // Navigation Graph
+                api("io.insert-koin:koin-androidx-navigation:${extra["koin.android.version"]}")
+//                // Jetpack Compose
                 api("io.insert-koin:koin-androidx-compose:${extra["koin.android.compose.version"]}")
+
+                api("com.squareup.sqldelight:android-driver:${extra["sqldelight.version"]}")
             }
         }
         val androidTest by getting {
@@ -71,6 +75,8 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 api(compose.preview)
+                api("com.squareup.sqldelight:sqlite-driver:${extra["sqldelight.version"]}")
+//                api("com.squareup.sqldelight:native-driver:${extra["sqldelight.version"]}")
             }
         }
         val desktopTest by getting
@@ -81,11 +87,17 @@ android {
     compileSdkVersion(33)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
+        minSdkVersion(28)
         targetSdkVersion(33)
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+sqldelight {
+    database("TranserDatabase") {
+        packageName = "com.haeyum.common"
     }
 }

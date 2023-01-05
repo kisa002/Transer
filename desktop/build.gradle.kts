@@ -36,6 +36,8 @@ compose.desktop {
             packageVersion = "1.0.0"
             copyright = "HAEYUM"
             description = "Translation utility made of kotlin multiplatform"
+            modules("java.sql")
+
             macOS {
                 dockName = "Transer"
                 appCategory = "public.app-category.utilities"

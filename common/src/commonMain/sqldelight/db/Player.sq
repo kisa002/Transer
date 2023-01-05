@@ -1,0 +1,16 @@
+CREATE TABLE recentTranslate (
+  query TEXT NOT NULL,
+  translatedText TEXT NOT NULL
+);
+
+selectAll:
+SELECT *
+FROM recentTranslate;
+
+insert:
+INSERT INTO recentTranslate(query, translatedText)
+VALUES (?, ?);
+
+insertFullRecentTranslateObject:
+INSERT INTO recentTranslate(query, translatedText)
+VALUES ?;

@@ -2,7 +2,9 @@ package com.haeyum.common.presentation
 
 import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import com.haeyum.common.domain.usecase.TranslateUseCase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -27,7 +29,7 @@ class DesktopViewModel(
                     delay(300)
                     _isRequesting.value = true
                     delay(700)
-                    translateUseCase(q = query, source = "en", target = "ko", key = "").translatedText
+                    translateUseCase(q = query, key = "").translatedText
                 }
             )
         }
@@ -42,17 +44,5 @@ class DesktopViewModel(
 
     fun setQuery(query: String) {
         _query.value = query
-    }
-
-    init {
-        ioScope.launch {
-            kotlin.runCatching {
-                getSupportedLanguagesUseCase(target = "en", key = "")
-            }.onSuccess {
-                println("Languages size: ${it.size}")
-            }.onFailure {
-                it.printStackTrace()
-            }
-        }
     }
 }

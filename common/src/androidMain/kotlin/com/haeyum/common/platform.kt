@@ -1,5 +1,5 @@
 package com.haeyum.common
 
-actual fun getPlatformName(): String {
-    return "Android"
-}
+import com.haeyum.common.presentation.Platform
+
+actual fun getPlatform() = Platform.Android

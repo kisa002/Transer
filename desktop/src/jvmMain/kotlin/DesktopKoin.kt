@@ -1,7 +1,7 @@
-package com.haeyum.common.di
-
+import com.haeyum.common.di.commonApiModule
+import com.haeyum.common.di.commonDataModule
+import com.haeyum.common.di.coroutineScopesModule
 import org.koin.core.context.startKoin
-import org.koin.dsl.KoinAppDeclaration
 
 object DesktopKoin {
     fun startKoin() = startKoin {

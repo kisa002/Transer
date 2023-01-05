@@ -1,3 +1,5 @@
 package com.haeyum.common
 
-expect fun getPlatformName(): String
+import com.haeyum.common.presentation.Platform
+
+expect fun getPlatform(): Platform
