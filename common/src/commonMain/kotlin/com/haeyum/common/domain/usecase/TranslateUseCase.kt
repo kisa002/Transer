@@ -1,14 +1,19 @@
 package com.haeyum.common.domain.usecase
 
 import com.haeyum.common.domain.repository.TranslationRepository
+import kotlinx.coroutines.flow.firstOrNull
 
 class TranslateUseCase(
     private val translationRepository: TranslationRepository,
-    private val detectLanguageUseCase: DetectLanguageUseCase
+    private val detectLanguageUseCase: DetectLanguageUseCase,
+    private val getPreferencesUseCase: GetPreferencesUseCase
 ) {
-    suspend operator fun invoke(q: String, target: String, source: String, key: String) =
+    suspend operator fun invoke(q: String, key: String) =
         detectLanguageUseCase(q, key).language.let { language ->
-            makeSourceTargetPair(language, target, source).let { (target, source) ->
+            val (source, target) = getPreferencesUseCase().firstOrNull()
+                ?: throw NullPointerException("Preferences is null")
+
+            makeSourceTargetPair(language, target.language, source.language).let { (target, source) ->
                 translationRepository.translate(q = q, target = target, source = source, key = key)
             }
         }
