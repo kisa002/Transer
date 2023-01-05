@@ -5,11 +5,11 @@ import com.haeyum.common.domain.repository.PreferencesRepository
 
 class SetPreferencesUseCase(private val preferencesRepository: PreferencesRepository) {
     suspend operator fun invoke(
-        nativeLanguage: Language,
+        sourceLanguage: Language,
         targetLanguage: Language,
     ) =
         preferencesRepository.setPreferences(
-            nativeLanguage = nativeLanguage,
+            sourceLanguage = sourceLanguage,
             targetLanguage = targetLanguage,
         )
 }

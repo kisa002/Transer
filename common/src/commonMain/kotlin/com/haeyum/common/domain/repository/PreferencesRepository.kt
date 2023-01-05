@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
     suspend fun getPreferences(): Flow<Preferences?>
-    suspend fun setPreferences(nativeLanguage: Language, targetLanguage: Language)
+    suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language)
 }

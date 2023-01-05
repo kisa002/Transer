@@ -12,14 +12,14 @@ class PreferencesDataSourceImpl(private val database: TranserDatabase) : Prefere
     override suspend fun getPreferences(): Flow<Preferences?> =
         database.preferencesQueries.select().asFlow().mapToOneOrNull().map {
             it?.let {
-                Preferences(Language(it.nativeLanguage, it.nativeName), Language(it.targetLanguage, it.targetName))
+                Preferences(Language(it.sourceLanguage, it.sourceName), Language(it.targetLanguage, it.targetName))
             }
         }
 
-    override suspend fun insertPreferences(nativeLanguage: Language, targetLanguage: Language) {
+    override suspend fun insertPreferences(sourceLanguage: Language, targetLanguage: Language) {
         database.preferencesQueries.set(
-            nativeLanguage = nativeLanguage.language,
-            nativeName = nativeLanguage.name,
+            sourceLanguage = sourceLanguage.language,
+            sourceName = sourceLanguage.name,
             targetLanguage = targetLanguage.language,
             targetName = targetLanguage.name
         )

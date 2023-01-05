@@ -12,11 +12,11 @@ class PreferencesRepositoryImpl(private val preferencesDataSource: PreferencesDa
     override suspend fun getPreferences(): Flow<Preferences?> =
         preferencesDataSource.getPreferences().map { it?.toDomain() }
 
-    override suspend fun setPreferences(nativeLanguage: Language, targetLanguage: Language) =
+    override suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language) =
         preferencesDataSource.insertPreferences(
-            nativeLanguage = com.haeyum.common.data.model.languages.Language(
-                nativeLanguage.language,
-                nativeLanguage.name
+            sourceLanguage = com.haeyum.common.data.model.languages.Language(
+                sourceLanguage.language,
+                sourceLanguage.name
             ),
             targetLanguage = com.haeyum.common.data.model.languages.Language(
                 targetLanguage.language,

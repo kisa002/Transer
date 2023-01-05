@@ -23,11 +23,11 @@ class MainActivity : AppCompatActivity() {
 
                 PreferencesScreen(
                     supportedLanguages = viewModel.testLanguageDataset,
-                    selectedNativeLanguage = viewModel.selectedNativeLanguage.collectAsState().value,
+                    selectedSourceLanguage = viewModel.selectedSourceLanguage.collectAsState().value,
                     selectedTargetLanguage = viewModel.selectedTargetLanguage.collectAsState().value,
                     onCloseRequest = {},
-                    onSelectedNativeLanguage = {
-                        viewModel.setSelectedNativeLanguage(it)
+                    onSelectedSourceLanguage = {
+                        viewModel.setSelectedSourceLanguage(it)
                     },
                     onSelectedTargetLanguage = {
                         viewModel.setSelectedTargetLanguage(it)

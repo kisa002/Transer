@@ -114,15 +114,15 @@ fun main() {
 
                 PreferencesScreen(
                     supportedLanguages = preferencesViewModel.supportedLanguages.collectAsState().value,
-                    selectedNativeLanguage = preferencesViewModel.selectedNativeLanguage.collectAsState().value?.name
+                    selectedSourceLanguage = preferencesViewModel.selectedSourceLanguage.collectAsState().value?.name
                         ?: "-",
                     selectedTargetLanguage = preferencesViewModel.selectedTargetLanguage.collectAsState().value?.name
                         ?: "-",
                     onCloseRequest = {
                         isShowPreferencesWindow = false
                     },
-                    onSelectedNativeLanguage = { nativeLanguage ->
-                        preferencesViewModel.setSelectedNativeLanguage(nativeLanguage)
+                    onSelectedSourceLanguage = { sourceLanguage ->
+                        preferencesViewModel.setSelectedSourceLanguage(sourceLanguage)
                     },
                     onSelectedTargetLanguage = { targetLanguage ->
                         preferencesViewModel.setSelectedTargetLanguage(targetLanguage)

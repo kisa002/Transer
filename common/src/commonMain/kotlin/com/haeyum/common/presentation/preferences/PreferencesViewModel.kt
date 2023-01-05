@@ -27,26 +27,26 @@ class PreferencesViewModel(
         }
     }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
 
-    val selectedNativeLanguage = preferences.filterNotNull().map { preferences ->
-        preferences.nativeLanguage
+    val selectedSourceLanguage = preferences.filterNotNull().map { preferences ->
+        preferences.sourceLanguage
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, null)
 
     val selectedTargetLanguage = preferences.filterNotNull().map { preferences ->
         preferences.targetLanguage
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, null)
 
-    fun setSelectedNativeLanguage(language: Language) {
+    fun setSelectedSourceLanguage(language: Language) {
         coroutineScope.launch {
             selectedTargetLanguage.value?.let { targetLanguage ->
-                setPreferencesUseCase(nativeLanguage = language, targetLanguage = targetLanguage)
+                setPreferencesUseCase(sourceLanguage = language, targetLanguage = targetLanguage)
             }
         }
     }
 
     fun setSelectedTargetLanguage(language: Language) {
         coroutineScope.launch {
-            selectedNativeLanguage.value?.let { nativeLanguage ->
-                setPreferencesUseCase(nativeLanguage = nativeLanguage, targetLanguage = language)
+            selectedSourceLanguage.value?.let { sourceLanguage ->
+                setPreferencesUseCase(sourceLanguage = sourceLanguage, targetLanguage = language)
             }
         }
     }

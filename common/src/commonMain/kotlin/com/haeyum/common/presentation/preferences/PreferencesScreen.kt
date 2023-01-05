@@ -27,16 +27,16 @@ import com.haeyum.common.presentation.component.Header
 @Composable
 fun PreferencesScreen(
     supportedLanguages: List<Language>,
-    selectedNativeLanguage: String,
+    selectedSourceLanguage: String,
     selectedTargetLanguage: String,
     onCloseRequest: () -> Unit,
-    onSelectedNativeLanguage: (Language) -> Unit,
+    onSelectedSourceLanguage: (Language) -> Unit,
     onSelectedTargetLanguage: (Language) -> Unit
 ) {
-    var isShowSelectNativeLanguage by remember { mutableStateOf(false) }
+    var isShowSelectSourceLanguage by remember { mutableStateOf(false) }
     var isShowSelectTargetLanguage by remember { mutableStateOf(false) }
 
-    var isShowNativeInfoAlert by remember { mutableStateOf(false) }
+    var isShowSourceInfoAlert by remember { mutableStateOf(false) }
     var isShowTargetInfoAlert by remember { mutableStateOf(false) }
 
     Column(
@@ -50,16 +50,16 @@ fun PreferencesScreen(
 
         Section(text = "Language") {
             Item(
-                key = "Native Language",
-                value = selectedNativeLanguage,
+                key = "Source Language",
+                value = selectedSourceLanguage,
                 iconVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "Native Language",
+                contentDescription = "Source Language",
                 isShowInfo = true,
                 onInfoClick = {
-                    isShowNativeInfoAlert = true
+                    isShowSourceInfoAlert = true
                 },
                 onItemClick = {
-                    isShowSelectNativeLanguage = true
+                    isShowSelectSourceLanguage = true
                 }
             )
 
@@ -85,15 +85,15 @@ fun PreferencesScreen(
     }
 
     AnimatedVisibilitySelectLanguageScreen(
-        title = "Native Language",
-        visible = isShowSelectNativeLanguage,
+        title = "Source Language",
+        visible = isShowSelectSourceLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            isShowSelectNativeLanguage = false
+            isShowSelectSourceLanguage = false
         },
         onSelectedLanguage = {
-            onSelectedNativeLanguage(it)
-            isShowSelectNativeLanguage = false
+            onSelectedSourceLanguage(it)
+            isShowSelectSourceLanguage = false
         }
     )
 
@@ -110,12 +110,12 @@ fun PreferencesScreen(
         }
     )
 
-    // If the language you enter is a language other than the target language, it will be translated into the native language.
+    // If the language you enter is a language other than the target language, it will be translated into the source language.
     AlertDialog(
-        isShow = isShowNativeInfoAlert,
-        onDismissRequest = { isShowNativeInfoAlert = false },
-        title = "What is Native Language?",
-        text = "The native language is basically the language of the text to be used for translation.",
+        isShow = isShowSourceInfoAlert,
+        onDismissRequest = { isShowSourceInfoAlert = false },
+        title = "What is Source Language?",
+        text = "The source language is basically the language of the text to be used for translation.",
     )
 
     AlertDialog(
