@@ -20,10 +20,9 @@ class TranslateUseCase(
 
     /** If the input text is the same as the language to be translated or that language does not match the source language, the request format is changed for normal translation. **/
     private fun makeSourceTargetPair(language: String, target: String, source: String): Pair<String, String> =
-        when {
-            language == "und" -> Pair(target, source)
-            language == target -> source to target
-            language != source -> target to language
+        when(language) {
+            target -> source to target
+            !in listOf(target, source) -> source to language
             else -> target to source
         }
 }
