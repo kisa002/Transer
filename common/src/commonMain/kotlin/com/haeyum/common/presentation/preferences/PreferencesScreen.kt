@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.component.Header
+import java.awt.Desktop
+import java.net.URI
 
 @Composable
 fun PreferencesScreen(
@@ -33,11 +35,11 @@ fun PreferencesScreen(
     onSelectedSourceLanguage: (Language) -> Unit,
     onSelectedTargetLanguage: (Language) -> Unit
 ) {
-    var isShowSelectSourceLanguage by remember { mutableStateOf(false) }
-    var isShowSelectTargetLanguage by remember { mutableStateOf(false) }
+    var isVisibleSelectSourceLanguage by remember { mutableStateOf(false) }
+    var isVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
 
-    var isShowSourceInfoAlert by remember { mutableStateOf(false) }
-    var isShowTargetInfoAlert by remember { mutableStateOf(false) }
+    var visibleSourceInfoAlert by remember { mutableStateOf(false) }
+    var visibleTargetInfoAlert by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -54,12 +56,12 @@ fun PreferencesScreen(
                 value = selectedSourceLanguage,
                 iconVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Source Language",
-                isShowInfo = true,
+                visibileInfo = true,
                 onInfoClick = {
-                    isShowSourceInfoAlert = true
+                    visibleSourceInfoAlert = true
                 },
                 onItemClick = {
-                    isShowSelectSourceLanguage = true
+                    isVisibleSelectSourceLanguage = true
                 }
             )
 
@@ -68,12 +70,12 @@ fun PreferencesScreen(
                 value = selectedTargetLanguage,
                 iconVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Target Language",
-                isShowInfo = true,
+                visibileInfo = true,
                 onInfoClick = {
-                    isShowTargetInfoAlert = true
+                    visibleTargetInfoAlert = true
                 },
                 onItemClick = {
-                    isShowSelectTargetLanguage = true
+                    isVisibleSelectTargetLanguage = true
                 }
             )
         }
@@ -84,50 +86,50 @@ fun PreferencesScreen(
         }
     }
 
-    AnimatedVisibilitySelectLanguageScreen(
+    VisibilitySelectLanguageScreen(
         title = "Source Language",
-        visible = isShowSelectSourceLanguage,
+        visible = isVisibleSelectSourceLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            isShowSelectSourceLanguage = false
+            isVisibleSelectSourceLanguage = false
         },
         onSelectedLanguage = {
             onSelectedSourceLanguage(it)
-            isShowSelectSourceLanguage = false
+            isVisibleSelectSourceLanguage = false
         }
     )
 
-    AnimatedVisibilitySelectLanguageScreen(
+    VisibilitySelectLanguageScreen(
         title = "Target Language",
-        visible = isShowSelectTargetLanguage,
+        visible = isVisibleSelectTargetLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            isShowSelectTargetLanguage = false
+            isVisibleSelectTargetLanguage = false
         },
         onSelectedLanguage = {
             onSelectedTargetLanguage(it)
-            isShowSelectTargetLanguage = false
+            isVisibleSelectTargetLanguage = false
         }
     )
 
     // If the language you enter is a language other than the target language, it will be translated into the source language.
     AlertDialog(
-        isShow = isShowSourceInfoAlert,
-        onDismissRequest = { isShowSourceInfoAlert = false },
+        visible = visibleSourceInfoAlert,
+        onDismissRequest = { visibleSourceInfoAlert = false },
         title = "What is Source Language?",
         text = "The source language is basically the language of the text to be used for translation.",
     )
 
     AlertDialog(
-        isShow = isShowTargetInfoAlert,
-        onDismissRequest = { isShowTargetInfoAlert = false },
+        visible = visibleTargetInfoAlert,
+        onDismissRequest = { visibleTargetInfoAlert = false },
         title = "What is Target Language?",
         text = "The target language is the language in which you want to translate the text you enter.",
     )
 }
 
 @Composable
-fun AnimatedVisibilitySelectLanguageScreen(
+fun VisibilitySelectLanguageScreen(
     title: String,
     visible: Boolean,
     languages: List<Language>,
@@ -149,8 +151,8 @@ fun AnimatedVisibilitySelectLanguageScreen(
 }
 
 @Composable
-private fun AlertDialog(isShow: Boolean, onDismissRequest: () -> Unit, title: String, text: String) {
-    if (isShow)
+private fun AlertDialog(visible: Boolean, onDismissRequest: () -> Unit, title: String, text: String) {
+    if (visible)
         AlertDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
@@ -190,7 +192,7 @@ private fun Item(
     value: String = "",
     iconVector: ImageVector? = null,
     contentDescription: String? = null,
-    isShowInfo: Boolean = false,
+    visibileInfo: Boolean = false,
     onInfoClick: () -> Unit = {},
     onItemClick: () -> Unit = {},
 ) {
@@ -205,7 +207,7 @@ private fun Item(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = key, color = Color(0xFF333333), fontSize = 14.sp, fontWeight = FontWeight.Medium)
 
-                if (isShowInfo) {
+                if (visibileInfo) {
                     IconButton(onClick = onInfoClick) {
                         Icon(
                             imageVector = Icons.Default.Info,
