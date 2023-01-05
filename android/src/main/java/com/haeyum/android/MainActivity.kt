@@ -1,14 +1,21 @@
 package com.haeyum.android
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.haeyum.common.domain.model.translation.languages.Language
+import com.haeyum.common.domain.usecase.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : AppCompatActivity() {
@@ -20,17 +27,26 @@ class MainActivity : AppCompatActivity() {
                 val viewModel by remember {
                     inject<PreferencesViewModel>(PreferencesViewModel::class.java)
                 }
+                val setPreferencesUseCase by remember {
+                    inject<SetPreferencesUseCase>(SetPreferencesUseCase::class.java)
+                }
+                val getPreferencesUseCase by remember {
+                    inject<GetPreferencesUseCase>(GetPreferencesUseCase::class.java)
+                }
 
                 PreferencesScreen(
-                    supportedLanguages = viewModel.testLanguageDataset,
-                    selectedSourceLanguage = viewModel.selectedSourceLanguage.collectAsState().value,
-                    selectedTargetLanguage = viewModel.selectedTargetLanguage.collectAsState().value,
+                    supportedLanguages = viewModel.supportedLanguages.collectAsState().value,
+                    selectedSourceLanguage = viewModel.selectedSourceLanguage.collectAsState().value?.name ?: "-",
+                    selectedTargetLanguage = viewModel.selectedTargetLanguage.collectAsState().value?.name ?: "-",
                     onCloseRequest = {},
                     onSelectedSourceLanguage = {
                         viewModel.setSelectedSourceLanguage(it)
                     },
                     onSelectedTargetLanguage = {
                         viewModel.setSelectedTargetLanguage(it)
+                    },
+                    onClickContact = {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("mailto:vnycall74@naver.com")))
                     }
                 )
 
@@ -38,6 +54,11 @@ class MainActivity : AppCompatActivity() {
                     onDispose {
                         viewModel.onDestroy()
                     }
+                }
+
+                LaunchedEffect(Unit) {
+                    if (getPreferencesUseCase().firstOrNull() == null)
+                        setPreferencesUseCase(Language("en", "English"), Language("ko", "Korean"))
                 }
             }
         }
