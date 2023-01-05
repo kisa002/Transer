@@ -21,7 +21,6 @@ import com.haeyum.common.presentation.App
 import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
 
