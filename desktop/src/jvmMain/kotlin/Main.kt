@@ -17,13 +17,13 @@ import androidx.compose.ui.window.*
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
-import com.haeyum.common.getPlatform
-import com.haeyum.common.presentation.App
-import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
+import di.DesktopKoin
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
+import presentation.App
+import presentation.DesktopViewModel
 import java.awt.Desktop
 import java.net.URI
 

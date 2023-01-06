@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.haeyum.common.presentation
+package presentation
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background

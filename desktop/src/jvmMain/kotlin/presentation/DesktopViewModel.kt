@@ -1,4 +1,4 @@
-package com.haeyum.common.presentation
+package presentation
 
 import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import com.haeyum.common.domain.usecase.TranslateUseCase

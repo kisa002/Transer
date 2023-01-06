@@ -1,3 +1,5 @@
+package data
+
 import com.haeyum.common.TranserDatabase
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver

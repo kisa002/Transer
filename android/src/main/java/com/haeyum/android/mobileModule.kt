@@ -7,7 +7,6 @@ import com.haeyum.common.data.repository.preferences.PreferencesDataSourceImpl
 import com.haeyum.common.domain.repository.PreferencesRepository
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
-import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import org.koin.android.ext.koin.androidContext
@@ -16,14 +15,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val mobileModule = module {
-    factory {
-        DesktopViewModel(
-            get(named("IOScope")),
-            get(),
-            get()
-        )
-    }
-
     single<TranserDatabase> {
         val driver = AndroidSqliteDriver(TranserDatabase.Schema, androidContext(), "transer.db")
         val database = TranserDatabase(driver)
@@ -49,11 +40,4 @@ val mobileModule = module {
             get()
         )
     }
-
-//    factory {
-//        PreferencesDesktopViewModel(get(), get(), get())
-//    }
-
-//    singleOf(com.haeyum.common.data.repository.preferences::PreferencesDataSourceImpl) bind PreferencesDataSourceImpl::class
-//    singleOf(com.haeyum.common.data.repository::PreferencesRepositoryImpl) bind PreferencesRepository::class
 }

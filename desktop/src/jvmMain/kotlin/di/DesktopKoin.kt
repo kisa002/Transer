@@ -1,3 +1,5 @@
+package di
+
 import com.haeyum.common.di.commonApiModule
 import com.haeyum.common.di.commonDataModule
 import com.haeyum.common.di.coroutineScopesModule

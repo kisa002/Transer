@@ -1,4 +1,4 @@
-package com.haeyum.common.presentation
+package presentation
 
 sealed class TranslateScreenState {
     object Home : TranslateScreenState()
