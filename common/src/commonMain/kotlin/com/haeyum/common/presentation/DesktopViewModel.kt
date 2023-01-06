@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DesktopViewModel(
-    private val ioScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
     private val getSupportedLanguagesUseCase: GetSupportedLanguagesUseCase
 ) {
@@ -19,14 +19,36 @@ class DesktopViewModel(
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
 
+    val translateScreenState = combine(isRequesting, query) { isRequesting, query ->
+        when {
+            query.isEmpty() || (query.length == 1 && query.first() == '>') -> TranslateScreenState.Home
+            query == ">Guide".take(query.length) -> TranslateScreenState.Home
+            query == ">Recent".take(query.length) -> TranslateScreenState.Recent
+            query == ">Favorite".take(query.length) -> TranslateScreenState.Favorite
+            query == ">Preferences".take(query.length) -> TranslateScreenState.Home
+            query.isNotEmpty() -> TranslateScreenState.Translate
+            else -> TranslateScreenState.Home
+        }
+    }.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = TranslateScreenState.Home
+    )
+
+    val commands = listOf(
+        ">Guide",
+        ">Recent",
+        ">Favorite",
+        ">Preferences"
+    )
+
     val translatedText = query
         .transformLatest { query ->
             emit(
-                if (query.isEmpty()) {
+                if (query.isEmpty() || query.contains(">")) {
                     _isRequesting.value = false
                     ""
                 } else {
-                    delay(300)
                     _isRequesting.value = true
                     delay(700)
                     translateUseCase(q = query, key = "").translatedText
@@ -40,7 +62,7 @@ class DesktopViewModel(
             _isRequesting.value = false
             it.printStackTrace()
         }
-        .stateIn(ioScope, SharingStarted.Lazily, "")
+        .stateIn(coroutineScope, SharingStarted.Lazily, "")
 
     fun setQuery(query: String) {
         _query.value = query

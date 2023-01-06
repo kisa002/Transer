@@ -42,6 +42,8 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
 
     val clipboardManager = LocalClipboardManager.current
 
+    val translateScreenState by viewModel.translateScreenState.collectAsState()
+
     val colors: List<Color> = remember {
         listOf(
             Color(0xFF5851D8),
@@ -91,123 +93,165 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
                 singleLine = true,
                 maxLines = 1,
                 decorationBox = { innerTextField ->
-                    if (query.isEmpty()) {
-                        Text(
-                            text = "Enter text to translate...",
-                            style = TextStyle(
-                                color = Color(0xFF999999),
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        )
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        innerTextField()
                     }
-                    innerTextField()
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        if (query.isEmpty()) {
+                            Text(
+                                text = "Enter text to translate...",
+                                style = TextStyle(
+                                    color = Color(0xFF999999),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                        } else {
+                            viewModel.commands.firstOrNull() {
+                                query.contains(it.take(2))
+                            }?.let { command ->
+                                Text(
+                                    text = buildAnnotatedString {
+                                        withStyle(style = SpanStyle(Color.Black)) {
+                                            append(query)
+                                        }
+                                        append(command.removePrefix(query))
+                                    },
+                                    style = TextStyle(
+                                        color = Color(0xFF999999),
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                )
+                            } ?: Text(
+                                text = query,
+                                style = TextStyle(
+                                    color = Color.Black,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                        }
+                    }
                 }
             )
         }
         Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
-        if (query.isBlank()) {
-            Text(
-                text = "Guide",
-                modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append("Commands can use through")
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    ) {
-                        append(" >\n")
-                    }
-                    append("If you want to show or hide this guide, you can enter ")
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    ) {
-                        append(">guide")
-                    }
-                    append(" to toggle it on/off.\n\n")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(">Recent\n")
-                    }
-                    append("Shows recent translation results.\n\n")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(">Saved\n")
-                    }
-                    append("Shows the saved translation results.\n\n")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(">Preferences\n")
-                    }
-                    append("Show the Application Settings, including selecting Translation Language.\n")
-                },
-                modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-            )
-        } else {
-            Text(
-                text = "Result",
-                modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-            )
-            if (translatedText.isBlank() || isRequesting) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(top = 96.dp)
-                        .size(64.dp)
-                        .rotate(rotateAnimation)
-                        .border(width = 4.dp, brush = Brush.sweepGradient(colors), shape = CircleShape),
-                    strokeWidth = 4.dp
+        when (translateScreenState) {
+            TranslateScreenState.Home -> {
+                Text(
+                    text = "Guide",
+                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 )
-            } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(12.dp)
-                        .background(
-                            color = Color(0x0F000000),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = translatedText,
-                        modifier = Modifier.weight(1f),
-                        style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                Text(
+                    text = buildAnnotatedString {
+                        append("Commands can use through")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        ) {
+                            append(" >\n")
+                        }
+                        append("If you want to show or hide this guide, you can enter ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        ) {
+                            append(">Guide")
+                        }
+                        append(" to toggle it on/off.\n\n")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(">Recent\n")
+                        }
+                        append("Shows recent translation results.\n\n")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(">Favorite\n")
+                        }
+                        append("Shows the favorite translation results.\n\n")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(">Preferences\n")
+                        }
+                        append("Show the Application Settings, including selecting Translation Language.\n")
+                    },
+                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                )
+            }
+
+            TranslateScreenState.Recent -> {
+                Text("RECENT")
+            }
+
+            TranslateScreenState.Favorite -> {
+                Text("FAVORITE")
+            }
+
+            else -> {
+                Text(
+                    text = "Result",
+                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                )
+                if (translatedText.isBlank() || isRequesting) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(top = 96.dp)
+                            .size(64.dp)
+                            .rotate(rotateAnimation)
+                            .border(width = 4.dp, brush = Brush.sweepGradient(colors), shape = CircleShape),
+                        strokeWidth = 4.dp
                     )
-                    Spacer(modifier = Modifier.size(24.dp))
+                } else {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(12.dp)
+                            .background(
+                                color = Color(0x0F000000),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "⌥↵ Save",
-                            modifier = Modifier
-                                .background(
-                                    color = Color(0x15000000),
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(6.dp),
-                            color = Color.Black,
-                            fontSize = 12.sp
+                            text = translatedText,
+                            modifier = Modifier.weight(1f),
+                            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
                         )
-                        Text(
-                            text = "↵ Copy",
-                            modifier = Modifier
-                                .background(
-                                    color = Color(0x15000000),
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(6.dp),
-                            color = Color.Black,
-                            fontSize = 12.sp
-                        )
+                        Spacer(modifier = Modifier.size(24.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "⌥↵ Save",
+                                modifier = Modifier
+                                    .background(
+                                        color = Color(0x15000000),
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                    .padding(6.dp),
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = "↵ Copy",
+                                modifier = Modifier
+                                    .background(
+                                        color = Color(0x15000000),
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                    .padding(6.dp),
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                        }
                     }
                 }
             }
@@ -217,4 +261,32 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
             focusRequester.requestFocus()
         }
     }
+}
+
+@Composable
+private fun makeSearchKeyword(query: String, vararg commands: String) {
+    commands.firstOrNull() {
+        query.contains(it.take(2))
+    }?.let { command ->
+        Text(
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(Color.Black)) {
+                    append(query)
+                }
+                append(command.removePrefix(query))
+            },
+            style = TextStyle(
+                color = Color(0xFF999999),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
+            )
+        )
+    } ?: Text(
+        text = query,
+        style = TextStyle(
+            color = Color.Black,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
+    )
 }
