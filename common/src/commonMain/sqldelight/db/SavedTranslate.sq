@@ -5,7 +5,7 @@ CREATE TABLE savedTranslate (
 );
 
 selectAll:
-SELECT * FROM savedTranslate;
+SELECT * FROM savedTranslate ORDER BY idx DESC;
 
 insert:
 INSERT INTO savedTranslate (originalText, translatedText) VALUES (?, ?);
