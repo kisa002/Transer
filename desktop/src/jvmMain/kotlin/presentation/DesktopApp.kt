@@ -43,6 +43,7 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
     val clipboardManager = LocalClipboardManager.current
 
     val translateScreenState by viewModel.translateScreenState.collectAsState()
+    val commandInference by viewModel.commandInference.collectAsState()
 
     val colors: List<Color> = remember {
         listOf(
@@ -108,9 +109,7 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
                                 )
                             )
                         } else {
-                            viewModel.commands.firstOrNull() {
-                                query.contains(it.take(2))
-                            }?.let { command ->
+                            commandInference?.query?.let { command ->
                                 Text(
                                     text = buildAnnotatedString {
                                         withStyle(style = SpanStyle(Color.Black)) {
@@ -139,7 +138,7 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
         }
         Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
         when (translateScreenState) {
-            TranslateScreenState.Home -> {
+            DesktopScreenState.Home -> {
                 Text(
                     text = "Guide",
                     modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
@@ -184,11 +183,11 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
                 )
             }
 
-            TranslateScreenState.Recent -> {
+            DesktopScreenState.Recent -> {
                 Text("RECENT")
             }
 
-            TranslateScreenState.Favorite -> {
+            DesktopScreenState.Favorite -> {
                 Text("FAVORITE")
             }
 

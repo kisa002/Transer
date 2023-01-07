@@ -19,27 +19,23 @@ class DesktopViewModel(
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
 
-    val translateScreenState = combine(isRequesting, query) { isRequesting, query ->
+    val commandInference = query.map { query ->
+        Command.values().firstOrNull { command ->
+            query.contains(command.query.take(2))
+        }
+    }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
+
+    val translateScreenState = combine(isRequesting, query, commandInference) { isRequesting, query, commandInference ->
         when {
-            query.isEmpty() || (query.length == 1 && query.first() == '>') -> TranslateScreenState.Home
-            query == ">Guide".take(query.length) -> TranslateScreenState.Home
-            query == ">Recent".take(query.length) -> TranslateScreenState.Recent
-            query == ">Favorite".take(query.length) -> TranslateScreenState.Favorite
-            query == ">Preferences".take(query.length) -> TranslateScreenState.Home
-            query.isNotEmpty() -> TranslateScreenState.Translate
-            else -> TranslateScreenState.Home
+            query.isEmpty() || (query.length == 1 && query.first() == '>') -> DesktopScreenState.Home
+            commandInference != null -> commandInference.state
+            query.isNotEmpty() -> DesktopScreenState.Translate
+            else -> DesktopScreenState.Home
         }
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = TranslateScreenState.Home
-    )
-
-    val commands = listOf(
-        ">Guide",
-        ">Recent",
-        ">Favorite",
-        ">Preferences"
+        initialValue = DesktopScreenState.Home
     )
 
     val translatedText = query
@@ -66,5 +62,29 @@ class DesktopViewModel(
 
     fun setQuery(query: String) {
         _query.value = query
+    }
+
+    fun onEnterKeyPressed() {
+        // Guide
+        when {
+            translateScreenState.value == DesktopScreenState.Translate && translatedText.value.isNotEmpty() -> {
+                "COPY"
+            }
+
+            translateScreenState.value == DesktopScreenState.Recent -> {
+                "RECENT"
+            }
+
+            translateScreenState.value == DesktopScreenState.Favorite -> {
+                "FAVORITE"
+            }
+
+            else -> {
+                "NONE"
+            }
+        }
+        if (query.value == ">Preferences".take(query.value.length)) {
+
+        }
     }
 }
