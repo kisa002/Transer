@@ -161,16 +161,16 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                     )
                     Text(
                         text = buildAnnotatedString {
-                            append("Commands can use through")
+                            append("You can execute by typing ")
                             withStyle(
                                 style = SpanStyle(
                                     fontWeight = FontWeight.Bold,
                                     textDecoration = TextDecoration.Underline
                                 )
                             ) {
-                                append(" >\n")
+                                append(">")
                             }
-                            append(" to toggle it on/off.\n\n")
+                            append(" and entering the command.\n\n")
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append(">recent\n")
                             }
