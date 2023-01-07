@@ -4,6 +4,7 @@ import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import com.haeyum.common.domain.usecase.TranslateUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
@@ -21,11 +22,11 @@ class DesktopViewModel(
 
     val commandInference = query.map { query ->
         Command.values().firstOrNull { command ->
-            query.contains(command.query.take(2))
+            query.lowercase().contains(command.query.take(query.length).lowercase())
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
-    val translateScreenState = combine(isRequesting, query, commandInference) { isRequesting, query, commandInference ->
+    val screenState = combine(isRequesting, query, commandInference) { isRequesting, query, commandInference ->
         when {
             query.isEmpty() || (query.length == 1 && query.first() == '>') -> DesktopScreenState.Home
             commandInference != null -> commandInference.state
@@ -37,6 +38,13 @@ class DesktopViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = DesktopScreenState.Home
     )
+
+    private val _screenEvent = MutableSharedFlow<DesktopScreenEvent>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val screenEvent = _screenEvent.asSharedFlow()
 
     val translatedText = query
         .transformLatest { query ->
@@ -65,26 +73,12 @@ class DesktopViewModel(
     }
 
     fun onEnterKeyPressed() {
-        // Guide
-        when {
-            translateScreenState.value == DesktopScreenState.Translate && translatedText.value.isNotEmpty() -> {
-                "COPY"
+        commandInference.value.let { command ->
+            when (command) {
+                Command.Preferences -> _screenEvent.tryEmit(DesktopScreenEvent.ShowPreferences)
+                null -> _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(translatedText.value))
+                else -> setQuery(command.query)
             }
-
-            translateScreenState.value == DesktopScreenState.Recent -> {
-                "RECENT"
-            }
-
-            translateScreenState.value == DesktopScreenState.Favorite -> {
-                "FAVORITE"
-            }
-
-            else -> {
-                "NONE"
-            }
-        }
-        if (query.value == ">Preferences".take(query.value.length)) {
-
         }
     }
 }

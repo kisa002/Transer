@@ -76,6 +76,9 @@ fun main() {
             ) {
                 App(
                     viewModel = viewModel,
+                    onShowPreferences = {
+                        isShowPreferencesWindow = true
+                    },
                     onMinimize = {
                         windowState.isMinimized = true
                     }

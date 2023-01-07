@@ -23,8 +23,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
+fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinimize: () -> Unit = {}) {
     val query by viewModel.query.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
     val isRequesting by viewModel.isRequesting.collectAsState()
@@ -41,9 +42,12 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
     val infiniteTransition = rememberInfiniteTransition()
 
     val clipboardManager = LocalClipboardManager.current
+    val focusManager = LocalFocusManager.current
 
-    val translateScreenState by viewModel.translateScreenState.collectAsState()
+    val desktopScreenState by viewModel.screenState.collectAsState()
     val commandInference by viewModel.commandInference.collectAsState()
+
+    val coroutineScope = rememberCoroutineScope()
 
     val colors: List<Color> = remember {
         listOf(
@@ -83,10 +87,23 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
             BasicTextField(
                 value = query,
                 onValueChange = { viewModel.setQuery(it.take(1000)) },
-                modifier = Modifier.weight(1f).focusRequester(focusRequester).onKeyEvent { keyEvent ->
-                    if (keyEvent.key == Key.Enter) {
-                        onMinimize()
-                        clipboardManager.setText(AnnotatedString(translatedText))
+                modifier = Modifier.weight(1f).focusRequester(focusRequester).onPreviewKeyEvent { keyEvent ->
+                    when (keyEvent.key) {
+                        Key.Enter -> {
+                            viewModel.onEnterKeyPressed()
+                        }
+
+                        Key.DirectionUp -> {
+//                            viewModel.onUpKeyPressed()
+                        }
+
+                        Key.DirectionDown -> {
+//                            viewModel.onDownKeyPressed()
+                        }
+
+                        else -> {
+                            return@onPreviewKeyEvent false
+                        }
                     }
                     true
                 },
@@ -115,7 +132,7 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
                                         withStyle(style = SpanStyle(Color.Black)) {
                                             append(query)
                                         }
-                                        append(command.removePrefix(query))
+                                        append(command.lowercase().removePrefix(query.lowercase()))
                                     },
                                     style = TextStyle(
                                         color = Color(0xFF999999),
@@ -137,7 +154,7 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
             )
         }
         Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
-        when (translateScreenState) {
+        when (desktopScreenState) {
             DesktopScreenState.Home -> {
                 Text(
                     text = "Guide",
@@ -256,8 +273,26 @@ fun App(viewModel: DesktopViewModel, onMinimize: () -> Unit = {}) {
             }
         }
 
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.screenEvent.collect { screenEvent ->
+            when (screenEvent) {
+                is DesktopScreenEvent.CopyEvent -> {
+                    onMinimize()
+                    clipboardManager.setText(AnnotatedString(translatedText))
+                    viewModel.setQuery("")
+                }
+
+                DesktopScreenEvent.ShowPreferences -> {
+                    onShowPreferences()
+                    viewModel.setQuery("")
+                }
+            }
         }
     }
 }
