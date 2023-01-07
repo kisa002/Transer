@@ -22,7 +22,7 @@ import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import di.DesktopKoin
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
-import presentation.App
+import presentation.DesktopApp
 import presentation.DesktopViewModel
 import java.awt.Desktop
 import java.net.URI
@@ -74,7 +74,7 @@ fun main() {
                 transparent = true,
                 resizable = false
             ) {
-                App(
+                DesktopApp(
                     viewModel = viewModel,
                     onShowPreferences = {
                         isShowPreferencesWindow = true

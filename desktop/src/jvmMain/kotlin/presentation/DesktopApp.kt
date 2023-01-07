@@ -23,8 +23,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -33,10 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.awt.event.KeyEvent
 
 @Composable
-fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinimize: () -> Unit = {}) {
+fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinimize: () -> Unit = {}) {
     val query by viewModel.query.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
     val isRequesting by viewModel.isRequesting.collectAsState()
@@ -167,9 +164,9 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                         }
                         append("Shows recent translation results.\n\n")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">favorite\n")
+                            append(">saved\n")
                         }
-                        append("Shows the favorite translation results.\n\n")
+                        append("Shows the saved translation results.\n\n")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append(">preferences\n")
                         }
@@ -197,8 +194,8 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                 }
             }
 
-            DesktopScreenState.Favorite -> {
-                Text("FAVORITE")
+            DesktopScreenState.Saved -> {
+                Text("Saved")
             }
 
             else -> {
