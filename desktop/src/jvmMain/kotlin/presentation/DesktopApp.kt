@@ -7,7 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.awt.event.KeyEvent
 
 @Composable
 fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinimize: () -> Unit = {}) {
@@ -51,6 +52,10 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
     val recentTranslates by viewModel.recentTranslates.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
+
+    var currentSelectedIndex by remember {
+        mutableStateOf(0)
+    }
 
     val colors: List<Color> = remember {
         listOf(
@@ -90,26 +95,37 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
             BasicTextField(
                 value = query,
                 onValueChange = { viewModel.setQuery(it.take(1000)) },
-                modifier = Modifier.weight(1f).focusRequester(focusRequester).onPreviewKeyEvent { keyEvent ->
-                    when (keyEvent.key) {
-                        Key.Enter -> {
-                            viewModel.onEnterKeyPressed()
-                        }
+                modifier = Modifier.weight(1f)
+                    .focusRequester(focusRequester)
+                    .onPreviewKeyEvent { keyEvent ->
+                        val (isPressed, isTyped, isReleased) = listOf(
+                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_PRESSED,
+                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_TYPED,
+                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_RELEASED
+                        )
 
-                        Key.DirectionUp -> {
-//                            viewModel.onUpKeyPressed()
-                        }
+                        when (keyEvent.key) {
+                            Key.Enter -> {
+                                if(isPressed)
+                                    viewModel.onEnterKeyPressed()
+                            }
 
-                        Key.DirectionDown -> {
-//                            viewModel.onDownKeyPressed()
-                        }
+                            Key.DirectionUp -> {
+                                if ((isPressed || isTyped) && currentSelectedIndex > 0)
+                                    currentSelectedIndex--
+                            }
 
-                        else -> {
-                            return@onPreviewKeyEvent false
+                            Key.DirectionDown -> {
+                                if ((isPressed || isTyped) && currentSelectedIndex < recentTranslates.size - 1)
+                                    currentSelectedIndex++
+                            }
+
+                            else -> {
+                                return@onPreviewKeyEvent false
+                            }
                         }
-                    }
-                    true
-                },
+                        true
+                    },
                 textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
                 singleLine = true,
                 maxLines = 1,
@@ -204,18 +220,60 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
             }
 
             DesktopScreenState.Recent -> {
-                LazyColumn {
-                    items(recentTranslates) {
-                        Text(
-                            text = it.translatedText,
-                            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                        )
-//                        RecentTranslateItem(
-//                            translate = it,
-//                            onItemClicked = { viewModel.onRecentTranslateItemClicked(it) },
-//                            onFavoriteClicked = { viewModel.onRecentTranslateFavoriteClicked(it) }
-//                        )
+                Text(
+                    text = "Recent",
+                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                )
+
+                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+                    itemsIndexed(recentTranslates) { index, recentTranslate ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .background(
+                                    color = if (index == currentSelectedIndex) Color(0x0F000000) else Color.Transparent,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = recentTranslate.translatedText,
+                                modifier = Modifier.weight(1f).padding(vertical = 6.dp),
+                                style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                            )
+                            if (index == currentSelectedIndex) {
+                                Spacer(modifier = Modifier.size(24.dp))
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "⌥↵ Save",
+                                        modifier = Modifier
+                                            .background(
+                                                color = Color(0x15000000),
+                                                shape = RoundedCornerShape(4.dp)
+                                            )
+                                            .padding(6.dp),
+                                        color = Color.Black,
+                                        fontSize = 12.sp
+                                    )
+                                    Text(
+                                        text = "↵ Copy",
+                                        modifier = Modifier
+                                            .background(
+                                                color = Color(0x15000000),
+                                                shape = RoundedCornerShape(4.dp)
+                                            )
+                                            .padding(6.dp),
+                                        color = Color.Black,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
