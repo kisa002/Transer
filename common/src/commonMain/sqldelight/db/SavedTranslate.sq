@@ -1,0 +1,14 @@
+CREATE TABLE savedTranslate (
+    idx INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    originalText TEXT NOT NULL,
+    translatedText TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM savedTranslate;
+
+insert:
+INSERT INTO savedTranslate (originalText, translatedText) VALUES (?, ?);
+
+delete:
+DELETE FROM savedTranslate WHERE idx = ?;

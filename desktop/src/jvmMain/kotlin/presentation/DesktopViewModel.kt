@@ -7,6 +7,8 @@ import androidx.compose.ui.input.key.key
 import com.haeyum.common.domain.usecase.TranslateUseCase
 import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
+import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -19,7 +21,9 @@ class DesktopViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
     private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
-    private val addRecentTranslateUseCase: AddRecentTranslateUseCase
+    private val addRecentTranslateUseCase: AddRecentTranslateUseCase,
+    private val getSavedTranslatesUseCase: GetSavedTranslatesUseCase,
+    private val addSavedTranslateUseCase: AddSavedTranslateUseCase
 ) {
     private val _isRequesting = MutableStateFlow(false)
     val isRequesting: StateFlow<Boolean> = _isRequesting
