@@ -34,7 +34,7 @@ val mobileModule = module {
 
     factory {
         PreferencesViewModel(
-            get(named("IOScope")),
+            get(named("DefaultScope")),
             get(),
             get(),
             get()

@@ -80,7 +80,7 @@ fun main() {
                         isShowPreferencesWindow = true
                     },
                     onMinimize = {
-                        windowState.isMinimized = true
+//                        windowState.isMinimized = true
                     }
                 )
                 MenuBar {
