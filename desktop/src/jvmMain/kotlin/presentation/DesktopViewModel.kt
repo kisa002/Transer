@@ -97,6 +97,18 @@ class DesktopViewModel(
 
     private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text))
 
+    fun onClickTranslatedItem(originalText: String, translatedText: String) {
+        coroutineScope.launch {
+            when (screenState.value) {
+                DesktopScreenState.Recent -> sendCopyEvent(translatedText)
+                else -> {
+                    addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
+                    sendCopyEvent(translatedText)
+                }
+            }
+        }
+    }
+
     fun onPreviewKeyEvent(keyEvent: KeyEvent): Boolean {
         val keyEventId = (keyEvent.nativeKeyEvent as java.awt.event.KeyEvent).id
         val (isPressed, isTyped, isReleased) = listOf(
@@ -107,12 +119,13 @@ class DesktopViewModel(
 
         when (keyEvent.key) {
             Key.Enter ->
-                if (isPressed)
+                if (isPressed) {
                     if (keyEvent.isAltPressed) {
                         onAltEnterKeyPressed()
                     } else {
                         onEnterKeyPressed()
                     }
+                }
 
             Key.DirectionUp ->
                 if ((isPressed || isTyped) && currentSelectedIndex.value > 0)

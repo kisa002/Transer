@@ -5,6 +5,7 @@ package presentation
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -192,8 +193,10 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                 LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = recentTranslateLazyListState) {
                     itemsIndexed(recentTranslates) { index, recentTranslate ->
                         TranslatedItem(
+                            originalText = recentTranslate.originalText,
                             translatedText = recentTranslate.translatedText,
-                            isSelected = index == currentSelectedIndex
+                            isSelected = index == currentSelectedIndex,
+                            onClick = viewModel::onClickTranslatedItem
                         )
                     }
                 }
@@ -207,10 +210,12 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                 )
 
                 LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = savedTranslatesLazyListState) {
-                    itemsIndexed(savedTranslates) { index, recentTranslate ->
+                    itemsIndexed(savedTranslates) { index, savedTranslate ->
                         TranslatedItem(
-                            translatedText = recentTranslate.translatedText,
-                            isSelected = index == currentSelectedIndex
+                            originalText = savedTranslate.originalText,
+                            translatedText = savedTranslate.translatedText,
+                            isSelected = index == currentSelectedIndex,
+                            onClick = viewModel::onClickTranslatedItem
                         )
                     }
                 }
@@ -234,9 +239,11 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                     )
                 } else {
                     TranslatedItem(
+                        originalText = query,
                         translatedText = translatedText,
                         isSelected = true,
-                        modifier = Modifier.padding(12.dp)
+                        modifier = Modifier.padding(12.dp),
+                        onClick = viewModel::onClickTranslatedItem
                     )
                 }
             }
@@ -274,13 +281,28 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
             }
         }
     }
+
+    LaunchedEffect(query) {
+        if (query.isEmpty()) {
+            focusRequester.requestFocus()
+        }
+    }
 }
 
 @Composable
-private fun TranslatedItem(translatedText: String, isSelected: Boolean, modifier: Modifier = Modifier) {
+private fun TranslatedItem(
+    originalText: String,
+    translatedText: String,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: (String, String) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .then(modifier)
+            .clickable {
+                onClick(originalText, translatedText)
+            }
             .background(
                 color = if (isSelected) Color(0x0F000000) else Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
