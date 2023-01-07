@@ -106,7 +106,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
 
                         when (keyEvent.key) {
                             Key.Enter -> {
-                                if(isPressed)
+                                if (isPressed)
                                     viewModel.onEnterKeyPressed()
                             }
 
@@ -191,26 +191,17 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                         ) {
                             append(" >\n")
                         }
-                        append("If you want to show or hide this guide, you can enter ")
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline
-                            )
-                        ) {
-                            append(">Guide")
-                        }
                         append(" to toggle it on/off.\n\n")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">Recent\n")
+                            append(">recent\n")
                         }
                         append("Shows recent translation results.\n\n")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">Favorite\n")
+                            append(">favorite\n")
                         }
                         append("Shows the favorite translation results.\n\n")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">Preferences\n")
+                            append(">preferences\n")
                         }
                         append("Show the Application Settings, including selecting Translation Language.\n")
                     },
@@ -228,52 +219,10 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
 
                 LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp)) {
                     itemsIndexed(recentTranslates) { index, recentTranslate ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                                .background(
-                                    color = if (index == currentSelectedIndex) Color(0x0F000000) else Color.Transparent,
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = recentTranslate.translatedText,
-                                modifier = Modifier.weight(1f).padding(vertical = 6.dp),
-                                style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                            )
-                            if (index == currentSelectedIndex) {
-                                Spacer(modifier = Modifier.size(24.dp))
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "⌥↵ Save",
-                                        modifier = Modifier
-                                            .background(
-                                                color = Color(0x15000000),
-                                                shape = RoundedCornerShape(4.dp)
-                                            )
-                                            .padding(6.dp),
-                                        color = Color.Black,
-                                        fontSize = 12.sp
-                                    )
-                                    Text(
-                                        text = "↵ Copy",
-                                        modifier = Modifier
-                                            .background(
-                                                color = Color(0x15000000),
-                                                shape = RoundedCornerShape(4.dp)
-                                            )
-                                            .padding(6.dp),
-                                        color = Color.Black,
-                                        fontSize = 12.sp
-                                    )
-                                }
-                            }
-                        }
+                        TranslatedItem(
+                            translatedText = recentTranslate.translatedText,
+                            isSelected = index == currentSelectedIndex
+                        )
                     }
                 }
             }
@@ -288,6 +237,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                     modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
                     style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 )
+
                 if (translatedText.isBlank() || isRequesting) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -298,51 +248,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                         strokeWidth = 4.dp
                     )
                 } else {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(12.dp)
-                            .background(
-                                color = Color(0x0F000000),
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = translatedText,
-                            modifier = Modifier.weight(1f),
-                            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                        )
-                        Spacer(modifier = Modifier.size(24.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "⌥↵ Save",
-                                modifier = Modifier
-                                    .background(
-                                        color = Color(0x15000000),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .padding(6.dp),
-                                color = Color.Black,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = "↵ Copy",
-                                modifier = Modifier
-                                    .background(
-                                        color = Color(0x15000000),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .padding(6.dp),
-                                color = Color.Black,
-                                fontSize = 12.sp
-                            )
-                        }
-                    }
+                    TranslatedItem(translatedText = translatedText, isSelected = true, modifier = Modifier.padding(12.dp))
                 }
             }
         }
@@ -372,29 +278,52 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
 }
 
 @Composable
-private fun makeSearchKeyword(query: String, vararg commands: String) {
-    commands.firstOrNull() {
-        query.contains(it.take(2))
-    }?.let { command ->
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(Color.Black)) {
-                    append(query)
-                }
-                append(command.removePrefix(query))
-            },
-            style = TextStyle(
-                color = Color(0xFF999999),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium
+private fun TranslatedItem(translatedText: String, isSelected: Boolean, modifier: Modifier = Modifier) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .then(modifier)
+            .background(
+                color = if (isSelected) Color(0x0F000000) else Color.Transparent,
+                shape = RoundedCornerShape(8.dp)
             )
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = translatedText,
+            modifier = Modifier.weight(1f).padding(vertical = 6.dp),
+            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
         )
-    } ?: Text(
-        text = query,
-        style = TextStyle(
-            color = Color.Black,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium
-        )
-    )
+        if (isSelected) {
+            Spacer(modifier = Modifier.size(24.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "⌥↵ Save",
+                    modifier = Modifier
+                        .background(
+                            color = Color(0x15000000),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(6.dp),
+                    color = Color.Black,
+                    fontSize = 12.sp
+                )
+                Text(
+                    text = "↵ Copy",
+                    modifier = Modifier
+                        .background(
+                            color = Color(0x15000000),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(6.dp),
+                    color = Color.Black,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
 }
