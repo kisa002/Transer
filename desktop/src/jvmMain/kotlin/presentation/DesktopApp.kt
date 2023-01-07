@@ -2,6 +2,7 @@
 
 package presentation
 
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,6 +57,8 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
 
     val currentSelectedIndex by viewModel.currentSelectedIndex.collectAsState()
 
+    val snackbarState by viewModel.snackbarState.collectAsState()
+
     val recentTranslateLazyListState = rememberLazyListState()
     val savedTranslatesLazyListState = rememberLazyListState()
 
@@ -84,171 +88,200 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
         )
     )
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(8.dp))
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().height(57.dp).padding(horizontal = 18.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BasicTextField(
-                value = query,
-                onValueChange = { viewModel.setQuery(it.take(1000)) },
-                modifier = Modifier.weight(1f)
-                    .focusRequester(focusRequester)
-                    .onPreviewKeyEvent(viewModel::onPreviewKeyEvent),
-                textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
-                singleLine = true,
-                maxLines = 1,
-                decorationBox = { innerTextField ->
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        innerTextField()
-                    }
+        Column(modifier = Modifier.fillMaxSize()) {
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        if (query.isEmpty()) {
-                            Text(
-                                text = "Enter text to translate...",
-                                style = TextStyle(
-                                    color = Color(0xFF999999),
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            )
-                        } else {
-                            commandInference?.query?.let { command ->
+            Row(
+                modifier = Modifier.fillMaxWidth().height(57.dp).padding(horizontal = 18.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BasicTextField(
+                    value = query,
+                    onValueChange = { viewModel.setQuery(it.take(1000)) },
+                    modifier = Modifier.weight(1f)
+                        .focusRequester(focusRequester)
+                        .onPreviewKeyEvent(viewModel::onPreviewKeyEvent),
+                    textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
+                    singleLine = true,
+                    maxLines = 1,
+                    decorationBox = { innerTextField ->
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            innerTextField()
+                        }
+
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            if (query.isEmpty()) {
                                 Text(
-                                    text = buildAnnotatedString {
-                                        withStyle(style = SpanStyle(Color.Black)) {
-                                            append(query)
-                                        }
-                                        append(command.lowercase().removePrefix(query.lowercase()))
-                                    },
+                                    text = "Enter text to translate...",
                                     style = TextStyle(
                                         color = Color(0xFF999999),
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Medium
                                     )
                                 )
-                            } ?: Text(
-                                text = query,
-                                style = TextStyle(
-                                    color = Color.Black,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Medium
+                            } else {
+                                commandInference?.query?.let { command ->
+                                    Text(
+                                        text = buildAnnotatedString {
+                                            withStyle(style = SpanStyle(Color.Black)) {
+                                                append(query)
+                                            }
+                                            append(command.lowercase().removePrefix(query.lowercase()))
+                                        },
+                                        style = TextStyle(
+                                            color = Color(0xFF999999),
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    )
+                                } ?: Text(
+                                    text = query,
+                                    style = TextStyle(
+                                        color = Color.Black,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
                                 )
+                            }
+                        }
+                    }
+                )
+            }
+            Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
+            when (desktopScreenState) {
+                DesktopScreenState.Home -> {
+                    Text(
+                        text = "Guide",
+                        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                        style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    )
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Commands can use through")
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            ) {
+                                append(" >\n")
+                            }
+                            append(" to toggle it on/off.\n\n")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(">recent\n")
+                            }
+                            append("Shows recent translation results.\n\n")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(">saved\n")
+                            }
+                            append("Shows the saved translation results.\n\n")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(">preferences\n")
+                            }
+                            append("Show the Application Settings, including selecting Translation Language.\n")
+                        },
+                        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                        style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                    )
+                }
+
+                DesktopScreenState.Recent -> {
+                    Text(
+                        text = "Recent",
+                        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                        style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    )
+
+                    LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = recentTranslateLazyListState) {
+                        itemsIndexed(recentTranslates) { index, recentTranslate ->
+                            TranslatedItem(
+                                originalText = recentTranslate.originalText,
+                                translatedText = recentTranslate.translatedText,
+                                isSelected = index == currentSelectedIndex,
+                                onClick = viewModel::onClickTranslatedItem
                             )
                         }
                     }
                 }
+
+                DesktopScreenState.Saved -> {
+                    Text(
+                        text = "Saved",
+                        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                        style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    )
+
+                    LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = savedTranslatesLazyListState) {
+                        itemsIndexed(savedTranslates) { index, savedTranslate ->
+                            TranslatedItem(
+                                originalText = savedTranslate.originalText,
+                                translatedText = savedTranslate.translatedText,
+                                isSelected = index == currentSelectedIndex,
+                                onClick = viewModel::onClickTranslatedItem
+                            )
+                        }
+                    }
+                }
+
+                else -> {
+                    Text(
+                        text = "Result",
+                        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                        style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    )
+
+                    if (translatedText.isBlank() || isRequesting) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                                .padding(top = 96.dp)
+                                .size(64.dp)
+                                .rotate(rotateAnimation)
+                                .border(width = 4.dp, brush = Brush.sweepGradient(colors), shape = CircleShape),
+                            strokeWidth = 4.dp
+                        )
+                    } else {
+                        TranslatedItem(
+                            originalText = query,
+                            translatedText = translatedText,
+                            isSelected = true,
+                            modifier = Modifier.padding(12.dp),
+                            onClick = viewModel::onClickTranslatedItem
+                        )
+                    }
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = snackbarState != null,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            enter = fadeIn() + slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(
+                    durationMillis = 1500,
+                    easing = EaseOutExpo
+                )
+            ),
+            exit = fadeOut() + slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(
+                    durationMillis = 3000,
+                    easing = EaseOutExpo
+                )
             )
-        }
-        Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
-        when (desktopScreenState) {
-            DesktopScreenState.Home -> {
+        ) {
+            Snackbar(backgroundColor = Color(0xFF3F8CFF)) {
                 Text(
-                    text = "Guide",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    text = snackbarState ?: "",
+                    color = Color.White,
+                    fontSize = 16.sp
                 )
-                Text(
-                    text = buildAnnotatedString {
-                        append("Commands can use through")
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline
-                            )
-                        ) {
-                            append(" >\n")
-                        }
-                        append(" to toggle it on/off.\n\n")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">recent\n")
-                        }
-                        append("Shows recent translation results.\n\n")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">saved\n")
-                        }
-                        append("Shows the saved translation results.\n\n")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(">preferences\n")
-                        }
-                        append("Show the Application Settings, including selecting Translation Language.\n")
-                    },
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                )
-            }
-
-            DesktopScreenState.Recent -> {
-                Text(
-                    text = "Recent",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                )
-
-                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = recentTranslateLazyListState) {
-                    itemsIndexed(recentTranslates) { index, recentTranslate ->
-                        TranslatedItem(
-                            originalText = recentTranslate.originalText,
-                            translatedText = recentTranslate.translatedText,
-                            isSelected = index == currentSelectedIndex,
-                            onClick = viewModel::onClickTranslatedItem
-                        )
-                    }
-                }
-            }
-
-            DesktopScreenState.Saved -> {
-                Text(
-                    text = "Saved",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                )
-
-                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = savedTranslatesLazyListState) {
-                    itemsIndexed(savedTranslates) { index, savedTranslate ->
-                        TranslatedItem(
-                            originalText = savedTranslate.originalText,
-                            translatedText = savedTranslate.translatedText,
-                            isSelected = index == currentSelectedIndex,
-                            onClick = viewModel::onClickTranslatedItem
-                        )
-                    }
-                }
-            }
-
-            else -> {
-                Text(
-                    text = "Result",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                )
-
-                if (translatedText.isBlank() || isRequesting) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(top = 96.dp)
-                            .size(64.dp)
-                            .rotate(rotateAnimation)
-                            .border(width = 4.dp, brush = Brush.sweepGradient(colors), shape = CircleShape),
-                        strokeWidth = 4.dp
-                    )
-                } else {
-                    TranslatedItem(
-                        originalText = query,
-                        translatedText = translatedText,
-                        isSelected = true,
-                        modifier = Modifier.padding(12.dp),
-                        onClick = viewModel::onClickTranslatedItem
-                    )
-                }
             }
         }
-
     }
 
     LaunchedEffect(Unit) {

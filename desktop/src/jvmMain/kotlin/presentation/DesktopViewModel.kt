@@ -58,6 +58,20 @@ class DesktopViewModel(
     )
     val screenEvent = _screenEvent.asSharedFlow()
 
+    private val snackbarEvent = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val snackbarState = snackbarEvent
+        .transformLatest { message ->
+            emit(message)
+            delay(2000)
+            emit(null)
+        }
+        .stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
+
     private val _currentSelectedIndex = MutableStateFlow(0)
     val currentSelectedIndex = _currentSelectedIndex.asStateFlow()
 
@@ -95,7 +109,11 @@ class DesktopViewModel(
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
-    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text))
+    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text)).also {
+        sendSnackbarEvent("Copied to clipboard.")
+    }
+
+    private fun sendSnackbarEvent(message: String) = snackbarEvent.tryEmit(message)
 
     fun onClickTranslatedItem(originalText: String, translatedText: String) {
         coroutineScope.launch {
@@ -184,9 +202,11 @@ class DesktopViewModel(
                         }
 
                 else -> {
-                    /*no-op*/
+                    return@launch
                 }
             }
+
+            sendSnackbarEvent("Selected has been saved.")
         }
     }
 
