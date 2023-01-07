@@ -5,7 +5,5 @@ import com.haeyum.common.domain.model.translation.languages.Language
 data class RecentTranslate(
     val idx: Int,
     val originalText: String,
-    val translatedText: String,
-    val sourceLanguage: Language,
-    val targetLanguage: Language,
+    val translatedText: String
 )

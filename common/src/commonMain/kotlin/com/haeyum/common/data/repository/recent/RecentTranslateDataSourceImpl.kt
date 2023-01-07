@@ -1,7 +1,6 @@
 package com.haeyum.common.data.repository.recent
 
 import com.haeyum.common.TranserDatabase
-import com.haeyum.common.data.model.languages.Language
 import com.haeyum.common.data.model.recent.RecentTranslate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
@@ -15,25 +14,17 @@ class RecentTranslateDataSourceImpl(private val database: TranserDatabase) : Rec
                 RecentTranslate(
                     idx = recentTranslate.idx.toInt(),
                     originalText = recentTranslate.originalText,
-                    translatedText = recentTranslate.translatedText,
-                    sourceLanguage = Language(recentTranslate.sourceLanguage, recentTranslate.sourceName),
-                    targetLanguage = Language(recentTranslate.targetLanguage, recentTranslate.targetName)
+                    translatedText = recentTranslate.translatedText
                 )
             }
         }
 
     override suspend fun addRecentTranslate(
         originalText: String,
-        translatedText: String,
-        sourceLanguage: Language,
-        targetLanguage: Language
+        translatedText: String
     ) = database.recentTranslateQueries.insert(
         originalText = originalText,
-        translatedText = translatedText,
-        sourceLanguage = sourceLanguage.language,
-        sourceName = sourceLanguage.name,
-        targetLanguage = targetLanguage.language,
-        targetName = targetLanguage.name
+        translatedText = translatedText
     )
 
 

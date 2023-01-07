@@ -1,18 +1,14 @@
 CREATE TABLE recentTranslate (
     idx INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     originalText TEXT NOT NULL,
-    translatedText TEXT NOT NULL,
-    sourceLanguage TEXT NOT NULL,
-    sourceName TEXT NOT NULL,
-    targetLanguage TEXT NOT NULL,
-    targetName TEXT NOT NULL
+    translatedText TEXT NOT NULL
 );
 
 selectAll:
 SELECT * FROM recentTranslate;
 
 insert:
-INSERT INTO recentTranslate (originalText, translatedText, sourceLanguage, sourceName, targetLanguage, targetName) VALUES (?, ?, ?, ?, ?, ?);
+INSERT INTO recentTranslate (originalText, translatedText) VALUES (?, ?);
 
 delete:
 DELETE FROM recentTranslate WHERE idx = ?;

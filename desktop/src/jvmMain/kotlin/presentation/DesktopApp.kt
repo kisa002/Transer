@@ -6,6 +6,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -46,6 +48,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
 
     val desktopScreenState by viewModel.screenState.collectAsState()
     val commandInference by viewModel.commandInference.collectAsState()
+    val recentTranslates by viewModel.recentTranslates.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -201,7 +204,20 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
             }
 
             DesktopScreenState.Recent -> {
-                Text("RECENT")
+                LazyColumn {
+                    items(recentTranslates) {
+                        Text(
+                            text = it.translatedText,
+                            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                        )
+//                        RecentTranslateItem(
+//                            translate = it,
+//                            onItemClicked = { viewModel.onRecentTranslateItemClicked(it) },
+//                            onFavoriteClicked = { viewModel.onRecentTranslateFavoriteClicked(it) }
+//                        )
+                    }
+                }
             }
 
             DesktopScreenState.Favorite -> {

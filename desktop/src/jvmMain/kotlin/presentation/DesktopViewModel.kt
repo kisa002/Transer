@@ -1,18 +1,21 @@
 package presentation
 
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import com.haeyum.common.domain.usecase.TranslateUseCase
+import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
+import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DesktopViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
-    private val getSupportedLanguagesUseCase: GetSupportedLanguagesUseCase
+    private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
+    private val addRecentTranslateUseCase: AddRecentTranslateUseCase
 ) {
     private val _isRequesting = MutableStateFlow(false)
     val isRequesting: StateFlow<Boolean> = _isRequesting
@@ -68,16 +71,28 @@ class DesktopViewModel(
         }
         .stateIn(coroutineScope, SharingStarted.Lazily, "")
 
+    val recentTranslates = channelFlow {
+        getRecentTranslatesUseCase().collectLatest {
+            send(it)
+        }
+    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+
     fun setQuery(query: String) {
         _query.value = query
     }
 
     fun onEnterKeyPressed() {
-        commandInference.value.let { command ->
-            when (command) {
-                Command.Preferences -> _screenEvent.tryEmit(DesktopScreenEvent.ShowPreferences)
-                null -> _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(translatedText.value))
-                else -> setQuery(command.query)
+        coroutineScope.launch {
+            commandInference.value.let { command ->
+                when (command) {
+                    Command.Preferences -> _screenEvent.emit(DesktopScreenEvent.ShowPreferences)
+                    null -> {
+                        _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(translatedText.value))
+                        addRecentTranslateUseCase(query.value, translatedText.value)
+                    }
+
+                    else -> setQuery(command.query)
+                }
             }
         }
     }
