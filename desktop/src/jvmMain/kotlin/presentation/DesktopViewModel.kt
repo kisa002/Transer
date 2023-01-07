@@ -3,10 +3,13 @@ package presentation
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
 import com.haeyum.common.domain.usecase.TranslateUseCase
 import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
+import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -19,7 +22,9 @@ class DesktopViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
     private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
-    private val addRecentTranslateUseCase: AddRecentTranslateUseCase
+    private val addRecentTranslateUseCase: AddRecentTranslateUseCase,
+    private val getSavedTranslatesUseCase: GetSavedTranslatesUseCase,
+    private val addSavedTranslateUseCase: AddSavedTranslateUseCase
 ) {
     private val _isRequesting = MutableStateFlow(false)
     val isRequesting: StateFlow<Boolean> = _isRequesting
@@ -40,6 +45,8 @@ class DesktopViewModel(
             query.isNotEmpty() -> DesktopScreenState.Translate
             else -> DesktopScreenState.Home
         }
+    }.onEach {
+        _currentSelectedIndex.value = 0
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(),
@@ -52,6 +59,20 @@ class DesktopViewModel(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val screenEvent = _screenEvent.asSharedFlow()
+
+    private val snackbarEvent = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val snackbarState = snackbarEvent
+        .transformLatest { message ->
+            emit(message)
+            delay(2000)
+            emit(null)
+        }
+        .stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
     private val _currentSelectedIndex = MutableStateFlow(0)
     val currentSelectedIndex = _currentSelectedIndex.asStateFlow()
@@ -84,7 +105,29 @@ class DesktopViewModel(
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
-    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text))
+    val savedTranslates = channelFlow {
+        getSavedTranslatesUseCase().collectLatest {
+            send(it)
+        }
+    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+
+    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text)).also {
+        sendSnackbarEvent("Copied to clipboard.")
+    }
+
+    private fun sendSnackbarEvent(message: String) = snackbarEvent.tryEmit(message)
+
+    fun onClickTranslatedItem(originalText: String, translatedText: String) {
+        coroutineScope.launch {
+            when (screenState.value) {
+                DesktopScreenState.Recent -> sendCopyEvent(translatedText)
+                else -> {
+                    addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
+                    sendCopyEvent(translatedText)
+                }
+            }
+        }
+    }
 
     fun onPreviewKeyEvent(keyEvent: KeyEvent): Boolean {
         val keyEventId = (keyEvent.nativeKeyEvent as java.awt.event.KeyEvent).id
@@ -96,16 +139,29 @@ class DesktopViewModel(
 
         when (keyEvent.key) {
             Key.Enter ->
-                if (isPressed)
-                    onEnterKeyPressed()
+                if (isPressed) {
+                    if (keyEvent.isAltPressed) {
+                        onAltEnterKeyPressed()
+                    } else {
+                        onEnterKeyPressed()
+                    }
+                }
 
             Key.DirectionUp ->
                 if ((isPressed || isTyped) && currentSelectedIndex.value > 0)
                     _currentSelectedIndex.value--
 
-            Key.DirectionDown ->
-                if ((isPressed || isTyped) && currentSelectedIndex.value < recentTranslates.value.size - 1)
+            Key.DirectionDown -> {
+                if (
+                    (isPressed || isTyped) && currentSelectedIndex.value < when (screenState.value) {
+                        DesktopScreenState.Recent -> recentTranslates.value.size - 1
+                        DesktopScreenState.Saved -> savedTranslates.value.size - 1
+                        else -> 0
+                    }
+                ) {
                     _currentSelectedIndex.value++
+                }
+            }
 
             else -> return false
         }
@@ -118,6 +174,7 @@ class DesktopViewModel(
                 when (command) {
                     Command.Preferences -> _screenEvent.emit(DesktopScreenEvent.ShowPreferences)
                     Command.Recent -> sendCopyEvent(recentTranslates.value[currentSelectedIndex.value].translatedText)
+                    Command.Saved -> sendCopyEvent(savedTranslates.value[currentSelectedIndex.value].translatedText)
                     null -> {
                         sendCopyEvent(translatedText.value)
                         addRecentTranslateUseCase(query.value, translatedText.value)
@@ -126,6 +183,33 @@ class DesktopViewModel(
                     else -> setQuery(command.query)
                 }
             }
+        }
+    }
+
+    private fun onAltEnterKeyPressed() {
+        coroutineScope.launch {
+            val (query, translatedText) = listOf(query.first(), translatedText.first())
+
+            when {
+                query.isNotEmpty() && translatedText.isNotEmpty() ->
+                    addSavedTranslateUseCase(
+                        originalText = query,
+                        translatedText = translatedText
+                    )
+
+                commandInference.value == Command.Recent ->
+                    recentTranslates
+                        .first()
+                        .getOrNull(currentSelectedIndex.value)?.let {
+                            addSavedTranslateUseCase(originalText = it.originalText, translatedText = it.translatedText)
+                        }
+
+                else -> {
+                    return@launch
+                }
+            }
+
+            sendSnackbarEvent("Selected has been saved.")
         }
     }
 

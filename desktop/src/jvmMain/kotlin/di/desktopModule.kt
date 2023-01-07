@@ -29,11 +29,13 @@ val desktopModule = module {
             get(named("DefaultScope")),
             get(),
             get(),
+            get(),
+            get(),
             get()
         )
     }
 
-    single<TranserDatabase> {
+    single {
         val driver = JdbcSqliteDriver("jdbc:sqlite:transer.db")
         if (!File("transer.db").exists()) {
             TranserDatabase.Schema.create(driver)
