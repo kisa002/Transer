@@ -1,3 +1,6 @@
+package di
+
+import presentation.DesktopViewModel
 import com.haeyum.common.TranserDatabase
 import com.haeyum.common.data.repository.PreferencesRepositoryImpl
 import com.haeyum.common.data.repository.preferences.PreferencesDataSource
@@ -5,7 +8,6 @@ import com.haeyum.common.data.repository.preferences.PreferencesDataSourceImpl
 import com.haeyum.common.domain.repository.PreferencesRepository
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
-import com.haeyum.common.presentation.DesktopViewModel
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.module.dsl.factoryOf
