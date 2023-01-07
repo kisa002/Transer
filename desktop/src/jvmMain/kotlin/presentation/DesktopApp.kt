@@ -53,9 +53,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
 
     val coroutineScope = rememberCoroutineScope()
 
-    var currentSelectedIndex by remember {
-        mutableStateOf(0)
-    }
+    val currentSelectedIndex by viewModel.currentSelectedIndex.collectAsState()
 
     val colors: List<Color> = remember {
         listOf(
@@ -97,35 +95,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
                 onValueChange = { viewModel.setQuery(it.take(1000)) },
                 modifier = Modifier.weight(1f)
                     .focusRequester(focusRequester)
-                    .onPreviewKeyEvent { keyEvent ->
-                        val (isPressed, isTyped, isReleased) = listOf(
-                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_PRESSED,
-                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_TYPED,
-                            (keyEvent.nativeKeyEvent as KeyEvent).id == KeyEvent.KEY_RELEASED
-                        )
-
-                        when (keyEvent.key) {
-                            Key.Enter -> {
-                                if (isPressed)
-                                    viewModel.onEnterKeyPressed()
-                            }
-
-                            Key.DirectionUp -> {
-                                if ((isPressed || isTyped) && currentSelectedIndex > 0)
-                                    currentSelectedIndex--
-                            }
-
-                            Key.DirectionDown -> {
-                                if ((isPressed || isTyped) && currentSelectedIndex < recentTranslates.size - 1)
-                                    currentSelectedIndex++
-                            }
-
-                            else -> {
-                                return@onPreviewKeyEvent false
-                            }
-                        }
-                        true
-                    },
+                    .onPreviewKeyEvent(viewModel::onPreviewKeyEvent),
                 textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
                 singleLine = true,
                 maxLines = 1,
@@ -264,7 +234,7 @@ fun App(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinim
             when (screenEvent) {
                 is DesktopScreenEvent.CopyEvent -> {
                     onMinimize()
-                    clipboardManager.setText(AnnotatedString(translatedText))
+                    clipboardManager.setText(AnnotatedString(screenEvent.text))
                     viewModel.setQuery("")
                 }
 

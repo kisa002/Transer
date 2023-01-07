@@ -1,5 +1,9 @@
 package presentation
 
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
 import com.haeyum.common.domain.usecase.TranslateUseCase
 import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
@@ -10,7 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
 class DesktopViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
@@ -49,6 +53,9 @@ class DesktopViewModel(
     )
     val screenEvent = _screenEvent.asSharedFlow()
 
+    private val _currentSelectedIndex = MutableStateFlow(0)
+    val currentSelectedIndex = _currentSelectedIndex.asStateFlow()
+
     val translatedText = query
         .transformLatest { query ->
             emit(
@@ -77,17 +84,42 @@ class DesktopViewModel(
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
-    fun setQuery(query: String) {
-        _query.value = query
+    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text))
+
+    fun onPreviewKeyEvent(keyEvent: KeyEvent): Boolean {
+        val keyEventId = (keyEvent.nativeKeyEvent as java.awt.event.KeyEvent).id
+        val (isPressed, isTyped, isReleased) = listOf(
+            keyEventId == java.awt.event.KeyEvent.KEY_PRESSED,
+            keyEventId == java.awt.event.KeyEvent.KEY_TYPED,
+            keyEventId == java.awt.event.KeyEvent.KEY_RELEASED
+        )
+
+        when (keyEvent.key) {
+            Key.Enter ->
+                if (isPressed)
+                    onEnterKeyPressed()
+
+            Key.DirectionUp ->
+                if ((isPressed || isTyped) && currentSelectedIndex.value > 0)
+                    _currentSelectedIndex.value--
+
+            Key.DirectionDown ->
+                if ((isPressed || isTyped) && currentSelectedIndex.value < recentTranslates.value.size - 1)
+                    _currentSelectedIndex.value++
+
+            else -> return false
+        }
+        return true
     }
 
-    fun onEnterKeyPressed() {
+    private fun onEnterKeyPressed() {
         coroutineScope.launch {
             commandInference.value.let { command ->
                 when (command) {
                     Command.Preferences -> _screenEvent.emit(DesktopScreenEvent.ShowPreferences)
+                    Command.Recent -> sendCopyEvent(recentTranslates.value[currentSelectedIndex.value].translatedText)
                     null -> {
-                        _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(translatedText.value))
+                        sendCopyEvent(translatedText.value)
                         addRecentTranslateUseCase(query.value, translatedText.value)
                     }
 
@@ -95,5 +127,9 @@ class DesktopViewModel(
                 }
             }
         }
+    }
+
+    fun setQuery(query: String) {
+        _query.value = query
     }
 }
