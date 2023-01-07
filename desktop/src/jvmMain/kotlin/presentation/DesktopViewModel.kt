@@ -45,6 +45,8 @@ class DesktopViewModel(
             query.isNotEmpty() -> DesktopScreenState.Translate
             else -> DesktopScreenState.Home
         }
+    }.onEach {
+        _currentSelectedIndex.value = 0
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(),
@@ -172,6 +174,7 @@ class DesktopViewModel(
                 when (command) {
                     Command.Preferences -> _screenEvent.emit(DesktopScreenEvent.ShowPreferences)
                     Command.Recent -> sendCopyEvent(recentTranslates.value[currentSelectedIndex.value].translatedText)
+                    Command.Saved -> sendCopyEvent(savedTranslates.value[currentSelectedIndex.value].translatedText)
                     null -> {
                         sendCopyEvent(translatedText.value)
                         addRecentTranslateUseCase(query.value, translatedText.value)

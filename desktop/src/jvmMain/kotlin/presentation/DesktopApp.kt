@@ -305,7 +305,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
         }
     }
 
-    LaunchedEffect(currentSelectedIndex) {
+    LaunchedEffect(desktopScreenState, currentSelectedIndex) {
         when (desktopScreenState) {
             DesktopScreenState.Recent -> recentTranslateLazyListState.scrollToItem(currentSelectedIndex)
             DesktopScreenState.Saved -> savedTranslatesLazyListState.scrollToItem(currentSelectedIndex)
