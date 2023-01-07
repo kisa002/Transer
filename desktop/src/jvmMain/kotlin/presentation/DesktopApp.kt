@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -47,10 +48,14 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
     val desktopScreenState by viewModel.screenState.collectAsState()
     val commandInference by viewModel.commandInference.collectAsState()
     val recentTranslates by viewModel.recentTranslates.collectAsState()
+    val savedTranslates by viewModel.savedTranslates.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
     val currentSelectedIndex by viewModel.currentSelectedIndex.collectAsState()
+
+    val recentTranslateLazyListState = rememberLazyListState()
+    val savedTranslatesLazyListState = rememberLazyListState()
 
     val colors: List<Color> = remember {
         listOf(
@@ -184,7 +189,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                     style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 )
 
-                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = recentTranslateLazyListState) {
                     itemsIndexed(recentTranslates) { index, recentTranslate ->
                         TranslatedItem(
                             translatedText = recentTranslate.translatedText,
@@ -195,7 +200,20 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
             }
 
             DesktopScreenState.Saved -> {
-                Text("Saved")
+                Text(
+                    text = "Saved",
+                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                    style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                )
+
+                LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = savedTranslatesLazyListState) {
+                    itemsIndexed(savedTranslates) { index, recentTranslate ->
+                        TranslatedItem(
+                            translatedText = recentTranslate.translatedText,
+                            isSelected = index == currentSelectedIndex
+                        )
+                    }
+                }
             }
 
             else -> {
@@ -215,7 +233,11 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                         strokeWidth = 4.dp
                     )
                 } else {
-                    TranslatedItem(translatedText = translatedText, isSelected = true, modifier = Modifier.padding(12.dp))
+                    TranslatedItem(
+                        translatedText = translatedText,
+                        isSelected = true,
+                        modifier = Modifier.padding(12.dp)
+                    )
                 }
             }
         }
@@ -239,6 +261,16 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                     onShowPreferences()
                     viewModel.setQuery("")
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(currentSelectedIndex) {
+        when (desktopScreenState) {
+            DesktopScreenState.Recent -> recentTranslateLazyListState.scrollToItem(currentSelectedIndex)
+            DesktopScreenState.Saved -> savedTranslatesLazyListState.scrollToItem(currentSelectedIndex)
+            else -> {
+                /* no-op */
             }
         }
     }

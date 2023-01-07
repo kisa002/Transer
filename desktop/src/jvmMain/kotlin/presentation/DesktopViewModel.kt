@@ -3,6 +3,7 @@ package presentation
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
 import com.haeyum.common.domain.usecase.TranslateUseCase
 import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
@@ -88,6 +89,12 @@ class DesktopViewModel(
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
+    val savedTranslates = channelFlow {
+        getSavedTranslatesUseCase().collectLatest {
+            send(it)
+        }
+    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+
     private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text))
 
     fun onPreviewKeyEvent(keyEvent: KeyEvent): Boolean {
@@ -101,15 +108,27 @@ class DesktopViewModel(
         when (keyEvent.key) {
             Key.Enter ->
                 if (isPressed)
-                    onEnterKeyPressed()
+                    if (keyEvent.isAltPressed) {
+                        onAltEnterKeyPressed()
+                    } else {
+                        onEnterKeyPressed()
+                    }
 
             Key.DirectionUp ->
                 if ((isPressed || isTyped) && currentSelectedIndex.value > 0)
                     _currentSelectedIndex.value--
 
-            Key.DirectionDown ->
-                if ((isPressed || isTyped) && currentSelectedIndex.value < recentTranslates.value.size - 1)
+            Key.DirectionDown -> {
+                if (
+                    (isPressed || isTyped) && currentSelectedIndex.value < when (screenState.value) {
+                        DesktopScreenState.Recent -> recentTranslates.value.size - 1
+                        DesktopScreenState.Saved -> savedTranslates.value.size - 1
+                        else -> 0
+                    }
+                ) {
                     _currentSelectedIndex.value++
+                }
+            }
 
             else -> return false
         }
@@ -128,6 +147,31 @@ class DesktopViewModel(
                     }
 
                     else -> setQuery(command.query)
+                }
+            }
+        }
+    }
+
+    private fun onAltEnterKeyPressed() {
+        coroutineScope.launch {
+            val (query, translatedText) = listOf(query.first(), translatedText.first())
+
+            when {
+                query.isNotEmpty() && translatedText.isNotEmpty() ->
+                    addSavedTranslateUseCase(
+                        originalText = query,
+                        translatedText = translatedText
+                    )
+
+                commandInference.value == Command.Recent ->
+                    recentTranslates
+                        .first()
+                        .getOrNull(currentSelectedIndex.value)?.let {
+                            addSavedTranslateUseCase(originalText = it.originalText, translatedText = it.translatedText)
+                        }
+
+                else -> {
+                    /*no-op*/
                 }
             }
         }
