@@ -101,7 +101,9 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
             ) {
                 BasicTextField(
                     value = query,
-                    onValueChange = { viewModel.setQuery(it.take(1000)) },
+                    onValueChange = {
+                        viewModel.setQuery(it.replace("\n", "").take(1000))
+                    },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester)
                         .onPreviewKeyEvent(viewModel::onPreviewKeyEvent),
@@ -138,14 +140,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                                             fontWeight = FontWeight.Medium
                                         )
                                     )
-                                } ?: Text(
-                                    text = query,
-                                    style = TextStyle(
-                                        color = Color.Black,
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                )
+                                }
                             }
                         }
                     }
