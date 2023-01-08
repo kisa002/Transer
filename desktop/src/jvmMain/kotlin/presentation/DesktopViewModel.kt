@@ -131,7 +131,7 @@ class DesktopViewModel(
                 .replace("&amp;", "&")
                 .replace("&quot;", "\"")
                 .replace("&apos;", "'")
-                .replace("&#39;". "'")
+                .replace("&#39;", "'")
         }
         .onEach {
             _isRequesting.value = false

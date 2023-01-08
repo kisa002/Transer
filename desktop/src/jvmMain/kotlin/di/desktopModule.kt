@@ -36,8 +36,9 @@ val desktopModule = module {
     }
 
     single {
-        val driver = JdbcSqliteDriver("jdbc:sqlite:transer.db")
-        if (!File("transer.db").exists()) {
+        val filePath = System.getProperty("user.home") + "/transer.db"
+        val driver = JdbcSqliteDriver("jdbc:sqlite:$filePath")
+        if (!File(filePath).exists()) {
             TranserDatabase.Schema.create(driver)
         }
         println("TranserDatabase created")
