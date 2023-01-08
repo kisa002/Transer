@@ -257,6 +257,6 @@ class DesktopViewModel(
     }
 
     fun setQuery(query: String) {
-        _query.value = query
+        _query.value = query.removePrefix(" ").removePrefix(" ").removeSuffix(" ").replace("\n", "").take(1000)
     }
 }

@@ -36,8 +36,6 @@ kotlin {
                 api("io.insert-koin:koin-core:${extra["koin.version"]}")
                 // Koin for Ktor
                 api("io.insert-koin:koin-ktor:${extra["koin.ktor"]}")
-                // SLF4J Logger
-                api("io.insert-koin:koin-logger-slf4j:${extra["koin.ktor"]}")
 
                 // SQLDelight
                 api("com.squareup.sqldelight:coroutines-extensions:1.5.4")
@@ -76,7 +74,7 @@ kotlin {
             dependencies {
                 api(compose.preview)
                 api("com.squareup.sqldelight:sqlite-driver:${extra["sqldelight.version"]}")
-//                api("com.squareup.sqldelight:native-driver:${extra["sqldelight.version"]}")
+                api("com.github.kwhat:jnativehook:2.2.2")
             }
         }
         val desktopTest by getting

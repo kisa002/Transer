@@ -14,17 +14,21 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import com.github.kwhat.jnativehook.GlobalScreen
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import di.DesktopKoin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
 import presentation.DesktopApp
 import presentation.DesktopViewModel
+import presentation.TranserShortcutListener
 import java.awt.Desktop
+import java.awt.desktop.AppForegroundEvent
 import java.net.URI
 
 fun main() {
@@ -32,6 +36,11 @@ fun main() {
     val viewModel by inject<DesktopViewModel>(DesktopViewModel::class.java)
     val setPreferencesUseCase by inject<SetPreferencesUseCase>(SetPreferencesUseCase::class.java)
     val getPreferencesUseCase by inject<GetPreferencesUseCase>(GetPreferencesUseCase::class.java)
+
+//    System.setProperty("apple.awt.UIElement", "true")
+
+//    val isMac = System.getProperty("os.name").toLowerCase().contains("mac")
+    println(System.getProperty("os.name"))
 
     application {
         val trayState = rememberTrayState()
@@ -49,6 +58,22 @@ fun main() {
         var isShowPreferencesWindow by remember {
             mutableStateOf(false)
         }
+        val isForeground by produceState(true) {
+            val listener = object: java.awt.desktop.AppForegroundListener {
+                override fun appRaisedToForeground(e: AppForegroundEvent?) {
+                    value = true
+                }
+
+                override fun appMovedToBackground(e: AppForegroundEvent?) {
+                    value = false
+                }
+            }
+            java.awt.Desktop.getDesktop().addAppEventListener(listener)
+
+            awaitDispose {
+                java.awt.Desktop.getDesktop().removeAppEventListener(listener)
+            }
+        }
 
         Tray(
             icon = TrayIcon,
@@ -59,13 +84,12 @@ fun main() {
             },
             menu = {
                 Item("Show Transer") {
-                    isShowTranslateWindow = true
-//                    trayState.sendNotification(Notification(title = "Title", message = LocalDateTime.now().toString(), type = Notification.Type.Info))
+                    java.awt.Desktop.getDesktop().requestForeground(true)
                 }
             }
         )
 
-        if (isShowTranslateWindow) {
+//        if (isShowTranslateWindow) {
             Window(
                 onCloseRequest = ::exitApplication,
                 state = windowState,
@@ -78,30 +102,17 @@ fun main() {
                     viewModel = viewModel,
                     onShowPreferences = {
                         isShowPreferencesWindow = true
-                    },
-                    onMinimize = {
-//                        windowState.isMinimized = true
                     }
                 )
                 MenuBar {
-                    Menu(text = "File") {
-                        Item(
-                            text = "Preferences",
-                            shortcut = KeyShortcut(Key.Comma, meta = true),
-                            onClick = {
-                                isShowPreferencesWindow = true
-                            }
-                        )
-                    }
                     Menu(text = "Window") {
                         Item(text = "Hide", shortcut = KeyShortcut(Key.W, meta = true), onClick = {
                             isShowTranslateWindow = false
-                        }
-                        )
+                        })
                     }
                 }
             }
-        }
+//        }
 
         if (isShowPreferencesWindow) {
             Window(
@@ -161,6 +172,42 @@ fun main() {
         LaunchedEffect(Unit) {
             if (getPreferencesUseCase().firstOrNull() == null)
                 setPreferencesUseCase(Language("en", "English"), Language("ko", "Korean"))
+
+            java.awt.Desktop.getDesktop().setPreferencesHandler {
+                isShowPreferencesWindow = true
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            runCatching {
+                GlobalScreen.registerNativeHook()
+            }.onSuccess {
+                GlobalScreen.addNativeKeyListener(
+                    TranserShortcutListener(
+                        onEscKeyPressed = {
+
+                        },
+                        onTriggerKeyPressed = {
+                            if (isForeground && isShowTranslateWindow) {
+                                windowState.size = DpSize(width = 0.dp, height = 0.dp)
+                                isShowTranslateWindow = false
+                            } else {
+                                windowState.size = DpSize(width = 720.dp, height = 400.dp)
+                                isShowTranslateWindow = true
+                                java.awt.Desktop.getDesktop().requestForeground(true)
+                            }
+                            println("isForeground: $isForeground || isShow: $isShowTranslateWindow")
+                        }
+                    )
+                )
+            }.onFailure {
+                println("Failed to register native hook")
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            delay(1000)
+            java.awt.Desktop.getDesktop().requestForeground(true)
         }
     }
 }
