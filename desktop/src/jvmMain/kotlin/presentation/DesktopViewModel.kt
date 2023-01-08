@@ -90,6 +90,13 @@ class DesktopViewModel(
                 }
             )
         }
+        .map {
+            it.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&amp;", "&")
+                .replace("&quot;", "\"")
+                .replace("&apos;", "'")
+        }
         .onEach {
             _isRequesting.value = false
         }
