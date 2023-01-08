@@ -24,5 +24,8 @@ class RecentTranslateRepositoryImpl(
         )
     }
 
-    override suspend fun deleteRecentTranslate(idx: Int) = recentTranslateDataSource.deleteRecentTranslate(idx)
+    override suspend fun deleteRecentTranslateByIdx(idx: Int) = recentTranslateDataSource.deleteRecentTranslateById(idx)
+
+    override suspend fun deleteRecentTranslateByTranslatedText(translatedText: String) =
+        recentTranslateDataSource.deleteRecentTranslateByTranslatedText(translatedText)
 }

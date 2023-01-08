@@ -8,9 +8,8 @@ import com.haeyum.common.data.repository.translation.TranslationDataSource
 import com.haeyum.common.data.repository.translation.TranslationDataSourceImpl
 import com.haeyum.common.domain.repository.SavedTranslateRepository
 import com.haeyum.common.domain.repository.TranslationRepository
-import com.haeyum.common.domain.usecase.DetectLanguageUseCase
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
-import com.haeyum.common.domain.usecase.TranslateUseCase
+import com.haeyum.common.domain.usecase.*
+import com.haeyum.common.domain.usecase.recent.*
 import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
@@ -26,6 +25,13 @@ val commonDataModule = module {
     singleOf(::GetSupportedLanguagesUseCase)
     singleOf(::SavedTranslateRepositoryImpl) bind SavedTranslateRepository::class
     singleOf(::SavedTranslateDataSourceImpl) bind SavedTranslateDataSource::class
+    singleOf(::GetPreferencesUseCase)
+    singleOf(::SetPreferencesUseCase)
+    singleOf(::GetRecentTranslatesUseCase)
+    singleOf(::AddRecentTranslateUseCase)
+    singleOf(::DeleteRecentTranslateByIdxUseCase)
+    singleOf(::DeleteRecentTranslateByTranslatedTextUseCase)
+    singleOf(::DeleteAndAddRecentTranslateUseCase)
     singleOf(::GetSavedTranslatesUseCase)
     singleOf(::AddSavedTranslateUseCase)
     singleOf(::DeleteSavedTranslateUseCase)
