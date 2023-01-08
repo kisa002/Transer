@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, onMinimize: () -> Unit = {}) {
+fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) {
     val query by viewModel.query.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
     val isRequesting by viewModel.isRequesting.collectAsState()
@@ -102,7 +102,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                 BasicTextField(
                     value = query,
                     onValueChange = {
-                        viewModel.setQuery(it.replace("\n", "").take(1000))
+                        viewModel.setQuery(it)
                     },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester)
@@ -228,7 +228,11 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                             Text(
                                 text = "Disconnected Network",
                                 modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                                style = TextStyle(color = Color(0xFFE60000), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                style = TextStyle(
+                                    color = Color(0xFFE60000),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
                             )
                             Text(
                                 text = "Please check your network connection.",
@@ -236,11 +240,16 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                                 style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
                             )
                         }
+
                         DesktopScreenErrorEvent.FailedTranslate -> {
                             Text(
                                 text = "Failed Translate",
                                 modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                                style = TextStyle(color = Color(0xFFE60000), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                style = TextStyle(
+                                    color = Color(0xFFE60000),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
                             )
                             Text(
                                 text = "Translation failed. Please change the text or try again later.",
@@ -248,11 +257,16 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                                 style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
                             )
                         }
+
                         DesktopScreenErrorEvent.NotFoundPreferences -> {
                             Text(
                                 text = "Not found preferences",
                                 modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                                style = TextStyle(color = Color(0xFFE60000), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                style = TextStyle(
+                                    color = Color(0xFFE60000),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
                             )
                             Text(
                                 text = "Preferences file not found. Please reinstall the app.",
@@ -260,11 +274,16 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                                 style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
                             )
                         }
+
                         DesktopScreenErrorEvent.WrongCommand -> {
                             Text(
                                 text = "Wrong command",
                                 modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                                style = TextStyle(color = Color(0xFFE60000), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                style = TextStyle(
+                                    color = Color(0xFFE60000),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
                             )
                             Text(
                                 text = "Please check the command.",
@@ -340,7 +359,6 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
         viewModel.screenEvent.collect { screenEvent ->
             when (screenEvent) {
                 is DesktopScreenEvent.CopyEvent -> {
-                    onMinimize()
                     clipboardManager.setText(AnnotatedString(screenEvent.text))
                     viewModel.setQuery("")
                 }

@@ -131,7 +131,7 @@ class DesktopViewModel(
                 .replace("&amp;", "&")
                 .replace("&quot;", "\"")
                 .replace("&apos;", "'")
-                .replace("&#39;". "'")
+                .replace("&#39;", "'")
         }
         .onEach {
             _isRequesting.value = false
@@ -257,6 +257,6 @@ class DesktopViewModel(
     }
 
     fun setQuery(query: String) {
-        _query.value = query
+        _query.value = query.removePrefix(" ").removePrefix(" ").removeSuffix(" ").replace("\n", "").take(1000)
     }
 }
