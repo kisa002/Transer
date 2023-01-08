@@ -34,6 +34,11 @@ class DesktopViewModel(
     val commandInference = query.map { query ->
         Command.values().firstOrNull { command ->
             query.lowercase().contains(command.query.take(query.length).lowercase())
+        }?.let { command ->
+            if (query.length <= command.query.length)
+                command
+            else
+                null
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
@@ -60,6 +65,7 @@ class DesktopViewModel(
             errorState is DesktopScreenErrorEvent -> DesktopScreenState.Error(errorState)
             query.isEmpty() || (query.length == 1 && query.first() == '>') -> DesktopScreenState.Home
             commandInference != null -> commandInference.state
+            query.first() == '>' -> DesktopScreenState.Error(DesktopScreenErrorEvent.WrongCommand) // TODO: I think this condition appropriate for move to errorEvent
             query.isNotEmpty() -> DesktopScreenState.Translate
             else -> DesktopScreenState.Home
         }
@@ -125,6 +131,7 @@ class DesktopViewModel(
                 .replace("&amp;", "&")
                 .replace("&quot;", "\"")
                 .replace("&apos;", "'")
+                .replace("&#39;". "'")
         }
         .onEach {
             _isRequesting.value = false

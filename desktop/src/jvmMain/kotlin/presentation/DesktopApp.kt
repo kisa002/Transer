@@ -260,6 +260,18 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}, 
                                 style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
                             )
                         }
+                        DesktopScreenErrorEvent.WrongCommand -> {
+                            Text(
+                                text = "Wrong command",
+                                modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                                style = TextStyle(color = Color(0xFFE60000), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            )
+                            Text(
+                                text = "Please check the command.",
+                                modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+                                style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+                            )
+                        }
                     }
                 }
 
