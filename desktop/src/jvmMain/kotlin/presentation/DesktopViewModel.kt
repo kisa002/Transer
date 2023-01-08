@@ -10,12 +10,11 @@ import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
 import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import java.net.SocketException
+import java.nio.channels.UnresolvedAddressException
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
 class DesktopViewModel(
@@ -35,13 +34,38 @@ class DesktopViewModel(
     val commandInference = query.map { query ->
         Command.values().firstOrNull { command ->
             query.lowercase().contains(command.query.take(query.length).lowercase())
+        }?.let { command ->
+            if (query.length <= command.query.length)
+                command
+            else
+                null
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
-    val screenState = combine(isRequesting, query, commandInference) { isRequesting, query, commandInference ->
+    private val errorEvent = MutableSharedFlow<DesktopScreenErrorEvent?>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    private val errorState = errorEvent.combine(query) { event, query ->
+        event to query
+    }.scan(initial = Pair<DesktopScreenErrorEvent?, String?>(null, null)) { previous, current ->
+        if (previous.second == null || previous.second == current.second) {
+            current.first to current.second
+        } else {
+            null to current.second
+        }
+    }.map {
+        it.first
+    }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
+
+    val screenState = combine(errorState, query, commandInference) { errorState, query, commandInference ->
         when {
+            errorState is DesktopScreenErrorEvent -> DesktopScreenState.Error(errorState)
             query.isEmpty() || (query.length == 1 && query.first() == '>') -> DesktopScreenState.Home
             commandInference != null -> commandInference.state
+            query.first() == '>' -> DesktopScreenState.Error(DesktopScreenErrorEvent.WrongCommand) // TODO: I think this condition appropriate for move to errorEvent
             query.isNotEmpty() -> DesktopScreenState.Translate
             else -> DesktopScreenState.Home
         }
@@ -80,15 +104,34 @@ class DesktopViewModel(
     val translatedText = query
         .transformLatest { query ->
             emit(
-                if (query.isEmpty() || query.contains(">")) {
+                if (query.isEmpty() || (query.firstOrNull() == '>')) {
                     _isRequesting.value = false
                     ""
                 } else {
                     _isRequesting.value = true
-                    delay(700)
-                    translateUseCase(q = query, key = "").translatedText
+                    delay(500)
+                    runCatching {
+                        translateUseCase(q = query, key = "").translatedText
+                    }.onFailure { exception ->
+                        if (exception !is CancellationException)
+                            errorEvent.emit(
+                                when (exception) {
+                                    is SocketException, is UnresolvedAddressException -> DesktopScreenErrorEvent.DisconnectedNetwork
+                                    is NullPointerException -> DesktopScreenErrorEvent.NotFoundPreferences // TODO: There is no possibility of an error in the scenario because preferences created on the on-boarding time, but a reset guide logic will be added after monitoring
+                                    else -> DesktopScreenErrorEvent.FailedTranslate
+                                }
+                            )
+                    }.getOrDefault("")
                 }
             )
+        }
+        .map {
+            it.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&amp;", "&")
+                .replace("&quot;", "\"")
+                .replace("&apos;", "'")
+                .replace("&#39;". "'")
         }
         .onEach {
             _isRequesting.value = false

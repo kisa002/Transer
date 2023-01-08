@@ -5,4 +5,5 @@ sealed class DesktopScreenState {
     object Translate : DesktopScreenState()
     object Recent : DesktopScreenState()
     object Saved : DesktopScreenState()
+    data class Error(val errorEvent: DesktopScreenErrorEvent) : DesktopScreenState()
 }
