@@ -80,7 +80,7 @@ class DesktopViewModel(
     val translatedText = query
         .transformLatest { query ->
             emit(
-                if (query.isEmpty() || query.contains(">")) {
+                if (query.isEmpty() || (query.firstOrNull() == '>')) {
                     _isRequesting.value = false
                     ""
                 } else {
