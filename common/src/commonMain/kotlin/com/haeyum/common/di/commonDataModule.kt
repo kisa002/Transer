@@ -8,12 +8,9 @@ import com.haeyum.common.data.repository.translation.TranslationDataSource
 import com.haeyum.common.data.repository.translation.TranslationDataSourceImpl
 import com.haeyum.common.domain.repository.SavedTranslateRepository
 import com.haeyum.common.domain.repository.TranslationRepository
-import com.haeyum.common.domain.usecase.DetectLanguageUseCase
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
-import com.haeyum.common.domain.usecase.TranslateUseCase
-import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
+import com.haeyum.common.domain.usecase.*
+import com.haeyum.common.domain.usecase.recent.*
+import com.haeyum.common.domain.usecase.saved.*
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -26,9 +23,20 @@ val commonDataModule = module {
     singleOf(::GetSupportedLanguagesUseCase)
     singleOf(::SavedTranslateRepositoryImpl) bind SavedTranslateRepository::class
     singleOf(::SavedTranslateDataSourceImpl) bind SavedTranslateDataSource::class
+    singleOf(::GetPreferencesUseCase)
+    singleOf(::SetPreferencesUseCase)
+    singleOf(::GetRecentTranslatesUseCase)
+    singleOf(::AddRecentTranslateUseCase)
+    singleOf(::DeleteRecentTranslateByIdxUseCase)
+    singleOf(::DeleteRecentTranslateByTranslatedTextUseCase)
+    singleOf(::DeleteAndAddRecentTranslateUseCase)
     singleOf(::GetSavedTranslatesUseCase)
     singleOf(::AddSavedTranslateUseCase)
     singleOf(::DeleteSavedTranslateUseCase)
+    singleOf(::IsExistsSavedTranslateUseCase)
+    singleOf(::ClearRecentTranslatesUseCase)
+    singleOf(::ClearSavedTranslatesUseCase)
+    singleOf(::ClearDataUseCase)
 //    singleOf(::GetRecentTranslatesUseCase)
 //    singleOf(::AddRecentTranslateUseCase)
 //    singleOf(::DeleteRecentTranslateUseCase)

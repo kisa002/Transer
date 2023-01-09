@@ -9,5 +9,7 @@ interface RecentTranslateRepository {
         originalText: String,
         translatedText: String
     )
-    suspend fun deleteRecentTranslate(idx: Int)
+    suspend fun deleteRecentTranslateByIdx(idx: Int)
+    suspend fun deleteRecentTranslateByTranslatedText(translatedText: String)
+    suspend fun clearRecentTranslates()
 }

@@ -144,6 +144,9 @@ fun main() {
                     onSelectedTargetLanguage = { targetLanguage ->
                         preferencesViewModel.setSelectedTargetLanguage(targetLanguage)
                     },
+                    onClickClearData = {
+                        preferencesViewModel.clearData()
+                    },
                     onClickContact = {
                         Desktop.getDesktop().browse(URI("mailto:vnycall74@naver.com"))
                     }

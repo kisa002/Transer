@@ -35,13 +35,16 @@ fun PreferencesScreen(
     onCloseRequest: () -> Unit,
     onSelectedSourceLanguage: (Language) -> Unit,
     onSelectedTargetLanguage: (Language) -> Unit,
+    onClickClearData: () -> Unit,
     onClickContact: () -> Unit
 ) {
-    var isVisibleSelectSourceLanguage by remember { mutableStateOf(false) }
-    var isVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
+    var visibleSelectSourceLanguage by remember { mutableStateOf(false) }
+    var vVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
 
     var visibleSourceInfoAlert by remember { mutableStateOf(false) }
     var visibleTargetInfoAlert by remember { mutableStateOf(false) }
+
+    var visibleClearDataAlert by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -63,7 +66,7 @@ fun PreferencesScreen(
                     visibleSourceInfoAlert = true
                 },
                 onItemClick = {
-                    isVisibleSelectSourceLanguage = true
+                    visibleSelectSourceLanguage = true
                 }
             )
 
@@ -77,12 +80,13 @@ fun PreferencesScreen(
                     visibleTargetInfoAlert = true
                 },
                 onItemClick = {
-                    isVisibleSelectTargetLanguage = true
+                    vVisibleSelectTargetLanguage = true
                 }
             )
         }
 
         Section(text = "Information") {
+            Item(key = "Clear Data", onItemClick = { visibleClearDataAlert = true })
             Item(key = "Contact", onItemClick = onClickContact)
             Item(key = "Version", value = getVersion())
         }
@@ -103,29 +107,42 @@ fun PreferencesScreen(
         text = "The target language is the language in which you want to translate the text you enter.",
     )
 
+    AlertDialog(
+        visible = visibleClearDataAlert,
+        onDismissRequest = { visibleClearDataAlert = false },
+        onConfirmRequest = {
+            visibleClearDataAlert = false
+            onClickClearData()
+        },
+        confirmButtonText = "Clear",
+        dismissButtonText = "Cancel",
+        title = "Clear Data",
+        text = "Are you sure you want to clear recent translates and saved translates data?"
+    )
+
     VisibilitySelectLanguageScreen(
         title = "Source Language",
-        visible = isVisibleSelectSourceLanguage,
+        visible = visibleSelectSourceLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            isVisibleSelectSourceLanguage = false
+            visibleSelectSourceLanguage = false
         },
         onSelectedLanguage = {
             onSelectedSourceLanguage(it)
-            isVisibleSelectSourceLanguage = false
+            visibleSelectSourceLanguage = false
         }
     )
 
     VisibilitySelectLanguageScreen(
         title = "Target Language",
-        visible = isVisibleSelectTargetLanguage,
+        visible = vVisibleSelectTargetLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            isVisibleSelectTargetLanguage = false
+            vVisibleSelectTargetLanguage = false
         },
         onSelectedLanguage = {
             onSelectedTargetLanguage(it)
-            isVisibleSelectTargetLanguage = false
+            vVisibleSelectTargetLanguage = false
         }
     )
 }
@@ -153,13 +170,28 @@ fun VisibilitySelectLanguageScreen(
 }
 
 @Composable
-private fun AlertDialog(visible: Boolean, onDismissRequest: () -> Unit, title: String, text: String) {
+private fun AlertDialog(
+    visible: Boolean,
+    onConfirmRequest: () -> Unit = {},
+    onDismissRequest: () -> Unit,
+    title: String,
+    text: String,
+    confirmButtonText: String = "OK",
+    dismissButtonText: String? = null
+) {
     if (visible)
         AlertDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
-                TextButton(onClick = onDismissRequest) {
-                    Text(text = "OK")
+                TextButton(onClick = onConfirmRequest) {
+                    Text(text = confirmButtonText)
+                }
+            },
+            dismissButton = dismissButtonText?.let {
+                {
+                    TextButton(onClick = onDismissRequest) {
+                        Text(text = it)
+                    }
                 }
             },
             modifier = Modifier.then(

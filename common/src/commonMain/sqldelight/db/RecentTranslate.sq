@@ -10,5 +10,11 @@ SELECT * FROM recentTranslate ORDER BY idx DESC;
 insert:
 INSERT INTO recentTranslate (originalText, translatedText) VALUES (?, ?);
 
-delete:
+deleteByIdx:
 DELETE FROM recentTranslate WHERE idx = ?;
+
+deleteByTranslatedText:
+DELETE FROM recentTranslate WHERE translatedText = ?;
+
+deleteAll:
+DELETE FROM recentTranslate;

@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -52,6 +53,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
     val commandInference by viewModel.commandInference.collectAsState()
     val recentTranslates by viewModel.recentTranslates.collectAsState()
     val savedTranslates by viewModel.savedTranslates.collectAsState()
+    val isExistsSavedTranslate by viewModel.isExistsSavedTranslate.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -197,6 +199,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
                                 originalText = recentTranslate.originalText,
                                 translatedText = recentTranslate.translatedText,
                                 isSelected = index == currentSelectedIndex,
+                                isExists = isExistsSavedTranslate,
                                 onClick = viewModel::onClickTranslatedItem
                             )
                         }
@@ -216,6 +219,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
                                 originalText = savedTranslate.originalText,
                                 translatedText = savedTranslate.translatedText,
                                 isSelected = index == currentSelectedIndex,
+                                isExists = isExistsSavedTranslate,
                                 onClick = viewModel::onClickTranslatedItem
                             )
                         }
@@ -315,6 +319,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
                             originalText = query,
                             translatedText = translatedText,
                             isSelected = true,
+                            isExists = isExistsSavedTranslate,
                             modifier = Modifier.padding(12.dp),
                             onClick = viewModel::onClickTranslatedItem
                         )
@@ -329,14 +334,14 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
             enter = fadeIn() + slideInVertically(
                 initialOffsetY = { it },
                 animationSpec = tween(
-                    durationMillis = 1500,
+                    durationMillis = 1000,
                     easing = EaseOutExpo
                 )
             ),
             exit = fadeOut() + slideOutVertically(
                 targetOffsetY = { it },
                 animationSpec = tween(
-                    durationMillis = 3000,
+                    durationMillis = 1000,
                     easing = EaseOutExpo
                 )
             )
@@ -393,19 +398,18 @@ private fun TranslatedItem(
     originalText: String,
     translatedText: String,
     isSelected: Boolean,
+    isExists: Boolean,
     modifier: Modifier = Modifier,
     onClick: (String, String) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .then(modifier)
+            .clip(RoundedCornerShape(8.dp))
+            .background(color = if (isSelected) Color(0x0F000000) else Color.Transparent)
             .clickable {
                 onClick(originalText, translatedText)
             }
-            .background(
-                color = if (isSelected) Color(0x0F000000) else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
-            )
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -422,7 +426,7 @@ private fun TranslatedItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "⌥↵ Save",
+                    text = if (isExists) "⌥↵ Save Delete" else "⌥↵ Save",
                     modifier = Modifier
                         .background(
                             color = Color(0x15000000),
