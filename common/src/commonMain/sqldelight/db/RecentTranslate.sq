@@ -15,3 +15,6 @@ DELETE FROM recentTranslate WHERE idx = ?;
 
 deleteByTranslatedText:
 DELETE FROM recentTranslate WHERE translatedText = ?;
+
+deleteAll:
+DELETE FROM recentTranslate;

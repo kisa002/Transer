@@ -11,4 +11,5 @@ interface RecentTranslateRepository {
     )
     suspend fun deleteRecentTranslateByIdx(idx: Int)
     suspend fun deleteRecentTranslateByTranslatedText(translatedText: String)
+    suspend fun clearRecentTranslates()
 }

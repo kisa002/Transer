@@ -1,6 +1,7 @@
 package com.haeyum.common.presentation.preferences
 
 import com.haeyum.common.domain.model.translation.languages.Language
+import com.haeyum.common.domain.usecase.ClearDataUseCase
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase
@@ -13,7 +14,8 @@ class PreferencesViewModel(
     private val coroutineScope: CoroutineScope,
     private val getSupportedLanguagesUseCase: GetSupportedLanguagesUseCase,
     private val getPreferencesUseCase: GetPreferencesUseCase,
-    private val setPreferencesUseCase: SetPreferencesUseCase
+    private val setPreferencesUseCase: SetPreferencesUseCase,
+    private val clearDataUseCase: ClearDataUseCase
 ) {
     val supportedLanguages = flow {
         emit(getSupportedLanguagesUseCase(target = "en", key = ""))
@@ -48,6 +50,12 @@ class PreferencesViewModel(
             selectedSourceLanguage.value?.let { sourceLanguage ->
                 setPreferencesUseCase(sourceLanguage = sourceLanguage, targetLanguage = language)
             }
+        }
+    }
+
+    fun clearData() {
+        coroutineScope.launch {
+            clearDataUseCase()
         }
     }
 

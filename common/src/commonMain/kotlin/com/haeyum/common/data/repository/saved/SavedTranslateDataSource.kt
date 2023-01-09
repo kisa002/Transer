@@ -9,4 +9,5 @@ interface SavedTranslateDataSource {
     suspend fun insertSavedTranslate(originalText: String, translatedText: String)
     suspend fun deleteSavedTranslateByIdx(idx: Int)
     suspend fun deleteSavedTranslateByTranslatedText(translatedText: String)
+    suspend fun deleteAllSavedTranslates()
 }

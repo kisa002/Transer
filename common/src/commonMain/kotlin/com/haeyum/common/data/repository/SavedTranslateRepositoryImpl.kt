@@ -27,4 +27,6 @@ class SavedTranslateRepositoryImpl(
 
     override suspend fun deleteSavedTranslateByTranslatedText(translatedText: String) =
         savedTranslateDataSource.deleteSavedTranslateByTranslatedText(translatedText)
+
+    override suspend fun clearSavedTranslates() = savedTranslateDataSource.deleteAllSavedTranslates()
 }

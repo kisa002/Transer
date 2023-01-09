@@ -37,4 +37,6 @@ class SavedTranslateDataSourceImpl(private val database: TranserDatabase) : Save
     override suspend fun deleteSavedTranslateByIdx(idx: Int) = database.savedTranslateQueries.deleteByIdx(idx.toLong())
     override suspend fun deleteSavedTranslateByTranslatedText(translatedText: String) =
         database.savedTranslateQueries.deleteByTranslatedText(translatedText)
+
+    override suspend fun deleteAllSavedTranslates() = database.savedTranslateQueries.deleteAll()
 }

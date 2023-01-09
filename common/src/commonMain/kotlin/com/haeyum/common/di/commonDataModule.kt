@@ -10,10 +10,7 @@ import com.haeyum.common.domain.repository.SavedTranslateRepository
 import com.haeyum.common.domain.repository.TranslationRepository
 import com.haeyum.common.domain.usecase.*
 import com.haeyum.common.domain.usecase.recent.*
-import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
-import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.*
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -37,6 +34,9 @@ val commonDataModule = module {
     singleOf(::AddSavedTranslateUseCase)
     singleOf(::DeleteSavedTranslateUseCase)
     singleOf(::IsExistsSavedTranslateUseCase)
+    singleOf(::ClearRecentTranslatesUseCase)
+    singleOf(::ClearSavedTranslatesUseCase)
+    singleOf(::ClearDataUseCase)
 //    singleOf(::GetRecentTranslatesUseCase)
 //    singleOf(::AddRecentTranslateUseCase)
 //    singleOf(::DeleteRecentTranslateUseCase)

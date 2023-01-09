@@ -9,4 +9,5 @@ interface SavedTranslateRepository {
     suspend fun addSavedTranslate(originalText: String, translatedText: String)
     suspend fun deleteSavedTranslateByIdx(idx: Int)
     suspend fun deleteSavedTranslateByTranslatedText(translatedText: String)
+    suspend fun clearSavedTranslates()
 }

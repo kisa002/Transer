@@ -62,6 +62,7 @@ val desktopModule = module {
             get(named("DefaultScope")),
             get(),
             get(),
+            get(),
             get()
         )
     }

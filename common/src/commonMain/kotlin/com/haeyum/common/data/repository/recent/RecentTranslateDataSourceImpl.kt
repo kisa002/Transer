@@ -27,9 +27,10 @@ class RecentTranslateDataSourceImpl(private val database: TranserDatabase) : Rec
         translatedText = translatedText
     )
 
-
     override suspend fun deleteRecentTranslateById(idx: Int) = database.recentTranslateQueries.deleteByIdx(idx.toLong())
 
     override suspend fun deleteRecentTranslateByTranslatedText(translatedText: String) =
         database.recentTranslateQueries.deleteByTranslatedText(translatedText)
+
+    override suspend fun deleteAllRecentTranslates() = database.recentTranslateQueries.deleteAll()
 }
