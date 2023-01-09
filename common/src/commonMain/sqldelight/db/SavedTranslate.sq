@@ -4,11 +4,17 @@ CREATE TABLE savedTranslate (
     translatedText TEXT NOT NULL
 );
 
+select:
+SELECT * FROM savedTranslate WHERE translatedText = ? ORDER BY idx DESC;
+
 selectAll:
 SELECT * FROM savedTranslate ORDER BY idx DESC;
 
 insert:
 INSERT INTO savedTranslate (originalText, translatedText) VALUES (?, ?);
 
-delete:
+deleteByIdx:
 DELETE FROM savedTranslate WHERE idx = ?;
+
+deleteByTranslatedText:
+DELETE FROM savedTranslate WHERE translatedText = ?;
