@@ -1,15 +1,10 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 import androidx.compose.runtime.*
-import androidx.compose.ui.BiasAlignment
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
 import di.DesktopKoin
 import org.koin.java.KoinJavaComponent.inject
-import presentation.window.TranslationWindow
 import presentation.window.PreferencesWindow
+import presentation.window.TranslationWindow
 import java.awt.Desktop
 
 fun main() {
