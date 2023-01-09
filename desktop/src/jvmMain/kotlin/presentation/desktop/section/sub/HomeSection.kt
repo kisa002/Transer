@@ -15,15 +15,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import presentation.component.SectionHeader
 
 @Composable
 fun HomeSection() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Guide",
-            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-            style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        )
+        SectionHeader("Guide")
         Text(
             text = buildAnnotatedString {
                 append("You can execute by typing ")

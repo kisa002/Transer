@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import presentation.component.SectionHeader
 import presentation.desktop.DesktopScreenErrorEvent
 import presentation.desktop.DesktopScreenState
 
@@ -18,73 +19,35 @@ import presentation.desktop.DesktopScreenState
 fun ErrorSection(desktopScreenState: DesktopScreenState) {
     Column(modifier = Modifier.fillMaxSize()) {
         when ((desktopScreenState as DesktopScreenState.Error).errorEvent) {
-            DesktopScreenErrorEvent.DisconnectedNetwork -> {
-                Text(
-                    text = "Disconnected Network",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(
-                        color = Color(0xFFE60000),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Text(
-                    text = "Please check your network connection.",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                )
-            }
+            DesktopScreenErrorEvent.DisconnectedNetwork -> ErrorInfo(
+                title = "Disconnected Network",
+                description = "Please check your network connection."
+            )
 
-            DesktopScreenErrorEvent.FailedTranslate -> {
-                Text(
-                    text = "Failed Translate",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(
-                        color = Color(0xFFE60000),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Text(
-                    text = "Translation failed. Please change the text or try again later.",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                )
-            }
+            DesktopScreenErrorEvent.FailedTranslate -> ErrorInfo(
+                title = "Failed Translate",
+                description = "Please change the text or try again later."
+            )
 
-            DesktopScreenErrorEvent.NotFoundPreferences -> {
-                Text(
-                    text = "Not found preferences",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(
-                        color = Color(0xFFE60000),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Text(
-                    text = "Preferences file not found. Please reinstall the app.",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                )
-            }
+            DesktopScreenErrorEvent.NotFoundPreferences -> ErrorInfo(
+                title = "Not found preferences",
+                description = "Please reinstall the app."
+            )
 
-            DesktopScreenErrorEvent.WrongCommand -> {
-                Text(
-                    text = "Wrong command",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(
-                        color = Color(0xFFE60000),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Text(
-                    text = "Please check the command.",
-                    modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
-                )
-            }
+            DesktopScreenErrorEvent.WrongCommand -> ErrorInfo(
+                title = "Wrong command",
+                description = "Please check the command."
+            )
         }
     }
+}
+
+@Composable
+private fun ErrorInfo(title: String, description: String) {
+    SectionHeader(text = title, textColor = Color(0xFFE60000))
+    Text(
+        text = description,
+        modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
+        style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+    )
 }

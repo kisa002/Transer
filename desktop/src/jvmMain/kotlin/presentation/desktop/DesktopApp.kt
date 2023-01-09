@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import presentation.component.EventSnackBar
 import presentation.desktop.section.search.TranslateSearchSection
 import presentation.desktop.section.sub.*
-import presentation.section.sub.*
 
 @Composable
 fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) {

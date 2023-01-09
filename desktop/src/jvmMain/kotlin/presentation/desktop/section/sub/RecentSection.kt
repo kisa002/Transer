@@ -6,15 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.recent.RecentTranslate
+import presentation.component.SectionHeader
 import presentation.component.TranslatedItem
 
 @Composable
@@ -26,11 +22,7 @@ fun RecentSection(
     onClickTranslatedItem: (String, String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Recent",
-            modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-            style = TextStyle(color = Color(0xFF3F8CFF), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        )
+        SectionHeader("Recent")
 
         LazyColumn(modifier = Modifier.fillMaxSize().padding(12.dp), state = listState) {
             itemsIndexed(recentTranslates) { index, recentTranslate ->
