@@ -14,12 +14,12 @@ import androidx.compose.ui.window.WindowState
 import com.github.kwhat.jnativehook.GlobalScreen
 import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
-import presentation.desktop.DesktopApp
-import presentation.desktop.DesktopViewModel
+import presentation.translation.TranslationScreen
+import presentation.translation.TranslationViewModel
 import java.awt.Desktop
 
 @Composable
-fun DesktopWindow(
+fun TranslationWindow(
     visible: Boolean,
     title: String,
     state: WindowState,
@@ -39,9 +39,11 @@ fun DesktopWindow(
         transparent = true,
         resizable = false
     ) {
-        val viewModel by KoinJavaComponent.inject<DesktopViewModel>(DesktopViewModel::class.java)
+        val viewModel by remember {
+            KoinJavaComponent.inject<TranslationViewModel>(TranslationViewModel::class.java)
+        }
 
-        DesktopApp(
+        TranslationScreen(
             viewModel = viewModel,
             onShowPreferences = onShowPreferences
         )
@@ -96,6 +98,7 @@ fun DesktopWindow(
 
         DisposableEffect(Unit) {
             onDispose {
+                println("DISPOE")
                 viewModel.onDestroy()
             }
         }

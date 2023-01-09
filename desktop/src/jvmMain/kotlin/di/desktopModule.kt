@@ -14,12 +14,12 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import presentation.MainViewModel
-import presentation.desktop.DesktopViewModel
+import presentation.translation.TranslationViewModel
 import java.io.File
 
 val desktopModule = module {
     factory {
-        DesktopViewModel(
+        TranslationViewModel(
             get(named("DefaultScope")),
             get(),
             get(),

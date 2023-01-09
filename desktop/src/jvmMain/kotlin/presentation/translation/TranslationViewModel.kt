@@ -1,4 +1,4 @@
-package presentation.desktop
+package presentation.translation
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
@@ -19,7 +19,7 @@ import java.net.SocketException
 import java.nio.channels.UnresolvedAddressException
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
-class DesktopViewModel(
+class TranslationViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
     private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
@@ -44,13 +44,13 @@ class DesktopViewModel(
         }
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
-    private val errorEvent = MutableSharedFlow<DesktopScreenErrorEvent?>(
+    private val errorEvent = MutableSharedFlow<TranslationScreenErrorEvent?>(
         replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     private val errorState = errorEvent.combine(query) { event, query ->
         event to query
-    }.scan(initial = Pair<DesktopScreenErrorEvent?, String?>(null, null)) { previous, current ->
+    }.scan(initial = Pair<TranslationScreenErrorEvent?, String?>(null, null)) { previous, current ->
         if (previous.second == null || previous.second == current.second) {
             current.first to current.second
         } else {
@@ -62,20 +62,20 @@ class DesktopViewModel(
 
     val screenState = combine(errorState, query, commandInference) { errorState, query, commandInference ->
         when {
-            errorState is DesktopScreenErrorEvent -> DesktopScreenState.Error(errorState)
-            query.isEmpty() || (query.length == 1 && query.first() == '>') -> DesktopScreenState.Home
+            errorState is TranslationScreenErrorEvent -> TranslationScreenState.Error(errorState)
+            query.isEmpty() || (query.length == 1 && query.first() == '>') -> TranslationScreenState.Home
             commandInference != null -> commandInference.state
-            query.first() == '>' -> DesktopScreenState.Error(DesktopScreenErrorEvent.WrongCommand) // TODO: I think this condition appropriate for move to errorEvent
-            query.isNotEmpty() -> DesktopScreenState.Translate
-            else -> DesktopScreenState.Home
+            query.first() == '>' -> TranslationScreenState.Error(TranslationScreenErrorEvent.WrongCommand) // TODO: I think this condition appropriate for move to errorEvent
+            query.isNotEmpty() -> TranslationScreenState.Translate
+            else -> TranslationScreenState.Home
         }
     }.onEach {
         _currentSelectedIndex.value = 0
     }.stateIn(
-        scope = coroutineScope, started = SharingStarted.WhileSubscribed(), initialValue = DesktopScreenState.Home
+        scope = coroutineScope, started = SharingStarted.WhileSubscribed(), initialValue = TranslationScreenState.Home
     )
 
-    private val _screenEvent = MutableSharedFlow<DesktopScreenEvent>(
+    private val _screenEvent = MutableSharedFlow<TranslationScreenEvent>(
         replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val screenEvent = _screenEvent.asSharedFlow()
@@ -107,9 +107,9 @@ class DesktopViewModel(
                 }.onFailure { exception ->
                     if (exception !is CancellationException) errorEvent.emit(
                         when (exception) {
-                            is SocketException, is UnresolvedAddressException -> DesktopScreenErrorEvent.DisconnectedNetwork
-                            is NullPointerException -> DesktopScreenErrorEvent.NotFoundPreferences // TODO: There is no possibility of an error in the scenario because preferences created on the on-boarding time, but a reset guide logic will be added after monitoring
-                            else -> DesktopScreenErrorEvent.FailedTranslate
+                            is SocketException, is UnresolvedAddressException -> TranslationScreenErrorEvent.DisconnectedNetwork
+                            is NullPointerException -> TranslationScreenErrorEvent.NotFoundPreferences // TODO: There is no possibility of an error in the scenario because preferences created on the on-boarding time, but a reset guide logic will be added after monitoring
+                            else -> TranslationScreenErrorEvent.FailedTranslate
                         }
                     )
                 }.getOrDefault("")
@@ -146,13 +146,13 @@ class DesktopViewModel(
         Triple(state, text, index)
     }.flatMapLatest { (state, text, index) ->
         when (state) {
-            DesktopScreenState.Recent -> {
+            TranslationScreenState.Recent -> {
                 recentTranslates.first().getOrNull(index)?.let { recent ->
                     isExistsSavedTranslateUseCase(recent.translatedText)
                 } ?: flowOf(false)
             }
 
-            DesktopScreenState.Saved -> {
+            TranslationScreenState.Saved -> {
                 savedTranslates.first().getOrNull(index)?.let { saved ->
                     isExistsSavedTranslateUseCase(saved.translatedText)
                 } ?: flowOf(false)
@@ -167,13 +167,13 @@ class DesktopViewModel(
         savedTranslates.map { it.size },
         screenState,
     ) { currentSelectedIndex, size, screenState ->
-        if (screenState == DesktopScreenState.Saved)
+        if (screenState == TranslationScreenState.Saved)
             if (currentSelectedIndex > 0 && currentSelectedIndex >= size - 1) {
                 _currentSelectedIndex.value = size - 1
             }
     }.launchIn(coroutineScope)
 
-    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(DesktopScreenEvent.CopyEvent(text)).also {
+    private fun sendCopyEvent(text: String) = _screenEvent.tryEmit(TranslationScreenEvent.CopyEvent(text)).also {
         sendSnackbarEvent("Copied to clipboard.")
     }
 
@@ -207,8 +207,8 @@ class DesktopViewModel(
 
             Key.DirectionDown -> {
                 if ((isPressed || isTyped) && currentSelectedIndex.value < when (screenState.value) {
-                        DesktopScreenState.Recent -> recentTranslates.value.size - 1
-                        DesktopScreenState.Saved -> savedTranslates.value.size - 1
+                        TranslationScreenState.Recent -> recentTranslates.value.size - 1
+                        TranslationScreenState.Saved -> savedTranslates.value.size - 1
                         else -> 0
                     }
                 ) {
@@ -225,7 +225,7 @@ class DesktopViewModel(
         coroutineScope.launch {
             commandInference.value.let { command ->
                 when (command) {
-                    Command.Preferences -> _screenEvent.emit(DesktopScreenEvent.ShowPreferences)
+                    Command.Preferences -> _screenEvent.emit(TranslationScreenEvent.ShowPreferences)
                     Command.Recent -> {
                         sendCopyEvent(recentTranslates.value[currentSelectedIndex.value].translatedText)
                         deleteAndAddRecentTranslateUseCase(

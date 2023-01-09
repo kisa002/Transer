@@ -1,4 +1,4 @@
-package presentation.desktop.section.search
+package presentation.translation.section.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -17,13 +17,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import presentation.desktop.Command
-import presentation.desktop.DesktopViewModel
+import presentation.translation.Command
+import presentation.translation.TranslationViewModel
 
 @Composable
 fun TranslateSearchSection(
     query: String,
-    viewModel: DesktopViewModel,
+    viewModel: TranslationViewModel,
     focusRequester: FocusRequester,
     commandInference: Command?
 ) {

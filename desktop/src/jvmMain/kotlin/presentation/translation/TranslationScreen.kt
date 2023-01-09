@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package presentation.desktop
+package presentation.translation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,11 +18,11 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import presentation.component.EventSnackBar
-import presentation.desktop.section.search.TranslateSearchSection
-import presentation.desktop.section.sub.*
+import presentation.translation.section.search.TranslateSearchSection
+import presentation.translation.section.sub.*
 
 @Composable
-fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) {
+fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> Unit = {}) {
     val query by viewModel.query.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
     val isRequesting by viewModel.isRequesting.collectAsState()
@@ -57,9 +57,9 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
             )
             Divider(modifier = Modifier, color = Color(0xFFAFAFAF), thickness = (0.5).dp)
             when (desktopScreenState) {
-                DesktopScreenState.Home -> HomeSection()
+                TranslationScreenState.Home -> HomeSection()
 
-                DesktopScreenState.Recent -> RecentSection(
+                TranslationScreenState.Recent -> RecentSection(
                     recentTranslates = recentTranslates,
                     currentSelectedIndex = currentSelectedIndex,
                     listState = recentTranslateLazyListState,
@@ -67,7 +67,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
                     onClickTranslatedItem = viewModel::onClickTranslatedItem
                 )
 
-                DesktopScreenState.Saved -> SavedSection(
+                TranslationScreenState.Saved -> SavedSection(
                     savedTranslates = savedTranslates,
                     currentSelectedIndex = currentSelectedIndex,
                     listState = savedTranslatesLazyListState,
@@ -75,7 +75,7 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
                     onClickTranslatedItem = viewModel::onClickTranslatedItem
                 )
 
-                is DesktopScreenState.Error -> ErrorSection(desktopScreenState)
+                is TranslationScreenState.Error -> ErrorSection(desktopScreenState)
 
                 else -> ResultSection(
                     query = query,
@@ -93,12 +93,12 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collect { screenEvent ->
             when (screenEvent) {
-                is DesktopScreenEvent.CopyEvent -> {
+                is TranslationScreenEvent.CopyEvent -> {
                     clipboardManager.setText(AnnotatedString(screenEvent.text))
                     viewModel.setQuery("")
                 }
 
-                DesktopScreenEvent.ShowPreferences -> {
+                TranslationScreenEvent.ShowPreferences -> {
                     onShowPreferences()
                     viewModel.setQuery("")
                 }
@@ -108,8 +108,8 @@ fun DesktopApp(viewModel: DesktopViewModel, onShowPreferences: () -> Unit = {}) 
 
     LaunchedEffect(desktopScreenState, currentSelectedIndex) {
         when (desktopScreenState) {
-            DesktopScreenState.Recent -> recentTranslateLazyListState.scrollToItem(currentSelectedIndex)
-            DesktopScreenState.Saved -> savedTranslatesLazyListState.scrollToItem(currentSelectedIndex)
+            TranslationScreenState.Recent -> recentTranslateLazyListState.scrollToItem(currentSelectedIndex)
+            TranslationScreenState.Saved -> savedTranslatesLazyListState.scrollToItem(currentSelectedIndex)
             else -> {
                 /* no-op */
             }

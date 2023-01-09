@@ -9,7 +9,7 @@ import androidx.compose.ui.window.rememberWindowState
 import di.DesktopKoin
 import org.koin.java.KoinJavaComponent.inject
 import presentation.MainViewModel
-import presentation.window.DesktopWindow
+import presentation.window.TranslationWindow
 import presentation.window.PreferencesWindow
 import java.awt.Desktop
 
@@ -26,7 +26,7 @@ fun main() {
             position = WindowPosition(BiasAlignment(0f, -.3f)),
             size = DpSize(width = 720.dp, height = 400.dp)
         )
-        var visibleDesktopWindow by remember {
+        var visibleTranslationWindow by remember {
             mutableStateOf(true)
         }
         var visiblePreferencesWindow by remember {
@@ -35,13 +35,13 @@ fun main() {
 
         val isForeground = mainViewModel.isForeground.collectAsState().value
 
-        DesktopWindow(
-            visible = visibleDesktopWindow,
+        TranslationWindow(
+            visible = visibleTranslationWindow,
             title = "Transer",
             state = desktopWindowState,
             isForeground = isForeground,
             onChangeVisibleRequest = {
-                visibleDesktopWindow = it
+                visibleTranslationWindow = it
             },
             onShowPreferences = {
                 visiblePreferencesWindow = true

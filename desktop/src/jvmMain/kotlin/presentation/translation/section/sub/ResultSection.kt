@@ -1,4 +1,4 @@
-package presentation.desktop.section.sub
+package presentation.translation.section.sub
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.border

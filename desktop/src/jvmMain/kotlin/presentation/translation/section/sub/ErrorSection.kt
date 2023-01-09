@@ -1,4 +1,4 @@
-package presentation.desktop.section.sub
+package presentation.translation.section.sub
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,29 +12,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import presentation.component.SectionHeader
-import presentation.desktop.DesktopScreenErrorEvent
-import presentation.desktop.DesktopScreenState
+import presentation.translation.TranslationScreenErrorEvent
+import presentation.translation.TranslationScreenState
 
 @Composable
-fun ErrorSection(desktopScreenState: DesktopScreenState) {
+fun ErrorSection(translationScreenState: TranslationScreenState) {
     Column(modifier = Modifier.fillMaxSize()) {
-        when ((desktopScreenState as DesktopScreenState.Error).errorEvent) {
-            DesktopScreenErrorEvent.DisconnectedNetwork -> ErrorInfo(
+        when ((translationScreenState as TranslationScreenState.Error).errorEvent) {
+            TranslationScreenErrorEvent.DisconnectedNetwork -> ErrorInfo(
                 title = "Disconnected Network",
                 description = "Please check your network connection."
             )
 
-            DesktopScreenErrorEvent.FailedTranslate -> ErrorInfo(
+            TranslationScreenErrorEvent.FailedTranslate -> ErrorInfo(
                 title = "Failed Translate",
                 description = "Please change the text or try again later."
             )
 
-            DesktopScreenErrorEvent.NotFoundPreferences -> ErrorInfo(
+            TranslationScreenErrorEvent.NotFoundPreferences -> ErrorInfo(
                 title = "Not found preferences",
                 description = "Please reinstall the app."
             )
 
-            DesktopScreenErrorEvent.WrongCommand -> ErrorInfo(
+            TranslationScreenErrorEvent.WrongCommand -> ErrorInfo(
                 title = "Wrong command",
                 description = "Please check the command."
             )
