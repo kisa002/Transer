@@ -243,8 +243,10 @@ class TranslationViewModel(
                     }
 
                     null -> {
-                        sendCopyEvent(translatedText.value)
-                        deleteAndAddRecentTranslateUseCase(query.value, translatedText.value)
+                        if (translatedText.first().isNotEmpty()) {
+                            sendCopyEvent(translatedText.value)
+                            deleteAndAddRecentTranslateUseCase(query.value, translatedText.value)
+                        }
                     }
 
                     else -> setQuery(command.query)
