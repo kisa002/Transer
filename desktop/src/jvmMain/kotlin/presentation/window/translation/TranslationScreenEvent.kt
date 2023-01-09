@@ -1,4 +1,4 @@
-package presentation.translation
+package presentation.window.translation
 
 sealed class TranslationScreenEvent {
     object ShowPreferences : TranslationScreenEvent()

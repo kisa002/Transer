@@ -1,5 +1,3 @@
-package presentation
-
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.SetPreferencesUseCase

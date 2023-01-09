@@ -1,4 +1,4 @@
-package presentation.translation
+package presentation.window.translation
 
 sealed class TranslationScreenErrorEvent {
     object DisconnectedNetwork : TranslationScreenErrorEvent()

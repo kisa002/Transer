@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package presentation.translation
+package presentation.window.translation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,8 +18,9 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import presentation.component.EventSnackBar
-import presentation.translation.section.search.TranslateSearchSection
+import presentation.window.translation.section.search.TranslateSearchSection
 import presentation.translation.section.sub.*
+import presentation.window.translation.section.sub.*
 
 @Composable
 fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> Unit = {}) {

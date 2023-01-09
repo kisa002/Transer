@@ -1,4 +1,4 @@
-package presentation.translation.section.sub
+package presentation.window.translation.section.sub
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import presentation.component.SectionHeader
-import presentation.translation.TranslationScreenErrorEvent
-import presentation.translation.TranslationScreenState
+import presentation.window.translation.TranslationScreenErrorEvent
+import presentation.window.translation.TranslationScreenState
 
 @Composable
 fun ErrorSection(translationScreenState: TranslationScreenState) {

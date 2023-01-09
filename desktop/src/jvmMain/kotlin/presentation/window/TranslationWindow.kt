@@ -14,8 +14,8 @@ import androidx.compose.ui.window.WindowState
 import com.github.kwhat.jnativehook.GlobalScreen
 import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
-import presentation.translation.TranslationScreen
-import presentation.translation.TranslationViewModel
+import presentation.window.translation.TranslationScreen
+import presentation.window.translation.TranslationViewModel
 import java.awt.Desktop
 
 @Composable

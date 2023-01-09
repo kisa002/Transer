@@ -8,14 +8,13 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import di.DesktopKoin
 import org.koin.java.KoinJavaComponent.inject
-import presentation.MainViewModel
 import presentation.window.TranslationWindow
 import presentation.window.PreferencesWindow
 import java.awt.Desktop
 
 fun main() {
     DesktopKoin.startKoin()
-    val mainViewModel by inject<MainViewModel>(MainViewModel::class.java)
+    val viewModel by inject<MainViewModel>(MainViewModel::class.java)
 
 //    System.setProperty("apple.awt.UIElement", "true")
 //    val isMac = System.getProperty("os.name").toLowerCase().contains("mac")
@@ -33,7 +32,7 @@ fun main() {
             mutableStateOf(false)
         }
 
-        val isForeground = mainViewModel.isForeground.collectAsState().value
+        val isForeground = viewModel.isForeground.collectAsState().value
 
         TranslationWindow(
             visible = visibleTranslationWindow,
