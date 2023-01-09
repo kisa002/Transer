@@ -24,6 +24,8 @@ val desktopModule = module {
             get(),
             get(),
             get(),
+            get(),
+            get(),
             get()
         )
     }

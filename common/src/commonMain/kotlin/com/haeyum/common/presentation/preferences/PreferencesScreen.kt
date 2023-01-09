@@ -84,6 +84,7 @@ fun PreferencesScreen(
 
         Section(text = "Information") {
             Item(key = "Contact", onItemClick = onClickContact)
+            Item(key = "Clear Data", value = getVersion())
             Item(key = "Version", value = getVersion())
         }
     }
