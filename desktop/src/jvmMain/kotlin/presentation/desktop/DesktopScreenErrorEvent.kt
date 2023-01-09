@@ -1,4 +1,4 @@
-package presentation
+package presentation.desktop
 
 sealed class DesktopScreenErrorEvent {
     object DisconnectedNetwork : DesktopScreenErrorEvent()

@@ -1,4 +1,4 @@
-package presentation
+package presentation.desktop
 
 enum class Command(val state: DesktopScreenState, val query: String) {
     Hint(state = DesktopScreenState.Home, query = ">you can type 'recent', 'saved' or 'preferences'"),

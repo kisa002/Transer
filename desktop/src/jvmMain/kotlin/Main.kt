@@ -24,8 +24,8 @@ import di.DesktopKoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
-import presentation.DesktopApp
-import presentation.DesktopViewModel
+import presentation.desktop.DesktopApp
+import presentation.desktop.DesktopViewModel
 import presentation.TranserShortcutListener
 import java.awt.Desktop
 import java.awt.desktop.AppForegroundEvent

@@ -1,4 +1,4 @@
-package presentation
+package presentation.desktop
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key

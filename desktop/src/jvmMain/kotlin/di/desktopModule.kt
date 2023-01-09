@@ -13,7 +13,7 @@ import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import presentation.DesktopViewModel
+import presentation.desktop.DesktopViewModel
 import java.io.File
 
 val desktopModule = module {
