@@ -21,10 +21,6 @@ fun main() {
     println(System.getProperty("os.name"))
 
     application {
-        val desktopWindowState = rememberWindowState(
-            position = WindowPosition(BiasAlignment(0f, -.3f)),
-            size = DpSize(width = 720.dp, height = 400.dp)
-        )
         var visibleTranslationWindow by remember {
             mutableStateOf(true)
         }
@@ -37,7 +33,6 @@ fun main() {
         TranslationWindow(
             visible = visibleTranslationWindow,
             title = "Transer",
-            state = desktopWindowState,
             isForeground = isForeground,
             onChangeVisibleRequest = {
                 visibleTranslationWindow = it

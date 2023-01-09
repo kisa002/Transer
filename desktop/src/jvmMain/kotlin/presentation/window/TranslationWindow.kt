@@ -3,14 +3,13 @@
 package presentation.window
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.MenuBar
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.*
 import com.github.kwhat.jnativehook.GlobalScreen
 import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
@@ -22,7 +21,10 @@ import java.awt.Desktop
 fun TranslationWindow(
     visible: Boolean,
     title: String,
-    state: WindowState,
+    state: WindowState = rememberWindowState(
+        position = WindowPosition(BiasAlignment(0f, -.3f)),
+        size = DpSize(width = 720.dp, height = 400.dp)
+    ),
     isForeground: Boolean,
     onChangeVisibleRequest: (Boolean) -> Unit,
     onShowPreferences: () -> Unit,
@@ -66,12 +68,10 @@ fun TranslationWindow(
                 },
                 onTriggerKeyPressed = {
                     if (isForeground && visible) {
-                        state.size = DpSize(width = 0.dp, height = 0.dp)
                         onChangeVisibleRequest(false)
                     } else {
                         onChangeVisibleRequest(true)
                         Desktop.getDesktop().requestForeground(true)
-                        state.size = DpSize(width = 720.dp, height = 400.dp)
                     }
                 }
             )
@@ -89,6 +89,14 @@ fun TranslationWindow(
             }
         }
 
+        LaunchedEffect(visible) {
+            if (visible) {
+                state.size = DpSize(width = 720.dp, height = 400.dp)
+            } else {
+                state.size = DpSize(width = 0.dp, height = 0.dp)
+            }
+        }
+
         LaunchedEffect(isForeground) {
             if (isForeground) {
                 state.size = DpSize(width = 720.dp, height = 400.dp)
@@ -98,7 +106,6 @@ fun TranslationWindow(
 
         DisposableEffect(Unit) {
             onDispose {
-                println("DISPOE")
                 viewModel.onDestroy()
             }
         }
