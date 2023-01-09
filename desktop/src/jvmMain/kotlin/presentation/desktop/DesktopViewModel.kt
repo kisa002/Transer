@@ -295,4 +295,8 @@ class DesktopViewModel(
     fun setQuery(query: String) {
         _query.value = query.removePrefix(" ").removePrefix(" ").replace("\n", "").take(1000)
     }
+
+    fun onDestroy() {
+        coroutineScope.cancel()
+    }
 }
