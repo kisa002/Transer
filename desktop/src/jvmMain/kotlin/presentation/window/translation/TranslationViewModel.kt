@@ -103,7 +103,7 @@ class TranslationViewModel(
                 _isRequesting.value = true
                 delay(500)
                 runCatching {
-                    translateUseCase(q = query, key = "").translatedText
+                    translateUseCase(q = query).translatedText
                 }.onFailure { exception ->
                     if (exception !is CancellationException) errorEvent.emit(
                         when (exception) {

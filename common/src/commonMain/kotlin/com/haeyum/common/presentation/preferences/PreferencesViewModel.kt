@@ -18,7 +18,7 @@ class PreferencesViewModel(
     private val clearDataUseCase: ClearDataUseCase
 ) {
     val supportedLanguages = flow {
-        emit(getSupportedLanguagesUseCase(target = "en", key = ""))
+        emit(getSupportedLanguagesUseCase(target = "en"))
     }.catch {
 
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = emptyList())
