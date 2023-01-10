@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -15,6 +14,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.presentation.theme.ColorText
 import presentation.component.SectionHeader
 
 @Composable
@@ -47,7 +47,7 @@ fun HomeSection() {
                 append("Show the Application Settings, including selecting Translation Language.\n")
             },
             modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+            style = TextStyle(color = ColorText, fontSize = 14.sp, fontWeight = FontWeight.Normal)
         )
     }
 }
