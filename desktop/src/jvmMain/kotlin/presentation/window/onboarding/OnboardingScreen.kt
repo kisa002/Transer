@@ -32,6 +32,9 @@ fun OnboardingScreen() {
             currentIndex++
         }
     }
+    val viewModel = remember {
+        OnboardingViewModel()
+    }
 
     Box(
         modifier = Modifier
@@ -54,17 +57,11 @@ fun OnboardingScreen() {
                 onRequestNext = increaseCurrentIndex
             )
 
-            BasicOnboardingSlide(
-                title = "Shortcut Permission",
-                description = "Please allow permission to run TRANSER with a shortcut at any time.",
-                currentIndex = currentIndex,
-                targetIndex = 2,
-                onRequestNext = increaseCurrentIndex
-            )
+            ShortcutOnboardingSlide(viewModel, currentIndex, increaseCurrentIndex)
 
             BasicOnboardingSlide(
                 title = "⌥ + Space",
-                description = "Now, you can run TRANSER by pressing the shortcut key. Press it.",
+                description = "Now, you can run TRANSER by pressing the shortcut key.",
                 currentIndex = currentIndex,
                 targetIndex = 3,
                 onRequestNext = increaseCurrentIndex
@@ -110,6 +107,21 @@ fun OnboardingScreen() {
         delay(2000)
         increaseCurrentIndex()
     }
+}
+
+@Composable
+private fun ShortcutOnboardingSlide(viewModel: OnboardingViewModel, currentIndex: Int, increaseCurrentIndex: () -> Unit) {
+    BasicOnboardingSlide(
+        title = "Shortcut Permission",
+        description = "Please allow permission to run TRANSER with a shortcut at any time.",
+        currentIndex = currentIndex,
+        targetIndex = 2,
+        onRequestNext = {
+            if (viewModel.registerNativeHook()) {
+                increaseCurrentIndex()
+            }
+        }
+    )
 }
 
 @Composable
