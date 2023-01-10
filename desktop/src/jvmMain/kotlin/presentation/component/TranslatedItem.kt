@@ -14,8 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.Color0F000000
-import com.haeyum.common.presentation.theme.Color15000000
+import com.haeyum.common.presentation.theme.ColorSelected
+import com.haeyum.common.presentation.theme.ColorSelectedAction
 import com.haeyum.common.presentation.theme.Transparent
 
 @Composable
@@ -31,7 +31,7 @@ fun TranslatedItem(
         modifier = Modifier.fillMaxWidth()
             .then(modifier)
             .clip(RoundedCornerShape(8.dp))
-            .background(color = if (isSelected) Color0F000000 else Transparent)
+            .background(color = if (isSelected) ColorSelected else Transparent)
             .clickable {
                 onClick(originalText, translatedText)
             }
@@ -54,7 +54,7 @@ fun TranslatedItem(
                     text = if (isExists) "⌥↵ Save Delete" else "⌥↵ Save",
                     modifier = Modifier
                         .background(
-                            color = Color15000000,
+                            color = ColorSelectedAction,
                             shape = RoundedCornerShape(4.dp)
                         )
                         .padding(6.dp),
@@ -65,7 +65,7 @@ fun TranslatedItem(
                     text = "↵ Copy",
                     modifier = Modifier
                         .background(
-                            color = Color15000000,
+                            color = ColorSelectedAction,
                             shape = RoundedCornerShape(4.dp)
                         )
                         .padding(6.dp),

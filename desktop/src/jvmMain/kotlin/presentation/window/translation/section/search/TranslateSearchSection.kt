@@ -17,7 +17,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.Color999999
+import com.haeyum.common.presentation.theme.ColorHint
 import presentation.window.translation.Command
 import presentation.window.translation.TranslationViewModel
 
@@ -53,7 +53,7 @@ fun TranslateSearchSection(
                         Text(
                             text = "Enter text to translate...",
                             style = TextStyle(
-                                color = Color999999,
+                                color = ColorHint,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -68,7 +68,7 @@ fun TranslateSearchSection(
                                     append(command.lowercase().removePrefix(query.lowercase()))
                                 },
                                 style = TextStyle(
-                                    color = Color999999,
+                                    color = ColorHint,
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium
                                 )

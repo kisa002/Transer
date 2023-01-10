@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Color3F8CFF
+import com.haeyum.common.presentation.theme.ColorLightBlue
 import com.haeyum.common.presentation.theme.White
 
 @Composable
@@ -33,7 +33,7 @@ fun BoxScope.EventSnackBar(snackbarState: String?) {
             )
         )
     ) {
-        Snackbar(backgroundColor = Color3F8CFF) {
+        Snackbar(backgroundColor = ColorLightBlue) {
             Text(
                 text = snackbarState ?: "",
                 color = White,

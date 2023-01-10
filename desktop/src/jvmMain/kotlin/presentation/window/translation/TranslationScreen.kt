@@ -16,8 +16,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.presentation.theme.ColorAFAFAF
-import com.haeyum.common.presentation.theme.ColorEFEFEF
+import com.haeyum.common.presentation.theme.ColorDivider
+import com.haeyum.common.presentation.theme.ColorBackground
 import presentation.component.EventSnackBar
 import presentation.window.translation.section.search.TranslateSearchSection
 import presentation.window.translation.section.sub.*
@@ -47,7 +47,7 @@ fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = ColorEFEFEF, shape = RoundedCornerShape(8.dp))
+            .background(color = ColorBackground, shape = RoundedCornerShape(8.dp))
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             TranslateSearchSection(
@@ -56,7 +56,7 @@ fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> 
                 focusRequester = focusRequester,
                 commandInference = commandInference
             )
-            Divider(modifier = Modifier, color = ColorAFAFAF, thickness = (0.5).dp)
+            Divider(modifier = Modifier, color = ColorDivider, thickness = (0.5).dp)
             when (desktopScreenState) {
                 TranslationScreenState.Home -> HomeSection()
 
