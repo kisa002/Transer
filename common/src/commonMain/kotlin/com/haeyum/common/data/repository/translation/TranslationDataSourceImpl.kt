@@ -1,5 +1,6 @@
 package com.haeyum.common.data.repository.translation
 
+import com.haeyum.common.data.ApiInfo
 import com.haeyum.common.data.model.detect.DetectionsResponse
 import com.haeyum.common.data.model.languages.LanguagesResponse
 import com.haeyum.common.data.model.translate.TranslateResponse
@@ -9,22 +10,22 @@ import io.ktor.client.request.*
 
 class TranslationDataSourceImpl(private val client: HttpClient) : TranslationDataSource {
     override suspend fun translate(q: String, target: String, source: String, key: String): TranslateResponse =
-        client.get("https://translation.googleapis.com/language/translate/v2") {
+        client.get(ApiInfo.GOOGLE_TRANSLATE_API_URL) {
             parameter("q", q)
             parameter("source", source)
             parameter("target", target)
-            parameter("key", "AIzaSyA-RrgJ1ot3enCqWboW3zm4Ct37ZkKtO64")
+            parameter("key", ApiInfo.GOOGLE_TRANSLATE_API_KEY)
         }.body()
 
     override suspend fun detectLanguage(q: String, key: String): DetectionsResponse =
-        client.get("https://translation.googleapis.com/language/translate/v2/detect") {
+        client.get(ApiInfo.GOOGLE_TRANSLATE_API_DETECT_URL) {
             parameter("q", q)
-            parameter("key", "AIzaSyA-RrgJ1ot3enCqWboW3zm4Ct37ZkKtO64")
+            parameter("key", ApiInfo.GOOGLE_TRANSLATE_API_KEY)
         }.body()
 
     override suspend fun getLanguages(target: String, key: String): LanguagesResponse =
-        client.get("https://translation.googleapis.com/language/translate/v2/languages") {
+        client.get(ApiInfo.GOOGLE_TRANSLATE_API_LANGUAGES_URL) {
             parameter("target", target)
-            parameter("key", "AIzaSyA-RrgJ1ot3enCqWboW3zm4Ct37ZkKtO64")
+            parameter("key", ApiInfo.GOOGLE_TRANSLATE_API_KEY)
         }.body()
 }
