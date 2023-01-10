@@ -9,9 +9,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.presentation.theme.Color3F8CFF
 
 @Composable
-fun SectionHeader(text: String, textColor: Color = Color(0xFF3F8CFF)) {
+fun SectionHeader(text: String, textColor: Color = Color3F8CFF) {
     Text(
         text = text,
         modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),

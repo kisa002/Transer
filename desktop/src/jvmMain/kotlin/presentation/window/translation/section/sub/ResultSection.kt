@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.haeyum.common.presentation.theme.ColorsLoading
 import presentation.component.SectionHeader
 import presentation.component.TranslatedItem
 
@@ -39,19 +39,8 @@ fun ResultSection(
             )
         )
     )
-    val colors: List<Color> = remember {
-        listOf(
-            Color(0xFF5851D8),
-            Color(0xFF833AB4),
-            Color(0xFFC13584),
-            Color(0xFFE1306C),
-            Color(0xFFFD1D1D),
-            Color(0xFFF56040),
-            Color(0xFFF77737),
-            Color(0xFFFCAF45),
-            Color(0xFFFFDC80),
-            Color(0xFF5851D8)
-        )
+    val colors = remember {
+        ColorsLoading
     }
 
     Column(modifier = Modifier.fillMaxSize()) {

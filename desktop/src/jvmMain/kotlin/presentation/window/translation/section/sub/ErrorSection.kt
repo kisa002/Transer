@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.presentation.theme.Black
+import com.haeyum.common.presentation.theme.ColorE60000
 import presentation.component.SectionHeader
 import presentation.window.translation.TranslationScreenErrorEvent
 import presentation.window.translation.TranslationScreenState
@@ -44,10 +45,10 @@ fun ErrorSection(translationScreenState: TranslationScreenState) {
 
 @Composable
 private fun ErrorInfo(title: String, description: String) {
-    SectionHeader(text = title, textColor = Color(0xFFE60000))
+    SectionHeader(text = title, textColor = ColorE60000)
     Text(
         text = description,
         modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-        style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+        style = TextStyle(color = Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
     )
 }

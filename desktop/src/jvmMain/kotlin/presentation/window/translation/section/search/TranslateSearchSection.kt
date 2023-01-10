@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -17,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.presentation.theme.Black
+import com.haeyum.common.presentation.theme.Color999999
 import presentation.window.translation.Command
 import presentation.window.translation.TranslationViewModel
 
@@ -39,7 +40,7 @@ fun TranslateSearchSection(
             modifier = Modifier.weight(1f)
                 .focusRequester(focusRequester)
                 .onPreviewKeyEvent(viewModel::onPreviewKeyEvent),
-            textStyle = TextStyle(color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
+            textStyle = TextStyle(color = Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
             singleLine = true,
             maxLines = 1,
             decorationBox = { innerTextField ->
@@ -52,7 +53,7 @@ fun TranslateSearchSection(
                         Text(
                             text = "Enter text to translate...",
                             style = TextStyle(
-                                color = Color(0xFF999999),
+                                color = Color999999,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -61,13 +62,13 @@ fun TranslateSearchSection(
                         commandInference?.query?.let { command ->
                             Text(
                                 text = buildAnnotatedString {
-                                    withStyle(style = SpanStyle(Color.Black)) {
+                                    withStyle(style = SpanStyle(Black)) {
                                         append(query)
                                     }
                                     append(command.lowercase().removePrefix(query.lowercase()))
                                 },
                                 style = TextStyle(
-                                    color = Color(0xFF999999),
+                                    color = Color999999,
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium
                                 )

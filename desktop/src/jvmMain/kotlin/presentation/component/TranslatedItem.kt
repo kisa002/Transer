@@ -9,11 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.common.presentation.theme.Black
+import com.haeyum.common.presentation.theme.Color0F000000
+import com.haeyum.common.presentation.theme.Color15000000
+import com.haeyum.common.presentation.theme.Transparent
 
 @Composable
 fun TranslatedItem(
@@ -28,7 +31,7 @@ fun TranslatedItem(
         modifier = Modifier.fillMaxWidth()
             .then(modifier)
             .clip(RoundedCornerShape(8.dp))
-            .background(color = if (isSelected) Color(0x0F000000) else Color.Transparent)
+            .background(color = if (isSelected) Color0F000000 else Transparent)
             .clickable {
                 onClick(originalText, translatedText)
             }
@@ -39,7 +42,7 @@ fun TranslatedItem(
         Text(
             text = translatedText,
             modifier = Modifier.weight(1f).padding(vertical = 6.dp),
-            style = TextStyle(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+            style = TextStyle(color = Black, fontSize = 14.sp, fontWeight = FontWeight.Normal)
         )
         if (isSelected) {
             Spacer(modifier = Modifier.size(24.dp))
@@ -51,22 +54,22 @@ fun TranslatedItem(
                     text = if (isExists) "⌥↵ Save Delete" else "⌥↵ Save",
                     modifier = Modifier
                         .background(
-                            color = Color(0x15000000),
+                            color = Color15000000,
                             shape = RoundedCornerShape(4.dp)
                         )
                         .padding(6.dp),
-                    color = Color.Black,
+                    color = Black,
                     fontSize = 12.sp
                 )
                 Text(
                     text = "↵ Copy",
                     modifier = Modifier
                         .background(
-                            color = Color(0x15000000),
+                            color = Color15000000,
                             shape = RoundedCornerShape(4.dp)
                         )
                         .padding(6.dp),
-                    color = Color.Black,
+                    color = Black,
                     fontSize = 12.sp
                 )
             }
