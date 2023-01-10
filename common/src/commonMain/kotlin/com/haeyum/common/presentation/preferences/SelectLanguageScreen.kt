@@ -2,18 +2,23 @@ package com.haeyum.common.presentation.preferences
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +56,8 @@ fun SelectLanguageScreen(
                     shape = RoundedCornerShape(6.dp)
                 )
                 .padding(12.dp),
-            textStyle = TextStyle(color = Black, fontSize = 14.sp)
+            textStyle = TextStyle(color = Black, fontSize = 14.sp),
+            cursorBrush = SolidColor(Black)
         ) { innerTextField ->
             if (keyword.isEmpty())
                 Text(text = "Search language", color = ColorIcon, fontSize = 14.sp)

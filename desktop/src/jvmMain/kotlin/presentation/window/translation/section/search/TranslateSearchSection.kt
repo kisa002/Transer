@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -43,6 +44,7 @@ fun TranslateSearchSection(
             textStyle = TextStyle(color = Black, fontSize = 18.sp, fontWeight = FontWeight.Medium),
             singleLine = true,
             maxLines = 1,
+            cursorBrush = SolidColor(Black),
             decorationBox = { innerTextField ->
                 Box(modifier = Modifier.fillMaxWidth()) {
                     innerTextField()
