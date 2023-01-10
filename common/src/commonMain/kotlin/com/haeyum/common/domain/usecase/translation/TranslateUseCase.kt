@@ -1,6 +1,7 @@
-package com.haeyum.common.domain.usecase
+package com.haeyum.common.domain.usecase.translation
 
 import com.haeyum.common.domain.repository.TranslationRepository
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
 import kotlinx.coroutines.flow.firstOrNull
 
 class TranslateUseCase(
@@ -8,13 +9,13 @@ class TranslateUseCase(
     private val detectLanguageUseCase: DetectLanguageUseCase,
     private val getPreferencesUseCase: GetPreferencesUseCase
 ) {
-    suspend operator fun invoke(q: String, key: String) =
-        detectLanguageUseCase(q, key).language.let { language ->
+    suspend operator fun invoke(q: String) =
+        detectLanguageUseCase(q).language.let { language ->
             val (source, target) = getPreferencesUseCase().firstOrNull()
                 ?: throw NullPointerException("Preferences is null")
 
             makeSourceTargetPair(language, target.language, source.language).let { (target, source) ->
-                translationRepository.translate(q = q, target = target, source = source, key = key)
+                translationRepository.translate(q = q, target = target, source = source)
             }
         }
 

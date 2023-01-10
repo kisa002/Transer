@@ -9,8 +9,13 @@ import com.haeyum.common.data.repository.translation.TranslationDataSourceImpl
 import com.haeyum.common.domain.repository.SavedTranslateRepository
 import com.haeyum.common.domain.repository.TranslationRepository
 import com.haeyum.common.domain.usecase.*
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.domain.usecase.recent.*
 import com.haeyum.common.domain.usecase.saved.*
+import com.haeyum.common.domain.usecase.translation.DetectLanguageUseCase
+import com.haeyum.common.domain.usecase.translation.GetSupportedLanguagesUseCase
+import com.haeyum.common.domain.usecase.translation.TranslateUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

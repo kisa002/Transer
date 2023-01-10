@@ -1,6 +1,6 @@
 import com.haeyum.common.domain.model.translation.languages.Language
-import com.haeyum.common.domain.usecase.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.SetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted

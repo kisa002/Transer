@@ -2,9 +2,9 @@ package com.haeyum.common.presentation.preferences
 
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.ClearDataUseCase
-import com.haeyum.common.domain.usecase.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.GetSupportedLanguagesUseCase
-import com.haeyum.common.domain.usecase.SetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.translation.GetSupportedLanguagesUseCase
+import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
@@ -18,7 +18,7 @@ class PreferencesViewModel(
     private val clearDataUseCase: ClearDataUseCase
 ) {
     val supportedLanguages = flow {
-        emit(getSupportedLanguagesUseCase(target = "en", key = ""))
+        emit(getSupportedLanguagesUseCase(target = "en"))
     }.catch {
 
     }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = emptyList())

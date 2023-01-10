@@ -1,4 +1,4 @@
-package com.haeyum.common.domain.usecase
+package com.haeyum.common.domain.usecase.preferences
 
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.repository.PreferencesRepository

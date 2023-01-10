@@ -11,8 +11,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.haeyum.common.domain.model.translation.languages.Language
-import com.haeyum.common.domain.usecase.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.SetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import kotlinx.coroutines.flow.firstOrNull

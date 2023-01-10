@@ -5,7 +5,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
-import com.haeyum.common.domain.usecase.TranslateUseCase
+import com.haeyum.common.domain.usecase.translation.TranslateUseCase
 import com.haeyum.common.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
 import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
@@ -103,7 +103,7 @@ class TranslationViewModel(
                 _isRequesting.value = true
                 delay(500)
                 runCatching {
-                    translateUseCase(q = query, key = "").translatedText
+                    translateUseCase(q = query).translatedText
                 }.onFailure { exception ->
                     if (exception !is CancellationException) errorEvent.emit(
                         when (exception) {
