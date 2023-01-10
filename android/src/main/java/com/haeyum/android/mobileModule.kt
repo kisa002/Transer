@@ -5,8 +5,8 @@ import com.haeyum.common.data.repository.PreferencesRepositoryImpl
 import com.haeyum.common.data.repository.preferences.PreferencesDataSource
 import com.haeyum.common.data.repository.preferences.PreferencesDataSourceImpl
 import com.haeyum.common.domain.repository.PreferencesRepository
-import com.haeyum.common.domain.usecase.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.SetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import org.koin.android.ext.koin.androidContext

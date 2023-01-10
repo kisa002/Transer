@@ -1,6 +1,7 @@
-package com.haeyum.common.domain.usecase
+package com.haeyum.common.domain.usecase.translation
 
 import com.haeyum.common.domain.repository.TranslationRepository
+import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
 import kotlinx.coroutines.flow.firstOrNull
 
 class TranslateUseCase(
