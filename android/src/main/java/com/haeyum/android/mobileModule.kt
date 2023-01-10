@@ -37,6 +37,7 @@ val mobileModule = module {
             get(named("DefaultScope")),
             get(),
             get(),
+            get(),
             get()
         )
     }

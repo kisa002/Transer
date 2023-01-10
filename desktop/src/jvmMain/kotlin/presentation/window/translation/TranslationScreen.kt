@@ -19,7 +19,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import presentation.component.EventSnackBar
 import presentation.window.translation.section.search.TranslateSearchSection
-import presentation.translation.section.sub.*
 import presentation.window.translation.section.sub.*
 
 @Composable

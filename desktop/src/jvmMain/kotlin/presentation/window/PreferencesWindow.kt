@@ -52,12 +52,8 @@ fun PreferencesWindow(
                 onCloseRequest = {
                     onChangeVisibleRequest(false)
                 },
-                onSelectedSourceLanguage = { sourceLanguage ->
-                    preferencesViewModel.setSelectedSourceLanguage(sourceLanguage)
-                },
-                onSelectedTargetLanguage = { targetLanguage ->
-                    preferencesViewModel.setSelectedTargetLanguage(targetLanguage)
-                },
+                onSelectedSourceLanguage = preferencesViewModel::setSelectedSourceLanguage,
+                onSelectedTargetLanguage = preferencesViewModel::setSelectedTargetLanguage,
                 onClickClearData = {
                     preferencesViewModel.clearData()
                 },
