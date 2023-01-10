@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,7 @@ import com.haeyum.common.getPlatform
 import com.haeyum.common.getVersion
 import com.haeyum.common.presentation.Platform
 import com.haeyum.common.presentation.component.Header
+import com.haeyum.common.presentation.theme.*
 
 @Composable
 fun PreferencesScreen(
@@ -50,8 +50,8 @@ fun PreferencesScreen(
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
-            .background(color = Color.White)
-            .border(width = 1.dp, color = Color(0xFFE5E5E5), shape = RoundedCornerShape(8.dp))
+            .background(color = White)
+            .border(width = 1.dp, color = ColorSecondaryDivider, shape = RoundedCornerShape(8.dp))
     ) {
         Header(title = "Preferences", imageVector = Icons.Default.Close, onClick = onCloseRequest)
 
@@ -216,11 +216,11 @@ private fun Section(text: String, content: @Composable () -> Unit) {
         Text(
             text = text,
             modifier = Modifier.padding(top = 24.dp).padding(horizontal = 16.dp),
-            color = Color.Black,
+            color = Black,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
-        Divider(modifier = Modifier.padding(top = 24.dp), color = Color(0xFFE5E5E5))
+        Divider(modifier = Modifier.padding(top = 24.dp), color = ColorSecondaryDivider)
         Spacer(modifier = Modifier.height(12.dp))
         content()
     }
@@ -245,7 +245,7 @@ private fun Item(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = key, color = Color(0xFF333333), fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(text = key, color = ColorMenuText, fontSize = 14.sp, fontWeight = FontWeight.Medium)
 
                 if (visibleInfo) {
                     IconButton(onClick = onInfoClick) {
@@ -253,7 +253,7 @@ private fun Item(
                             imageVector = Icons.Default.Info,
                             contentDescription = "$key Information",
                             modifier = Modifier.size(20.dp),
-                            tint = Color(0xFFADADAD)
+                            tint = ColorIcon
                         )
                     }
                 }
@@ -263,13 +263,13 @@ private fun Item(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = value, color = Color(0xFF333333), fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(text = value, color = ColorMenuText, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 if (iconVector != null) {
                     Icon(
                         imageVector = iconVector,
                         contentDescription = contentDescription,
                         modifier = Modifier.size(24.dp),
-                        tint = Color(0xFFADADAD)
+                        tint = ColorIcon
                     )
                 }
             }
