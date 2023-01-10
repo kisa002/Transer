@@ -39,12 +39,9 @@ class MainActivity : AppCompatActivity() {
                     selectedSourceLanguage = viewModel.selectedSourceLanguage.collectAsState().value?.name ?: "-",
                     selectedTargetLanguage = viewModel.selectedTargetLanguage.collectAsState().value?.name ?: "-",
                     onCloseRequest = {},
-                    onSelectedSourceLanguage = {
-                        viewModel.setSelectedSourceLanguage(it)
-                    },
-                    onSelectedTargetLanguage = {
-                        viewModel.setSelectedTargetLanguage(it)
-                    },
+                    onSelectedSourceLanguage = viewModel::setSelectedSourceLanguage,
+                    onSelectedTargetLanguage = viewModel::setSelectedTargetLanguage,
+                    onClickClearData = viewModel::clearData(),
                     onClickContact = {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("mailto:vnycall74@naver.com")))
                     }
