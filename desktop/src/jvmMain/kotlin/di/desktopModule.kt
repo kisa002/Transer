@@ -14,6 +14,7 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import MainViewModel
+import presentation.window.onboarding.OnboardingViewModel
 import presentation.window.translation.TranslationViewModel
 import java.io.File
 
@@ -72,6 +73,13 @@ val desktopModule = module {
         MainViewModel(
             get(named("DefaultScope")),
             get(),
+            get()
+        )
+    }
+
+    factory {
+        OnboardingViewModel(
+            get(named("DefaultScope")),
             get()
         )
     }
