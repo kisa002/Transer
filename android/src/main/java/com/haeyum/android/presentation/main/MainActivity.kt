@@ -1,15 +1,15 @@
-package com.haeyum.android
+package com.haeyum.android.presentation.main
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.haeyum.android.presentation.translation.TranslationActivity
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
@@ -22,6 +22,9 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        finish()
+//        startActivity(Intent(this, TranslationActivity::class.java))
 
         setContent {
             TranserTheme {
