@@ -15,6 +15,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.RoomPreferences
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,7 +104,7 @@ class TranslationActivity : AppCompatActivity() {
                                         Text(
                                             text = screenState.originalText,
                                             modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                                            color = ColorText,
+                                            color = Black,
                                             fontSize = 18.sp
                                         )
 
@@ -118,9 +123,41 @@ class TranslationActivity : AppCompatActivity() {
                                         Text(
                                             text = screenState.translatedText,
                                             modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                                            color = ColorText,
+                                            color = Black,
                                             fontSize = 18.sp
                                         )
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth().padding(top = 18.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            IconButton(onClick = {}, modifier = Modifier.offset(x = (-12).dp)) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Settings,
+                                                    contentDescription = "Preferences",
+                                                    tint = ColorText
+                                                )
+                                            }
+
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                IconButton(onClick = {}) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.ContentCopy,
+                                                        contentDescription = "Copy",
+                                                        tint = ColorText
+                                                    )
+                                                }
+
+                                                IconButton(onClick = {}) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Favorite,
+                                                        contentDescription = "Save",
+                                                        tint = ColorText
+                                                    )
+                                                }
+                                            }
+                                        }
                                     }
 
                                     TranslationScreenState.DisconnectedNetwork -> {

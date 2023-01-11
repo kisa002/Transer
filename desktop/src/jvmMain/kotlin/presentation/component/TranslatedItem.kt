@@ -51,7 +51,7 @@ fun TranslatedItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (isExists) "⌥↵ Save Delete" else "⌥↵ Save",
+                    text = if (isExists) "⌥↵ Delete Saved" else "⌥↵ Save",
                     modifier = Modifier
                         .background(
                             color = ColorSelectedAction,
