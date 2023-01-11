@@ -1,11 +1,19 @@
 package com.haeyum.common.di
 
+import com.haeyum.common.data.repository.PreferencesRepositoryImpl
+import com.haeyum.common.data.repository.RecentTranslateRepositoryImpl
 import com.haeyum.common.data.repository.SavedTranslateRepositoryImpl
 import com.haeyum.common.data.repository.TranslationRepositoryImpl
+import com.haeyum.common.data.repository.preferences.PreferencesDataSource
+import com.haeyum.common.data.repository.preferences.PreferencesDataSourceImpl
+import com.haeyum.common.data.repository.recent.RecentTranslateDataSource
+import com.haeyum.common.data.repository.recent.RecentTranslateDataSourceImpl
 import com.haeyum.common.data.repository.saved.SavedTranslateDataSource
 import com.haeyum.common.data.repository.saved.SavedTranslateDataSourceImpl
 import com.haeyum.common.data.repository.translation.TranslationDataSource
 import com.haeyum.common.data.repository.translation.TranslationDataSourceImpl
+import com.haeyum.common.domain.repository.PreferencesRepository
+import com.haeyum.common.domain.repository.RecentTranslateRepository
 import com.haeyum.common.domain.repository.SavedTranslateRepository
 import com.haeyum.common.domain.repository.TranslationRepository
 import com.haeyum.common.domain.usecase.*
@@ -42,6 +50,22 @@ val commonDataModule = module {
     singleOf(::ClearRecentTranslatesUseCase)
     singleOf(::ClearSavedTranslatesUseCase)
     singleOf(::ClearDataUseCase)
+
+    single<PreferencesDataSource> {
+        PreferencesDataSourceImpl(get())
+    }
+
+    single<PreferencesRepository> {
+        PreferencesRepositoryImpl(get())
+    }
+
+    single<RecentTranslateDataSource> {
+        RecentTranslateDataSourceImpl(get())
+    }
+
+    single<RecentTranslateRepository> {
+        RecentTranslateRepositoryImpl(get())
+    }
 //    singleOf(::GetRecentTranslatesUseCase)
 //    singleOf(::AddRecentTranslateUseCase)
 //    singleOf(::DeleteRecentTranslateUseCase)

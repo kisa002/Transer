@@ -15,6 +15,7 @@ import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
 import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesScreen
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
+import com.haeyum.common.presentation.theme.TranserTheme
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.java.KoinJavaComponent.inject
 
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MaterialTheme {
+            TranserTheme {
                 val viewModel by remember {
                     inject<PreferencesViewModel>(PreferencesViewModel::class.java)
                 }
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     onCloseRequest = {},
                     onSelectedSourceLanguage = viewModel::setSelectedSourceLanguage,
                     onSelectedTargetLanguage = viewModel::setSelectedTargetLanguage,
-                    onClickClearData = viewModel::clearData(),
+                    onClickClearData = viewModel::clearData,
                     onClickContact = {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("mailto:vnycall74@naver.com")))
                     }

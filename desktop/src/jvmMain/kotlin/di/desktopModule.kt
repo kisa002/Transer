@@ -43,22 +43,6 @@ val desktopModule = module {
         TranserDatabase(driver)
     }
 
-    single<PreferencesDataSource> {
-        PreferencesDataSourceImpl(get())
-    }
-
-    single<PreferencesRepository> {
-        PreferencesRepositoryImpl(get())
-    }
-
-    single<RecentTranslateDataSource> {
-        RecentTranslateDataSourceImpl(get())
-    }
-
-    single<RecentTranslateRepository> {
-        RecentTranslateRepositoryImpl(get())
-    }
-
     factory {
         PreferencesViewModel(
             get(named("DefaultScope")),

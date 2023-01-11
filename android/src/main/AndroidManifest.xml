@@ -5,6 +5,8 @@
             android:name=".TranserApp"
             android:allowBackup="false"
             android:supportsRtl="true"
+            android:icon="@drawable/icon"
+            android:label="Transer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
