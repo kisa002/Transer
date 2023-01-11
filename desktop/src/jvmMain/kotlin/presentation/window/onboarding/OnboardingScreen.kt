@@ -24,23 +24,16 @@ import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.theme.*
 import kotlinx.coroutines.delay
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
-fun OnboardingScreen() {
-    var currentIndex by remember {
-        mutableStateOf(-1)
-    }
+fun OnboardingScreen(viewModel: OnboardingViewModel) {
     val increaseCurrentIndex: () -> Unit = remember {
         {
-            currentIndex++
+            viewModel.increaseCurrentIndex()
         }
     }
-    // TODO dispose
-    val viewModel by remember {
-        inject<OnboardingViewModel>(OnboardingViewModel::class.java)
-    }
 
+    val onboardingSlideState by viewModel.onboardingSlideState.collectAsState()
     val supportedLanguages by viewModel.supportedLanguages.collectAsState()
 
     Box(
@@ -50,96 +43,94 @@ fun OnboardingScreen() {
             .padding(horizontal = 96.dp, vertical = 40.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            AnimationSlide(currentIndex == 0) {
+            AnimationSlide(onboardingSlideState == OnboardingSlide.Splash) {
                 SplashSlide()
             }
         }
 
         Box(modifier = Modifier.padding(top = 96.dp).fillMaxSize(), contentAlignment = Alignment.Center) {
             BasicOnboardingSlide(
-                title = "Hello",
-                description = "TRANSER is an open-source translation program developed with Kotlin Multiplatform.",
-                currentIndex = currentIndex,
-                targetIndex = 1,
+                title = "What is TRANSER?",
+                description = "It's an open-source translation application developed with Kotlin Multiplatform.",
+                visibleContent = onboardingSlideState == OnboardingSlide.Introduce,
                 onRequestNext = increaseCurrentIndex
             )
 
-            ShortcutOnboardingSlide(
+            PermissionOnboardingSlide(
                 viewModel = viewModel,
-                currentIndex = currentIndex,
-                targetIndex = 3,
+                visibleContent = onboardingSlideState == OnboardingSlide.RequirePermission,
                 onRequestNext = increaseCurrentIndex
             )
 
             BasicOnboardingSlide(
                 title = "⌥ + Space",
-                description = "Now, you can run TRANSER by pressing the shortcut key.",
-                currentIndex = currentIndex,
-                targetIndex = 4,
+                description = "Great! You can run TRANSER by pressing the shortcut key after this onboarding is done.",
+                visibleContent = onboardingSlideState == OnboardingSlide.Shortcut,
                 onRequestNext = increaseCurrentIndex
             )
 
             BasicOnboardingSlide(
                 title = "Commands",
                 description = "You can use commands 'recent', 'saved', and 'preferences' on the search field, just type '>' and type the command.",
-                currentIndex = currentIndex,
-                targetIndex = 5,
+                visibleContent = onboardingSlideState == OnboardingSlide.Commands,
                 onRequestNext = increaseCurrentIndex
             )
 
             BasicOnboardingSlide(
                 title = "Recent Command",
                 description = "If you type '>recent', you can see the recent translation history.",
-                currentIndex = currentIndex,
-                targetIndex = 6,
+                visibleContent = onboardingSlideState == OnboardingSlide.RecentCommand,
                 onRequestNext = increaseCurrentIndex
             )
 
             BasicOnboardingSlide(
                 title = "Saved Command",
                 description = "If you type '>saved', you can see the saved translation history.",
-                currentIndex = currentIndex,
-                targetIndex = 7,
+                visibleContent = onboardingSlideState == OnboardingSlide.SavedCommand,
                 onRequestNext = increaseCurrentIndex
             )
 
             BasicOnboardingSlide(
                 title = "Preferences Command",
                 description = "If you type '>preferences', you can see the preferences window that includes selecting Translation Language.",
-                currentIndex = currentIndex,
-                targetIndex = 8,
+                visibleContent = onboardingSlideState == OnboardingSlide.PreferencesCommand,
+                onRequestNext = increaseCurrentIndex
+            )
+
+            DoneSlide(
+                visibleContent = onboardingSlideState == OnboardingSlide.Done,
                 onRequestNext = increaseCurrentIndex
             )
         }
 
         SelectLanguageOnboarding(
             supportedLanguages = supportedLanguages,
-            currentIndex = currentIndex,
-            targetIndex = 2,
-            onRequestNext = increaseCurrentIndex
+            visibleContent = onboardingSlideState == OnboardingSlide.SelectLanguage,
+            onRequestNext = { sourceLanguage, targetLanguage ->
+                viewModel.setLanguages(sourceLanguage, targetLanguage)
+                increaseCurrentIndex()
+            }
         )
     }
 
-    LaunchedEffect(Unit) {
-        delay(500)
-        increaseCurrentIndex()
-        delay(2000)
-        increaseCurrentIndex()
+    LaunchedEffect(onboardingSlideState) {
+        if (onboardingSlideState == OnboardingSlide.Done) {
+            delay(2000)
+//            onRequestDone()
+        }
     }
 }
 
 @Composable
-private fun ShortcutOnboardingSlide(
+private fun PermissionOnboardingSlide(
     viewModel: OnboardingViewModel,
-    currentIndex: Int,
-    targetIndex: Int,
+    visibleContent: Boolean,
     onRequestNext: () -> Unit
 ) {
     BasicOnboardingSlide(
         title = "Shortcut Permission",
         description = "Please allow permission to run TRANSER with a shortcut at any time.",
-        currentIndex = currentIndex,
-        targetIndex = targetIndex,
+        visibleContent = visibleContent,
         onRequestNext = {
             if (viewModel.registerNativeHook()) {
                 onRequestNext()
@@ -151,11 +142,10 @@ private fun ShortcutOnboardingSlide(
 @Composable
 private fun SelectLanguageOnboarding(
     supportedLanguages: List<Language>,
-    currentIndex: Int,
-    targetIndex: Int,
-    onRequestNext: () -> Unit
+    visibleContent: Boolean,
+    onRequestNext: (Language, Language) -> Unit
 ) {
-    AnimationSlide(currentIndex == targetIndex) {
+    AnimationSlide(visibleContent) {
         var expandedSourceLanguage by remember {
             mutableStateOf(false)
         }
@@ -204,6 +194,7 @@ private fun SelectLanguageOnboarding(
                         selectedLanguage = selectedSourceLanguage,
                         onSelectedLanguage = {
                             selectedSourceLanguage = it
+                            expandedSourceLanguage = false
                         }
                     )
                     SelecetLanguageSection(
@@ -217,12 +208,19 @@ private fun SelectLanguageOnboarding(
                         selectedLanguage = selectedTargetLanguage,
                         onSelectedLanguage = {
                             selectedTargetLanguage = it
+                            expandedTargetLanguage = false
                         }
                     )
                 }
             }
-            // TODO enable, disable
-            NextButton(text = "Next", modifier = Modifier.align(Alignment.BottomCenter), onClick = onRequestNext)
+            NextButton(
+                text = "Next",
+                modifier = Modifier.align(Alignment.BottomCenter),
+                enabled = selectedSourceLanguage != null && selectedTargetLanguage != null,
+                onClick = {
+                    onRequestNext(selectedSourceLanguage!!, selectedTargetLanguage!!)
+                }
+            )
         }
     }
 }
@@ -339,12 +337,13 @@ private fun AnimationSlide(visible: Boolean, content: @Composable AnimatedVisibi
 }
 
 @Composable
-private fun NextButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+private fun NextButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
     TextButton(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled,
         shape = CircleShape,
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = ColorLightBlue)
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = if (enabled) ColorLightBlue else ColorHint)
     ) {
         Text(
             text = text,
@@ -362,25 +361,38 @@ private fun SplashSlide() {
 }
 
 @Composable
+private fun DoneSlide(visibleContent: Boolean, onRequestNext: () -> Unit) {
+    BasicOnboardingSlide(
+        title = "Okay, Time to start!",
+        description = "Start simple and easy translation with TRANSER.",
+        visibleContent = visibleContent,
+        visibleButton = false,
+        onRequestNext = { }
+    )
+}
+
+@Composable
 private fun BasicOnboardingSlide(
     title: String,
     description: String,
-    currentIndex: Int,
-    targetIndex: Int,
+    visibleContent: Boolean,
+    visibleButton: Boolean = true,
     onRequestNext: () -> Unit
 ) {
-    AnimationSlide(currentIndex == targetIndex) {
+    AnimationSlide(visibleContent) {
         Box(modifier = Modifier.fillMaxSize()) {
             BasicSlide(
                 title = title,
                 description = description
             )
 
-            NextButton(
-                text = "Next",
-                modifier = Modifier.align(Alignment.BottomCenter),
-                onClick = onRequestNext
-            )
+            if (visibleButton) {
+                NextButton(
+                    text = "Next",
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    onClick = onRequestNext
+                )
+            }
         }
     }
 }

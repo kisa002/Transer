@@ -72,7 +72,6 @@ val desktopModule = module {
     factory {
         MainViewModel(
             get(named("DefaultScope")),
-            get(),
             get()
         )
     }
@@ -80,7 +79,8 @@ val desktopModule = module {
     factory {
         OnboardingViewModel(
             get(named("DefaultScope")),
-            get()
+            get(),
+            get(),
         )
     }
 }
