@@ -81,6 +81,7 @@ fun TranslationWindow(
             }.onSuccess {
                 GlobalScreen.addNativeKeyListener(listener)
             }.onFailure {
+                // TODO restart alert.
                 println("Failed to register native hook")
             }
 

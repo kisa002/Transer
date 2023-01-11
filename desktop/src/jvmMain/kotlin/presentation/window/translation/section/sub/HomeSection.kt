@@ -1,6 +1,7 @@
 package presentation.window.translation.section.sub
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -47,7 +48,14 @@ fun HomeSection() {
                 append("Show the Application Settings, including selecting Translation Language.\n")
             },
             modifier = Modifier.padding(top = 12.dp).padding(horizontal = 18.dp),
-            style = TextStyle(color = ColorText, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+            style = TextStyle(color = ColorText, fontSize = 14.sp)
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = "Open shorcut: ⌥ + Space - First time, you need to restart it.",
+            modifier = Modifier.padding(18.dp),
+            color = ColorText,
+            fontSize = 14.sp
         )
     }
 }

@@ -41,6 +41,15 @@ compose.desktop {
             macOS {
                 dockName = "Transer"
                 appCategory = "public.app-category.utilities"
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.icns"))
+            }
+
+            windows {
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.ico"))
+            }
+
+            linux {
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.icns"))
             }
         }
     }

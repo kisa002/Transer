@@ -1,12 +1,7 @@
-import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.awt.Desktop
 import java.awt.desktop.AppForegroundEvent
@@ -14,9 +9,22 @@ import java.awt.desktop.AppForegroundListener
 
 class MainViewModel(
     coroutineScope: CoroutineScope,
-    setPreferencesUseCase: SetPreferencesUseCase,
     getPreferencesUseCase: GetPreferencesUseCase
 ) {
+    private val _visibleOnboardingWindow = MutableStateFlow(false)
+    private val _visibleTranslationWindow = MutableStateFlow(false)
+    private val _visiblePreferencesWindow = MutableStateFlow(false)
+
+    val visibleOnboardingWindow = _visibleOnboardingWindow.asStateFlow()
+    val visibleTranslationWindow = _visibleTranslationWindow.asStateFlow()
+    val visiblePreferencesWindow = _visiblePreferencesWindow.asStateFlow()
+
+    val isExistsPreferences = channelFlow {
+        getPreferencesUseCase().collectLatest {
+            send(it != null)
+        }
+    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
+
     val isForeground = callbackFlow {
         val listener = object : AppForegroundListener {
             override fun appRaisedToForeground(e: AppForegroundEvent?) {
@@ -36,8 +44,33 @@ class MainViewModel(
 
     init {
         coroutineScope.launch {
-            if (getPreferencesUseCase().firstOrNull() == null)
-                setPreferencesUseCase(Language("en", "English"), Language("ko", "Korean"))
+            isExistsPreferences
+                .filterNotNull()
+                .onEach { isExistsPreferences ->
+                    if (isExistsPreferences) {
+                        setVisibleTranslationWindow(true)
+                    } else {
+                        setVisibleOnboardingWindow(true)
+                    }
+                }
+                .filter { it }
+                .collectLatest {
+                    setVisibleOnboardingWindow(false)
+                    setVisibleTranslationWindow(true)
+                }
         }
+
+    }
+
+    fun setVisibleOnboardingWindow(value: Boolean) {
+        _visibleOnboardingWindow.value = value
+    }
+
+    fun setVisibleTranslationWindow(value: Boolean) {
+        _visibleTranslationWindow.value = value
+    }
+
+    fun setVisiblePreferencesWindow(value: Boolean) {
+        _visiblePreferencesWindow.value = value
     }
 }

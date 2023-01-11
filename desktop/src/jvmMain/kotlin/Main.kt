@@ -1,8 +1,12 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
+import com.haeyum.common.presentation.theme.TranserTheme
 import di.DesktopKoin
 import org.koin.java.KoinJavaComponent.inject
+import presentation.window.OnboardingWindow
 import presentation.window.PreferencesWindow
 import presentation.window.TranslationWindow
 import java.awt.Desktop
@@ -16,38 +20,38 @@ fun main() {
     println(System.getProperty("os.name"))
 
     application {
-        var visibleTranslationWindow by remember {
-            mutableStateOf(true)
-        }
-        var visiblePreferencesWindow by remember {
-            mutableStateOf(false)
-        }
+        TranserTheme {
+            val visibleOnboardingWindow by viewModel.visibleOnboardingWindow.collectAsState()
+            val visibleTranslationWindow by viewModel.visibleTranslationWindow.collectAsState()
+            val visiblePreferencesWindow by viewModel.visiblePreferencesWindow.collectAsState()
 
-        val isForeground = viewModel.isForeground.collectAsState().value
+            val isForeground = viewModel.isForeground.collectAsState().value
+            val isExistsPreferences by viewModel.isExistsPreferences.collectAsState()
 
-        TranslationWindow(
-            visible = visibleTranslationWindow,
-            title = "Transer",
-            isForeground = isForeground,
-            onChangeVisibleRequest = {
-                visibleTranslationWindow = it
-            },
-            onShowPreferences = {
-                visiblePreferencesWindow = true
-            },
-            onCloseRequest = ::exitApplication
-        )
+            OnboardingWindow(visible = visibleOnboardingWindow)
 
-        PreferencesWindow(
-            visible = visiblePreferencesWindow,
-            onChangeVisibleRequest = {
-                visiblePreferencesWindow = it
+            if (isExistsPreferences == true) {
+                TranslationWindow(
+                    visible = visibleTranslationWindow,
+                    title = "Transer",
+                    isForeground = isForeground,
+                    onChangeVisibleRequest = viewModel::setVisibleTranslationWindow,
+                    onShowPreferences = {
+                        viewModel.setVisibleOnboardingWindow(true)
+                    },
+                    onCloseRequest = ::exitApplication
+                )
             }
-        )
 
-        LaunchedEffect(Unit) {
-            Desktop.getDesktop().setPreferencesHandler {
-                visiblePreferencesWindow = true
+            PreferencesWindow(
+                visible = visiblePreferencesWindow,
+                onChangeVisibleRequest = viewModel::setVisiblePreferencesWindow
+            )
+
+            LaunchedEffect(Unit) {
+                Desktop.getDesktop().setPreferencesHandler {
+                    viewModel.setVisiblePreferencesWindow(true)
+                }
             }
         }
     }
