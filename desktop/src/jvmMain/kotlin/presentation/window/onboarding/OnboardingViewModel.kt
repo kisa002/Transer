@@ -6,6 +6,7 @@ import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.domain.usecase.translation.GetSupportedLanguagesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,10 +22,18 @@ class OnboardingViewModel(
         OnboardingSlide.values()[currentIndex]
     }.stateIn(coroutineScope, SharingStarted.Eagerly, OnboardingSlide.Empty)
 
-    val supportedLanguages = flow {
-        emit(getSupportedLanguagesUseCase(target = "en"))
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
-    // TODO INTERNET DISCONNECT RETRY
+    private val retryGetSupportedLanguagesEvent = MutableSharedFlow<Unit>(
+        replay = 1,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val supportedLanguages: StateFlow<List<Language>?> = retryGetSupportedLanguagesEvent
+        .transformLatest {
+            emit(emptyList())
+            emit(
+                runCatching { getSupportedLanguagesUseCase(target = "en") }.getOrNull()
+            )
+        }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
     private var selectedSourceLanguage: Language? = null
     private var selectedTargetLanguage: Language? = null
@@ -51,7 +60,11 @@ class OnboardingViewModel(
                     }
             }
         }
+
+        retryGetSupportedLanguagesEvent()
     }
+
+    fun retryGetSupportedLanguagesEvent() = retryGetSupportedLanguagesEvent.tryEmit(Unit)
 
     fun registerNativeHook() = runCatching {
         GlobalScreen.registerNativeHook()

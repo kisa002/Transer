@@ -106,6 +106,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
         SelectLanguageOnboarding(
             supportedLanguages = supportedLanguages,
             visibleContent = onboardingSlideState == OnboardingSlide.SelectLanguage,
+            onRequestRetry = viewModel::retryGetSupportedLanguagesEvent,
             onRequestNext = { sourceLanguage, targetLanguage ->
                 viewModel.setLanguages(sourceLanguage, targetLanguage)
                 increaseCurrentIndex()
@@ -141,10 +142,12 @@ private fun PermissionOnboardingSlide(
 
 @Composable
 private fun SelectLanguageOnboarding(
-    supportedLanguages: List<Language>,
+    supportedLanguages: List<Language>?,
     visibleContent: Boolean,
+    onRequestRetry: () -> Unit,
     onRequestNext: (Language, Language) -> Unit
 ) {
+
     AnimationSlide(visibleContent) {
         var expandedSourceLanguage by remember {
             mutableStateOf(false)
@@ -162,65 +165,94 @@ private fun SelectLanguageOnboarding(
             mutableStateOf<Language?>(null)
         }
 
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "Select Language",
-                    color = Black,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "Please select the language you want to translate.",
-                    modifier = Modifier.padding(top = 4.dp),
-                    color = Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Light,
-                    textAlign = TextAlign.Center
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth().weight(1f).padding(top = 18.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    SelecetLanguageSection(
-                        subject = "Source",
-                        isSubjectLeft = false,
-                        supportedLanguages = supportedLanguages,
-                        expanded = expandedSourceLanguage,
-                        onChangeExpanded = {
-                            expandedSourceLanguage = it
-                        },
-                        selectedLanguage = selectedSourceLanguage,
-                        onSelectedLanguage = {
-                            selectedSourceLanguage = it
-                            expandedSourceLanguage = false
-                        }
+        when {
+            supportedLanguages == null -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    BasicSlide(
+                        title = "Failure to fetch data",
+                        description = "Please check your network connection."
                     )
-                    SelecetLanguageSection(
-                        subject = "Target",
-                        isSubjectLeft = true,
-                        supportedLanguages = supportedLanguages,
-                        expanded = expandedTargetLanguage,
-                        onChangeExpanded = {
-                            expandedTargetLanguage = it
-                        },
-                        selectedLanguage = selectedTargetLanguage,
-                        onSelectedLanguage = {
-                            selectedTargetLanguage = it
-                            expandedTargetLanguage = false
+
+                    NextButton(
+                        text = "Retry",
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        onClick = onRequestRetry
+                    )
+                }
+            }
+
+            supportedLanguages.isEmpty() -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    BasicSlide(
+                        title = "Fetching data",
+                        description = "Please wait a moment."
+                    )
+                    LinearProgressIndicator(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 64.dp))
+                }
+            }
+
+            else -> {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Select Language",
+                            color = Black,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Please select the language you want to translate.",
+                            modifier = Modifier.padding(top = 4.dp),
+                            color = Black,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Light,
+                            textAlign = TextAlign.Center
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth().weight(1f).padding(top = 18.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            SelecetLanguageSection(
+                                subject = "Source",
+                                isSubjectLeft = false,
+                                supportedLanguages = supportedLanguages,
+                                expanded = expandedSourceLanguage,
+                                onChangeExpanded = {
+                                    expandedSourceLanguage = it
+                                },
+                                selectedLanguage = selectedSourceLanguage,
+                                onSelectedLanguage = {
+                                    selectedSourceLanguage = it
+                                    expandedSourceLanguage = false
+                                }
+                            )
+                            SelecetLanguageSection(
+                                subject = "Target",
+                                isSubjectLeft = true,
+                                supportedLanguages = supportedLanguages,
+                                expanded = expandedTargetLanguage,
+                                onChangeExpanded = {
+                                    expandedTargetLanguage = it
+                                },
+                                selectedLanguage = selectedTargetLanguage,
+                                onSelectedLanguage = {
+                                    selectedTargetLanguage = it
+                                    expandedTargetLanguage = false
+                                }
+                            )
+                        }
+                    }
+                    NextButton(
+                        text = "Next",
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        enabled = selectedSourceLanguage != null && selectedTargetLanguage != null,
+                        onClick = {
+                            onRequestNext(selectedSourceLanguage!!, selectedTargetLanguage!!)
                         }
                     )
                 }
             }
-            NextButton(
-                text = "Next",
-                modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = selectedSourceLanguage != null && selectedTargetLanguage != null,
-                onClick = {
-                    onRequestNext(selectedSourceLanguage!!, selectedTargetLanguage!!)
-                }
-            )
         }
     }
 }
