@@ -64,7 +64,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
 
             BasicOnboardingSlide(
                 title = "⌥ + Space",
-                description = "Great! You can run TRANSER by pressing the shortcut key after this onboarding is done.",
+                description = "Great! You can run TRANSER by pressing the shortcut key after you restart it.",
                 visibleContent = onboardingSlideState == OnboardingSlide.Shortcut,
                 onRequestNext = increaseCurrentIndex
             )
@@ -112,13 +112,6 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
                 increaseCurrentIndex()
             }
         )
-    }
-
-    LaunchedEffect(onboardingSlideState) {
-        if (onboardingSlideState == OnboardingSlide.Done) {
-            delay(2000)
-//            onRequestDone()
-        }
     }
 }
 

@@ -55,7 +55,6 @@ class MainViewModel(
                 }
                 .filter { it }
                 .collectLatest {
-                    println("Latest : $isExistsPreferences")
                     setVisibleOnboardingWindow(false)
                     setVisibleTranslationWindow(true)
                 }
