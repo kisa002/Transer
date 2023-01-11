@@ -2,13 +2,22 @@ package com.haeyum.android.presentation.translation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.translation.TranslateUseCase
+import io.ktor.util.network.*
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import java.net.SocketException
-import java.nio.channels.UnresolvedAddressException
 
-class TranslationViewModel(private val translateUseCase: TranslateUseCase) : ViewModel() {
+class TranslationViewModel(
+    private val translateUseCase: TranslateUseCase,
+    private val isExistsSavedTranslateUseCase: IsExistsSavedTranslateUseCase,
+    private val addSavedTranslateUseCase: AddSavedTranslateUseCase,
+    private val deleteSavedTranslateUseCase: AddSavedTranslateUseCase
+) : ViewModel() {
     private val _screenState = MutableStateFlow<TranslationScreenState>(TranslationScreenState.Translating)
     val screenState = _screenState.asStateFlow()
 
@@ -27,7 +36,19 @@ class TranslationViewModel(private val translateUseCase: TranslateUseCase) : Vie
                 }
             }.getOrNull()
         }
+        .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
+
+    val isExistsSavedTranslate = translatedText
+        .filterNotNull()
+        .flatMapLatest {
+            isExistsSavedTranslateUseCase(it)
+        }
+        .catch {
+            println("isExistsSavedTranslateUseCase error: $it")
+        }
+        .flowOn(Dispatchers.IO)
+        .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = false)
 
     private val translatedSuccessObserver =
         originalText.combine(translatedText.filterNotNull()) { originalText, translatedText ->
@@ -36,5 +57,16 @@ class TranslationViewModel(private val translateUseCase: TranslateUseCase) : Vie
 
     fun requestTranslation(text: String) {
         originalText.value = text
+    }
+
+    fun toggleSave() {
+        viewModelScope.launch {
+            translatedText.first()?.let {
+                if (isExistsSavedTranslate.first())
+                    deleteSavedTranslateUseCase(originalText.first(), it)
+                else
+                    addSavedTranslateUseCase(originalText.first(), it)
+            }
+        }
     }
 }

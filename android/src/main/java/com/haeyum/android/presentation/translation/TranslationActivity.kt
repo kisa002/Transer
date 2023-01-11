@@ -18,15 +18,18 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.RoomPreferences
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.android.presentation.main.MainActivity
 import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
 import com.haeyum.common.presentation.theme.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,12 +56,15 @@ class TranslationActivity : AppCompatActivity() {
                 contentAlignment = Alignment.Center
             ) {
                 val screenState by viewModel.screenState.collectAsState()
+                val isExistsSavedTranslate by viewModel.isExistsSavedTranslate.collectAsState()
 
                 val coroutineScope = rememberCoroutineScope()
                 val bottomSheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.HalfExpanded,
                     skipHalfExpanded = false
                 )
+
+                val clipboardManager = LocalClipboardManager.current
 
                 ModalBottomSheetLayout(
                     sheetContent = {
@@ -132,7 +138,19 @@ class TranslationActivity : AppCompatActivity() {
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            IconButton(onClick = {}, modifier = Modifier.offset(x = (-12).dp)) {
+                                            IconButton(
+                                                onClick = {
+                                                    startActivity(
+                                                        Intent(
+                                                            this@TranslationActivity,
+                                                            MainActivity::class.java
+                                                        ).apply {
+                                                            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                                        }
+                                                    )
+                                                },
+                                                modifier = Modifier.offset(x = (-12).dp)
+                                            ) {
                                                 Icon(
                                                     imageVector = Icons.Default.Settings,
                                                     contentDescription = "Preferences",
@@ -141,7 +159,11 @@ class TranslationActivity : AppCompatActivity() {
                                             }
 
                                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                                IconButton(onClick = {}) {
+                                                IconButton(
+                                                    onClick = {
+                                                        clipboardManager.setText(AnnotatedString(screenState.translatedText))
+                                                    }
+                                                ) {
                                                     Icon(
                                                         imageVector = Icons.Default.ContentCopy,
                                                         contentDescription = "Copy",
@@ -149,10 +171,10 @@ class TranslationActivity : AppCompatActivity() {
                                                     )
                                                 }
 
-                                                IconButton(onClick = {}) {
+                                                IconButton(onClick = viewModel::toggleSave) {
                                                     Icon(
-                                                        imageVector = Icons.Default.Favorite,
-                                                        contentDescription = "Save",
+                                                        imageVector = if (isExistsSavedTranslate) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                                        contentDescription = if (isExistsSavedTranslate) "Delete Saved" else "Save",
                                                         tint = ColorText
                                                     )
                                                 }
@@ -191,6 +213,10 @@ class TranslationActivity : AppCompatActivity() {
 
                     }
                 )
+                LaunchedEffect(bottomSheetState) {
+                    if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
+                        finish()
+                }
             }
         }
     }

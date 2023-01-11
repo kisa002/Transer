@@ -12,11 +12,11 @@ import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
 import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import io.ktor.util.network.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import java.net.SocketException
-import java.nio.channels.UnresolvedAddressException
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
 class TranslationViewModel(
