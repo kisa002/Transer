@@ -50,6 +50,7 @@ kotlin {
             dependencies {
                 api("androidx.appcompat:appcompat:1.2.0")
                 api("androidx.core:core-ktx:1.3.1")
+                api("androidx.compose.material:material-icons-extended:1.3.0")
 
                 // Koin main features for Android
                 api("io.insert-koin:koin-android:${extra["koin.android.version"]}")
@@ -83,7 +84,13 @@ kotlin {
 
 android {
     compileSdkVersion(33)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].apply {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        res.srcDirs(
+            "src/commonMain/resources",
+            "src/androidMain/resources"
+        )
+    }
     defaultConfig {
         minSdkVersion(28)
         targetSdkVersion(33)

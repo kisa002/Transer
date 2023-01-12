@@ -3,19 +3,14 @@
 package com.haeyum.common.presentation.preferences
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,22 +19,26 @@ import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.getPlatform
 import com.haeyum.common.getVersion
 import com.haeyum.common.presentation.Platform
-import com.haeyum.common.presentation.component.Header
-import com.haeyum.common.presentation.theme.*
+import com.haeyum.common.presentation.theme.Black
+import com.haeyum.common.presentation.theme.ColorIcon
+import com.haeyum.common.presentation.theme.ColorMenuText
+import com.haeyum.common.presentation.theme.ColorSecondaryDivider
 
 @Composable
 fun PreferencesScreen(
+    modifier: Modifier,
+    header: @Composable () -> Unit,
     supportedLanguages: List<Language>,
     selectedSourceLanguage: String,
     selectedTargetLanguage: String,
-    onCloseRequest: () -> Unit,
     onSelectedSourceLanguage: (Language) -> Unit,
     onSelectedTargetLanguage: (Language) -> Unit,
     onClickClearData: () -> Unit,
-    onClickContact: () -> Unit
+    onClickContact: () -> Unit,
+    onNotifyVisibleSelect: (Boolean) -> Unit = {}
 ) {
     var visibleSelectSourceLanguage by remember { mutableStateOf(false) }
-    var vVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
+    var visibleSelectTargetLanguage by remember { mutableStateOf(false) }
 
     var visibleSourceInfoAlert by remember { mutableStateOf(false) }
     var visibleTargetInfoAlert by remember { mutableStateOf(false) }
@@ -47,13 +46,9 @@ fun PreferencesScreen(
     var visibleClearDataAlert by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(8.dp))
-            .background(color = White)
-            .border(width = 1.dp, color = ColorSecondaryDivider, shape = RoundedCornerShape(8.dp))
+        modifier = modifier.fillMaxSize()
     ) {
-        Header(title = "Preferences", imageVector = Icons.Default.Close, onClick = onCloseRequest)
+        header()
 
         Section(text = "Language") {
             Item(
@@ -80,7 +75,7 @@ fun PreferencesScreen(
                     visibleTargetInfoAlert = true
                 },
                 onItemClick = {
-                    vVisibleSelectTargetLanguage = true
+                    visibleSelectTargetLanguage = true
                 }
             )
         }
@@ -135,16 +130,20 @@ fun PreferencesScreen(
 
     VisibilitySelectLanguageScreen(
         title = "Target Language",
-        visible = vVisibleSelectTargetLanguage,
+        visible = visibleSelectTargetLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            vVisibleSelectTargetLanguage = false
+            visibleSelectTargetLanguage = false
         },
         onSelectedLanguage = {
             onSelectedTargetLanguage(it)
-            vVisibleSelectTargetLanguage = false
+            visibleSelectTargetLanguage = false
         }
     )
+
+    LaunchedEffect(visibleSelectSourceLanguage, visibleSelectTargetLanguage) {
+        onNotifyVisibleSelect(visibleSelectSourceLanguage && visibleSelectTargetLanguage)
+    }
 }
 
 @Composable
