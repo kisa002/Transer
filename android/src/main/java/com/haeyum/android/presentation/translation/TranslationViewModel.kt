@@ -2,7 +2,7 @@ package com.haeyum.android.presentation.translation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
+import com.haeyum.common.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
@@ -21,7 +21,7 @@ class TranslationViewModel(
     private val addSavedTranslateUseCase: AddSavedTranslateUseCase,
     private val getSavedTranslateUseCase: GetSavedTranslatesUseCase,
     private val deleteSavedTranslateUseCase: DeleteSavedTranslateUseCase,
-    private val addRecentTranslateUseCase: AddRecentTranslateUseCase
+    private val deleteAndAddRecentTranslateUseCase: DeleteAndAddRecentTranslateUseCase
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<TranslationScreenState>(TranslationScreenState.Translating)
     val screenState = _screenState.asStateFlow()
@@ -65,7 +65,7 @@ class TranslationViewModel(
             originalText to translatedText
         }.onEach { (originalText, translatedText) ->
             _screenState.value = TranslationScreenState.Translated(originalText, translatedText)
-            addRecentTranslateUseCase(originalText, translatedText)
+            deleteAndAddRecentTranslateUseCase(originalText, translatedText)
         }.launchIn(viewModelScope)
 
     fun requestTranslation(text: String) {
