@@ -21,6 +21,7 @@ import com.haeyum.android.presentation.main.recent.RecentTranslateScreen
 import com.haeyum.android.presentation.main.saved.SavedScreen
 import com.haeyum.common.presentation.theme.ColorBackground
 import com.haeyum.common.presentation.theme.ColorLightBlue
+import com.haeyum.common.presentation.theme.White
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -30,7 +31,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorBackground)
+            .background(White)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
