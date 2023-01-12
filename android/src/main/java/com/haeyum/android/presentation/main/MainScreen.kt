@@ -37,7 +37,9 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
         when (screenState) {
             MainScreenState.Recent -> RecentTranslateScreen(modifier = Modifier.weight(1f))
             MainScreenState.Saved -> SavedScreen(modifier = Modifier.weight(1f))
-            MainScreenState.Preferences -> AndroidPreferencesScreen()
+            MainScreenState.Preferences -> Box(modifier = Modifier.weight(1f)) {
+                AndroidPreferencesScreen()
+            }
         }
 
         BottomNavigation(backgroundColor = ColorLightBlue) {

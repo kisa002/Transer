@@ -35,7 +35,7 @@ fun Header(title: String, imageVector: ImageVector? = null, onClick: () -> Unit 
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            if (imageVector != null)
+            if (imageVector != null) {
                 IconButton(onClick = onClick, modifier = Modifier.align(Alignment.CenterEnd)) {
                     Icon(
                         imageVector = imageVector,
@@ -43,6 +43,10 @@ fun Header(title: String, imageVector: ImageVector? = null, onClick: () -> Unit 
                         tint = ColorIcon
                     )
                 }
+            }
+            else {
+                Spacer(modifier = Modifier.size(48.dp))
+            }
         }
 
         Divider(color = ColorSecondaryDivider)
