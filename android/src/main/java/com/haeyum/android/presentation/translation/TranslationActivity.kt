@@ -29,6 +29,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.haeyum.android.presentation.main.MainActivity
 import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
 import com.haeyum.common.presentation.theme.*
@@ -42,12 +43,17 @@ class TranslationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         window.setBackgroundDrawable(ColorDrawable(0))
+        window.statusBarColor = 0x00000000
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         viewModel.requestTranslation(intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString())
 
         setContent {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },

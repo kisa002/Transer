@@ -1,5 +1,7 @@
 package com.haeyum.android.di
 
+import com.haeyum.android.presentation.main.MainViewModel
+import com.haeyum.android.presentation.main.RecentTranslateViewModel
 import com.haeyum.android.presentation.translation.TranslationViewModel
 import com.haeyum.common.TranserDatabase
 import com.haeyum.common.data.repository.PreferencesRepositoryImpl
@@ -11,7 +13,6 @@ import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
 import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
@@ -45,5 +46,7 @@ val mobileModule = module {
         )
     }
 
+    viewModelOf(::MainViewModel)
     viewModelOf(::TranslationViewModel)
+    viewModelOf(::RecentTranslateViewModel)
 }
