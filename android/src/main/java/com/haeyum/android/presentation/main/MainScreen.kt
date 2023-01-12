@@ -1,5 +1,6 @@
 package com.haeyum.android.presentation.main
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigation
@@ -25,7 +26,7 @@ import com.haeyum.common.presentation.theme.White
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
+fun MainScreen(viewModel: MainViewModel = koinViewModel(), onRequestFinish: () -> Unit) {
     val screenState by viewModel.screenState.collectAsState()
 
     Column(
@@ -63,6 +64,10 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                 text = "Preferences"
             )
         }
+    }
+
+    BackHandler(true) {
+        onRequestFinish()
     }
 }
 

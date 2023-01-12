@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
 import com.haeyum.common.presentation.theme.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -183,9 +185,13 @@ fun TranslationScreen(
             sheetContentColor = Transparent,
             content = { }
         )
-        LaunchedEffect(bottomSheetState) {
-            if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
-                onRequestFinish()
+
+        LaunchedEffect(Unit) {
+            snapshotFlow { bottomSheetState.currentValue }
+                .filter { it == ModalBottomSheetValue.Hidden }
+                .collectLatest {
+                    onRequestFinish()
+                }
         }
     }
 

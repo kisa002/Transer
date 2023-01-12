@@ -34,10 +34,11 @@ fun PreferencesScreen(
     onSelectedSourceLanguage: (Language) -> Unit,
     onSelectedTargetLanguage: (Language) -> Unit,
     onClickClearData: () -> Unit,
-    onClickContact: () -> Unit
+    onClickContact: () -> Unit,
+    onNotifyVisibleSelect: (Boolean) -> Unit = {}
 ) {
     var visibleSelectSourceLanguage by remember { mutableStateOf(false) }
-    var vVisibleSelectTargetLanguage by remember { mutableStateOf(false) }
+    var visibleSelectTargetLanguage by remember { mutableStateOf(false) }
 
     var visibleSourceInfoAlert by remember { mutableStateOf(false) }
     var visibleTargetInfoAlert by remember { mutableStateOf(false) }
@@ -74,7 +75,7 @@ fun PreferencesScreen(
                     visibleTargetInfoAlert = true
                 },
                 onItemClick = {
-                    vVisibleSelectTargetLanguage = true
+                    visibleSelectTargetLanguage = true
                 }
             )
         }
@@ -129,16 +130,20 @@ fun PreferencesScreen(
 
     VisibilitySelectLanguageScreen(
         title = "Target Language",
-        visible = vVisibleSelectTargetLanguage,
+        visible = visibleSelectTargetLanguage,
         languages = supportedLanguages,
         onDismissRequest = {
-            vVisibleSelectTargetLanguage = false
+            visibleSelectTargetLanguage = false
         },
         onSelectedLanguage = {
             onSelectedTargetLanguage(it)
-            vVisibleSelectTargetLanguage = false
+            visibleSelectTargetLanguage = false
         }
     )
+
+    LaunchedEffect(visibleSelectSourceLanguage, visibleSelectTargetLanguage) {
+        onNotifyVisibleSelect(visibleSelectSourceLanguage && visibleSelectTargetLanguage)
+    }
 }
 
 @Composable

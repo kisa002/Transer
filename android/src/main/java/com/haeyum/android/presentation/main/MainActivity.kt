@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             TranserTheme {
-                MainScreen(viewModel)
+                MainScreen(viewModel = viewModel, onRequestFinish = ::finish)
             }
         }
     }
