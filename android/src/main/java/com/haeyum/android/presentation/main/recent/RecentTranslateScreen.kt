@@ -1,9 +1,8 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.android.presentation.main.recent
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.presentation.theme.Black
 import com.haeyum.common.presentation.theme.ColorDivider
-import com.haeyum.common.presentation.theme.ColorIcon
 import com.haeyum.common.presentation.theme.ColorText
 import org.koin.androidx.compose.koinViewModel
 

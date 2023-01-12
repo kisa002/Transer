@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.android.presentation.main.recent
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
