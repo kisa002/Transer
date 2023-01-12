@@ -12,23 +12,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.haeyum.android.presentation.translation.section.TranslateFailureSection
+import com.haeyum.android.presentation.translation.section.TranslateSuccessSection
 import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
-import com.haeyum.common.presentation.theme.*
+import com.haeyum.common.presentation.theme.ColorIcon
+import com.haeyum.common.presentation.theme.Transparent
+import com.haeyum.common.presentation.theme.White
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.koinViewModel
@@ -96,83 +91,29 @@ fun TranslationScreen(
                             is TranslationScreenState.Translated -> {
                                 val screenState = (screenState as TranslationScreenState.Translated)
 
-                                Text(
-                                    text = "Original Text",
-                                    color = ColorLightBlue,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
+                                TranslateSuccessSection(
+                                    screenState.originalText,
+                                    screenState.translatedText,
+                                    isExistsSavedTranslate = isExistsSavedTranslate,
+                                    onRequestOpen = onRequestOpen,
+                                    onRequestCopy = {
+                                        clipboardManager.setText(it)
+                                    },
+                                    onRequestToggleSave = viewModel::toggleSave
                                 )
-                                Text(
-                                    text = screenState.originalText,
-                                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                                    color = Black,
-                                    fontSize = 18.sp
-                                )
-
-                                Divider(
-                                    modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-                                    color = ColorIcon,
-                                    thickness = 1.dp
-                                )
-
-                                Text(
-                                    text = "Translated Text",
-                                    color = ColorLightBlue,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = screenState.translatedText,
-                                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                                    color = Black,
-                                    fontSize = 18.sp
-                                )
-
-                                Row(
-                                    modifier = Modifier.fillMaxWidth().padding(top = 18.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    ActionButton(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "Preferences",
-                                        modifier = Modifier.offset(x = (-12).dp),
-                                        onClick = onRequestOpen
-                                    )
-
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        ActionButton(
-                                            imageVector = Icons.Default.ContentCopy,
-                                            contentDescription = "Copy",
-                                            onClick = {
-                                                clipboardManager.setText(AnnotatedString(screenState.translatedText))
-                                            }
-                                        )
-
-                                        ActionButton(
-                                            imageVector = if (isExistsSavedTranslate) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                            contentDescription = if (isExistsSavedTranslate) "Delete Saved" else "Save",
-                                            onClick = viewModel::toggleSave
-                                        )
-                                    }
-                                }
                             }
 
                             TranslationScreenState.DisconnectedNetwork -> {
-                                Text(text = "Disconnected Network", color = Black, fontSize = 16.sp)
-                                Text(
-                                    text = "Please check your network connection.",
-                                    color = Black,
-                                    fontSize = 16.sp
+                                TranslateFailureSection(
+                                    title = "Disconnected Network",
+                                    description = "Please check your network connection."
                                 )
                             }
 
                             TranslationScreenState.FailedTranslate -> {
-                                Text(text = "Failed Translate", color = Black, fontSize = 16.sp)
-                                Text(
-                                    text = "Please change the text or try again later.",
-                                    color = Black,
-                                    fontSize = 16.sp
+                                TranslateFailureSection(
+                                    title = "Failed Translate",
+                                    description = "Please change the text or try again later."
                                 )
                             }
                         }
@@ -195,22 +136,6 @@ fun TranslationScreen(
         }
     }
 
-}
-
-@Composable
-private fun ActionButton(
-    imageVector: ImageVector,
-    contentDescription: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    IconButton(onClick = onClick, modifier = modifier) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = contentDescription,
-            tint = ColorText
-        )
-    }
 }
 
 @Composable

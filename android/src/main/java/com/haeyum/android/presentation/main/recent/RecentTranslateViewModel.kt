@@ -3,6 +3,7 @@ package com.haeyum.android.presentation.main.recent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class RecentTranslateViewModel(private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase) : ViewModel() {
@@ -10,5 +11,7 @@ class RecentTranslateViewModel(private val getRecentTranslatesUseCase: GetRecent
         getRecentTranslatesUseCase().collectLatest {
             send(it)
         }
-    }.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    }
+        .flowOn(Dispatchers.IO)
+        .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 }

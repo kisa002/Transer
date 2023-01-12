@@ -2,12 +2,10 @@ package com.haeyum.android.presentation.main.preferences
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.haeyum.common.presentation.component.Header
@@ -20,6 +18,8 @@ import org.koin.java.KoinJavaComponent.inject
 fun AndroidPreferencesScreen() {
     val viewModel by remember { inject<PreferencesViewModel>(PreferencesViewModel::class.java) }
     val context = LocalContext.current
+
+    var visibleSelect by remember { mutableStateOf(false) }
 
     PreferencesScreen(
         modifier = Modifier.fillMaxSize().background(color = White),
@@ -34,6 +34,9 @@ fun AndroidPreferencesScreen() {
         onClickClearData = viewModel::clearData,
         onClickContact = {
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("mailto:vnycall74@naver.com")))
+        },
+        onNotifyVisibleSelect = {
+
         }
     )
 
@@ -41,5 +44,9 @@ fun AndroidPreferencesScreen() {
         onDispose {
             viewModel.onDestroy()
         }
+    }
+
+    BackHandler(enabled = visibleSelect) {
+        /* no-op */
     }
 }
