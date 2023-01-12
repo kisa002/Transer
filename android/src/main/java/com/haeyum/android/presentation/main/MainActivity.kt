@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        finish()
-//        startActivity(Intent(this, TranslationActivity::class.java))
         window.statusBarColor = 0x00000000
         WindowCompat.setDecorFitsSystemWindows(window, false)
 

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.haeyum.common.domain.usecase.recent.AddRecentTranslateUseCase
 import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
+import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
 import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
 import com.haeyum.common.domain.usecase.translation.TranslateUseCase
 import io.ktor.util.network.*
@@ -17,7 +19,8 @@ class TranslationViewModel(
     private val translateUseCase: TranslateUseCase,
     private val isExistsSavedTranslateUseCase: IsExistsSavedTranslateUseCase,
     private val addSavedTranslateUseCase: AddSavedTranslateUseCase,
-    private val deleteSavedTranslateUseCase: AddSavedTranslateUseCase,
+    private val getSavedTranslateUseCase: GetSavedTranslatesUseCase,
+    private val deleteSavedTranslateUseCase: DeleteSavedTranslateUseCase,
     private val addRecentTranslateUseCase: AddRecentTranslateUseCase
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<TranslationScreenState>(TranslationScreenState.Translating)
@@ -41,13 +44,18 @@ class TranslationViewModel(
         .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
 
-    val isExistsSavedTranslate = translatedText
+    private val savedTranslates = channelFlow {
+        getSavedTranslateUseCase().collectLatest {
+            send(it)
+        }
+    }.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+
+    val isExistsSavedTranslate = translatedText.combine(savedTranslates) { translatedText, savedTranslates ->
+        translatedText
+    }
         .filterNotNull()
         .flatMapLatest {
             isExistsSavedTranslateUseCase(it)
-        }
-        .catch {
-            println("isExistsSavedTranslateUseCase error: $it")
         }
         .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = false)
@@ -68,7 +76,7 @@ class TranslationViewModel(
         viewModelScope.launch {
             translatedText.first()?.let {
                 if (isExistsSavedTranslate.first())
-                    deleteSavedTranslateUseCase(originalText.first(), it)
+                    deleteSavedTranslateUseCase(it)
                 else
                     addSavedTranslateUseCase(originalText.first(), it)
             }

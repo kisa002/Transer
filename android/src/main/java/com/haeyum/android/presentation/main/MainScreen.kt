@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.haeyum.android.presentation.main.preferences.AndroidPreferencesScreen
 import com.haeyum.android.presentation.main.recent.RecentTranslateScreen
+import com.haeyum.android.presentation.main.saved.SavedScreen
 import com.haeyum.common.presentation.theme.ColorBackground
 import com.haeyum.common.presentation.theme.ColorLightBlue
 import org.koin.androidx.compose.koinViewModel
@@ -35,10 +36,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     ) {
         when (screenState) {
             MainScreenState.Recent -> RecentTranslateScreen(modifier = Modifier.weight(1f))
-            MainScreenState.Saved -> {
-
-            }
-
+            MainScreenState.Saved -> SavedScreen(modifier = Modifier.weight(1f))
             MainScreenState.Preferences -> AndroidPreferencesScreen()
         }
 

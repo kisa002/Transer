@@ -2,6 +2,7 @@ package com.haeyum.android.di
 
 import com.haeyum.android.presentation.main.MainViewModel
 import com.haeyum.android.presentation.main.recent.RecentTranslateViewModel
+import com.haeyum.android.presentation.main.saved.SavedViewModel
 import com.haeyum.android.presentation.translation.TranslationViewModel
 import com.haeyum.common.TranserDatabase
 import com.haeyum.common.data.repository.PreferencesRepositoryImpl
@@ -49,4 +50,5 @@ val mobileModule = module {
     viewModelOf(::MainViewModel)
     viewModelOf(::TranslationViewModel)
     viewModelOf(::RecentTranslateViewModel)
+    viewModelOf(::SavedViewModel)
 }
