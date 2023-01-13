@@ -1,0 +1,10 @@
+CREATE TABLE languages (
+  language TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+insert:
+INSERT INTO languages (language, name) VALUES (?, ?);
+
+insertObject:
+INSERT INTO languages (language, name) VALUES ?;

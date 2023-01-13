@@ -1,0 +1,20 @@
+CREATE TABLE recentTranslate (
+    idx INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    originalText TEXT NOT NULL,
+    translatedText TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM recentTranslate ORDER BY idx DESC;
+
+insert:
+INSERT INTO recentTranslate (originalText, translatedText) VALUES (?, ?);
+
+deleteByIdx:
+DELETE FROM recentTranslate WHERE idx = ?;
+
+deleteByTranslatedText:
+DELETE FROM recentTranslate WHERE translatedText = ?;
+
+deleteAll:
+DELETE FROM recentTranslate;

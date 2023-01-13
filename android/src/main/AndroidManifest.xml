@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.haeyum.android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.haeyum.android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-            android:allowBackup="false"
-            android:supportsRtl="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity" android:exported="true">
+        android:name=".TranserApp"
+        android:allowBackup="false"
+        android:icon="@drawable/icon"
+        android:label="Transer"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".presentation.main.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.translation.TranslationActivity"
+            android:exported="true"
+            android:theme="@style/TransparentCompat">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
     </application>
