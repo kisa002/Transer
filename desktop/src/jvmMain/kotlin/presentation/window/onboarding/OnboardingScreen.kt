@@ -78,7 +78,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
 
             BasicOnboardingSlide(
                 title = "Recent Command",
-                description = "If you type '>recent', you can see the recent translation history.",
+                description = "If you type '>recent', you can see the copy translated from recent history",
                 visibleContent = onboardingSlideState == OnboardingSlide.RecentCommand,
                 onRequestNext = increaseCurrentIndex
             )
