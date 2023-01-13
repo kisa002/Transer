@@ -20,11 +20,12 @@ fun OnboardingWindow(
     state: WindowState = rememberWindowState(
         position = WindowPosition(BiasAlignment(0f, -.3f)),
         size = DpSize(width = 720.dp, height = 400.dp)
-    )
+    ),
+    onCloseRequest: () -> Unit,
 ) {
     if (visible) {
         Window(
-            onCloseRequest = { /* TODO */ },
+            onCloseRequest = onCloseRequest,
             title = "Onboarding",
             state = state,
             undecorated = true,

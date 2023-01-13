@@ -28,7 +28,10 @@ fun main() {
             val isForeground = viewModel.isForeground.collectAsState().value
             val isExistsPreferences by viewModel.isExistsPreferences.collectAsState()
 
-            OnboardingWindow(visible = visibleOnboardingWindow)
+            OnboardingWindow(
+                visible = visibleOnboardingWindow,
+                onCloseRequest = ::exitApplication
+            )
 
             if (isExistsPreferences == true) {
                 TranslationWindow(
