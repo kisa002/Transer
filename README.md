@@ -41,42 +41,42 @@ TRANSER automatically translates text when you select the text and click TRANSER
 
 - Onboarding
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/da3d6ba9-29a5-4c16-8f77-1562aade2242/Untitled.gif)
+  ![Desktop Onboarding](https://user-images.githubusercontent.com/4679634/212265744-28a19a8f-d059-40f7-8e74-cac5d1065e7b.gif)
 
 - Translate & Recent & Saved
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0f530f05-c35b-4e8c-b2e2-71c3d1387fe1/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265754-73ae4047-069c-4048-b185-8e392ffbf6b4.gif)
 
 - Preferences
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2d4c54ab-18dd-4e51-9901-99f8d4b6e340/Untitled.gif)
+  ![Untitled](httpshttps://user-images.githubusercontent.com/4679634/212265747-d00f9f5e-c02b-4af9-a9e5-fbcb55cc606b.gif)
 
 - Light Theme
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d2b94b50-c015-4fb7-a19a-fce1d1b9e486/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265741-c68b4b22-d1b9-4bd9-9932-49e5b2af99f5.gif)
 
 
 ### Android
 
 - Translate
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cb8dec82-f093-49b1-99d3-e981ef49b291/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265736-7a497a00-8cb8-4b34-a27a-3c4bf74ba50d.gif)
 
 - Recent
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7736736f-0ad4-457f-8b36-6c51b5488fec/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265726-3a3bc92c-e193-48f7-9b64-b30a883d315b.gif)
 
 - Saved
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c3b1f661-76e0-451d-9f8c-570908d82f0c/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265734-d4c24848-d0c1-4816-979c-ecaf55d9bb60.gif)
 
 - Preferences
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/17941e3a-6af1-45a3-a671-f3b52d6c5df4/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265719-cc7e2f1b-ba90-431d-9177-41b372bb0960.gif)
 
 - Light Theme
 
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/668e59b1-f7cb-4341-9782-a00b35ff2b8d/Untitled.gif)
+  ![Untitled](https://user-images.githubusercontent.com/4679634/212265656-7bad5f08-a44c-4662-8130-c2b608bc28be.gif)
 
 
 ### Features
