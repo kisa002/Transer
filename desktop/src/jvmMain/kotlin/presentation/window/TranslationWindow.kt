@@ -77,7 +77,11 @@ fun TranslationWindow(
 
                 },
                 onTriggerKeyPressed = {
-                    if ((CurrentPlatform.isWindows || isForeground) && visible) {
+                    // TODO separate logic and windows platform need to detect foreground event
+                    if (((CurrentPlatform.isMac && isForeground) || (CurrentPlatform.isWindows && !state.isMinimized)) && visible) {
+                        if (CurrentPlatform.isWindows)
+                            state.isMinimized = true
+
                         onChangeVisibleRequest(false)
                     } else {
                         onChangeVisibleRequest(true)
@@ -85,13 +89,7 @@ fun TranslationWindow(
                         if (Desktop.getDesktop().isSupported(Desktop.Action.APP_REQUEST_FOREGROUND)) {
                             Desktop.getDesktop().requestForeground(true)
                         } else {
-                            // TODO move to view model
-                            coroutineScope.launch {
-                                // TODO It's just bring to front, need focus
-                                alwaysOnTop = true
-                                delay(500)
-                                alwaysOnTop = false
-                            }
+                            state.isMinimized = false
                         }
                     }
                 }

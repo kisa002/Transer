@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.presentation.theme.ColorText
 import presentation.component.SectionHeader
+import supports.CurrentPlatform
 
 @Composable
 fun HomeSection() {
@@ -51,11 +52,13 @@ fun HomeSection() {
             style = TextStyle(color = ColorText, fontSize = 14.sp)
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Open shorcut: ⌥ + Space - First time, you need to restart it.",
-            modifier = Modifier.padding(18.dp),
-            color = ColorText,
-            fontSize = 14.sp
-        )
+
+        if (CurrentPlatform.isMac)
+            Text(
+                text = "Open shorcut: ⌥ + Space - First time, you need to restart it.",
+                modifier = Modifier.padding(18.dp),
+                color = ColorText,
+                fontSize = 14.sp
+            )
     }
 }
