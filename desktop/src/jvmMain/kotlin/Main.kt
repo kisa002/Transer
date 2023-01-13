@@ -52,8 +52,10 @@ fun main() {
             )
 
             LaunchedEffect(Unit) {
-                Desktop.getDesktop().setPreferencesHandler {
-                    viewModel.setVisiblePreferencesWindow(true)
+                if (Desktop.getDesktop().isSupported(Desktop.Action.APP_PREFERENCES)) {
+                    Desktop.getDesktop().setPreferencesHandler {
+                        viewModel.setVisiblePreferencesWindow(true)
+                    }
                 }
             }
         }
