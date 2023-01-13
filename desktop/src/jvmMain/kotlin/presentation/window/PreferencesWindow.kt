@@ -27,6 +27,7 @@ import com.haeyum.common.presentation.preferences.PreferencesViewModel
 import com.haeyum.common.presentation.theme.ColorSecondaryDivider
 import com.haeyum.common.presentation.theme.White
 import org.koin.java.KoinJavaComponent
+import supports.CurrentPlatform
 import java.awt.Desktop
 import java.net.URI
 
@@ -84,15 +85,17 @@ fun PreferencesWindow(
                 }
             )
 
-            MenuBar {
-                Menu("Window") {
-                    Item(
-                        text = "Close",
-                        onClick = {
-                            onChangeVisibleRequest(false)
-                        },
-                        shortcut = KeyShortcut(Key.W, meta = true)
-                    )
+            if (CurrentPlatform.isMac) {
+                MenuBar {
+                    Menu("Window") {
+                        Item(
+                            text = "Close",
+                            onClick = {
+                                onChangeVisibleRequest(false)
+                            },
+                            shortcut = KeyShortcut(Key.W, meta = true)
+                        )
+                    }
                 }
             }
 

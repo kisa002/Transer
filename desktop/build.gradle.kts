@@ -31,11 +31,11 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "Transer"
             packageVersion = "1.0.0"
             copyright = "HAEYUM"
-            description = "Translation utility made of kotlin multiplatform"
+            description = "Transer"
             modules("java.sql")
 
             macOS {

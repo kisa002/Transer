@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.common.domain.model.translation.languages.Language
 import com.haeyum.common.presentation.theme.*
-import kotlinx.coroutines.delay
+import supports.CurrentPlatform
+import supports.TranserFunctionKey
 
 @Composable
 fun OnboardingScreen(viewModel: OnboardingViewModel) {
@@ -51,7 +52,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
         Box(modifier = Modifier.padding(top = 96.dp).fillMaxSize(), contentAlignment = Alignment.Center) {
             BasicOnboardingSlide(
                 title = "What is TRANSER?",
-                description = "It's an open-source translation application developed with Kotlin Multiplatform.",
+                description = "It's an open-source translation application developed based on the Kotlin Multiplatform.",
                 visibleContent = onboardingSlideState == OnboardingSlide.Introduce,
                 onRequestNext = increaseCurrentIndex
             )
@@ -63,8 +64,8 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
             )
 
             BasicOnboardingSlide(
-                title = "⌥ + Space",
-                description = "Great! You can run TRANSER by pressing the shortcut key after you restart it.",
+                title = "${TranserFunctionKey.shortcut}",
+                description = "Great! You can run TRANSER by pressing the shortcut key" + if (CurrentPlatform.isMac) " after you restart it." else ".",
                 visibleContent = onboardingSlideState == OnboardingSlide.Shortcut,
                 onRequestNext = increaseCurrentIndex
             )
@@ -78,7 +79,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
 
             BasicOnboardingSlide(
                 title = "Recent Command",
-                description = "If you type '>recent', you can see the recent translation history.",
+                description = "If you type '>recent', you can see the copy translated from recent history",
                 visibleContent = onboardingSlideState == OnboardingSlide.RecentCommand,
                 onRequestNext = increaseCurrentIndex
             )

@@ -11,10 +11,13 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import com.github.kwhat.jnativehook.GlobalScreen
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
 import presentation.window.translation.TranslationScreen
 import presentation.window.translation.TranslationViewModel
+import supports.CurrentPlatform
 import java.awt.Desktop
 
 @Composable
@@ -32,6 +35,8 @@ fun TranslationWindow(
 ) {
     val isForeground by rememberUpdatedState(isForeground)
     val visible by rememberUpdatedState(visible)
+    var alwaysOnTop by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Window(
         onCloseRequest = onCloseRequest,
@@ -39,7 +44,8 @@ fun TranslationWindow(
         title = title,
         undecorated = true,
         transparent = true,
-        resizable = false
+        resizable = false,
+        alwaysOnTop = alwaysOnTop
     ) {
         val viewModel by remember {
             KoinJavaComponent.inject<TranslationViewModel>(TranslationViewModel::class.java)
@@ -47,17 +53,21 @@ fun TranslationWindow(
 
         TranslationScreen(
             viewModel = viewModel,
-            onShowPreferences = onShowPreferences
+            onShowPreferences = onShowPreferences,
+            alwaysOnTop = alwaysOnTop
         )
-        MenuBar {
-            Menu(text = "Window") {
-                Item(
-                    text = "Hide",
-                    shortcut = KeyShortcut(Key.W, meta = true),
-                    onClick = {
-                        onChangeVisibleRequest(false)
-                    }
-                )
+
+        if (CurrentPlatform.isMac) {
+            MenuBar {
+                Menu(text = "Window") {
+                    Item(
+                        text = "Hide",
+                        shortcut = KeyShortcut(Key.W, meta = true),
+                        onClick = {
+                            onChangeVisibleRequest(false)
+                        }
+                    )
+                }
             }
         }
 
@@ -67,11 +77,20 @@ fun TranslationWindow(
 
                 },
                 onTriggerKeyPressed = {
-                    if (isForeground && visible) {
+                    // TODO separate logic and windows platform need to detect foreground event
+                    if (((CurrentPlatform.isMac && isForeground) || (CurrentPlatform.isWindows && !state.isMinimized)) && visible) {
+                        if (CurrentPlatform.isWindows)
+                            state.isMinimized = true
+
                         onChangeVisibleRequest(false)
                     } else {
                         onChangeVisibleRequest(true)
-                        Desktop.getDesktop().requestForeground(true)
+
+                        if (Desktop.getDesktop().isSupported(Desktop.Action.APP_REQUEST_FOREGROUND)) {
+                            Desktop.getDesktop().requestForeground(true)
+                        } else {
+                            state.isMinimized = false
+                        }
                     }
                 }
             )

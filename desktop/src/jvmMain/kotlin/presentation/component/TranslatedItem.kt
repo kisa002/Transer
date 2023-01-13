@@ -17,6 +17,7 @@ import com.haeyum.common.presentation.theme.Black
 import com.haeyum.common.presentation.theme.ColorSelected
 import com.haeyum.common.presentation.theme.ColorSelectedAction
 import com.haeyum.common.presentation.theme.Transparent
+import supports.TranserFunctionKey
 
 @Composable
 fun TranslatedItem(
@@ -51,7 +52,7 @@ fun TranslatedItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (isExists) "⌥↵ Delete Saved" else "⌥↵ Save",
+                    text = if (isExists) "${TranserFunctionKey.saveKey} Delete Saved" else "${TranserFunctionKey.saveKey} Save",
                     modifier = Modifier
                         .background(
                             color = ColorSelectedAction,

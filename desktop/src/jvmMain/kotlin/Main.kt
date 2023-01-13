@@ -15,10 +15,6 @@ fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<MainViewModel>(MainViewModel::class.java)
 
-//    System.setProperty("apple.awt.UIElement", "true")
-//    val isMac = System.getProperty("os.name").toLowerCase().contains("mac")
-    println(System.getProperty("os.name"))
-
     application {
         TranserTheme {
             val visibleOnboardingWindow by viewModel.visibleOnboardingWindow.collectAsState()
@@ -28,7 +24,10 @@ fun main() {
             val isForeground = viewModel.isForeground.collectAsState().value
             val isExistsPreferences by viewModel.isExistsPreferences.collectAsState()
 
-            OnboardingWindow(visible = visibleOnboardingWindow)
+            OnboardingWindow(
+                visible = visibleOnboardingWindow,
+                onCloseRequest = ::exitApplication
+            )
 
             if (isExistsPreferences == true) {
                 TranslationWindow(
@@ -37,7 +36,7 @@ fun main() {
                     isForeground = isForeground,
                     onChangeVisibleRequest = viewModel::setVisibleTranslationWindow,
                     onShowPreferences = {
-                        viewModel.setVisibleOnboardingWindow(true)
+                        viewModel.setVisiblePreferencesWindow(true)
                     },
                     onCloseRequest = ::exitApplication
                 )
@@ -49,8 +48,10 @@ fun main() {
             )
 
             LaunchedEffect(Unit) {
-                Desktop.getDesktop().setPreferencesHandler {
-                    viewModel.setVisiblePreferencesWindow(true)
+                if (Desktop.getDesktop().isSupported(Desktop.Action.APP_PREFERENCES)) {
+                    Desktop.getDesktop().setPreferencesHandler {
+                        viewModel.setVisiblePreferencesWindow(true)
+                    }
                 }
             }
         }
