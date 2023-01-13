@@ -1,6 +1,7 @@
 package com.haeyum.android.presentation.main.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,14 +22,25 @@ import com.haeyum.common.presentation.theme.ColorDivider
 import com.haeyum.common.presentation.theme.ColorText
 
 @Composable
-fun LazyTranslatesColumn(translates: List<Pair<String, String>>, onClick: (AnnotatedString) -> Unit) {
+fun LazyTranslatesColumn(
+    translates: List<Pair<String, String>>,
+    onLongPress: (String) -> Unit,
+    onTap: (AnnotatedString) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(translates) { index, (translatedText, originalText) ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onClick(AnnotatedString(translatedText))
+                    .pointerInput(translatedText) {
+                        detectTapGestures(
+                            onLongPress = {
+                                onLongPress(translatedText)
+                            },
+                            onTap = {
+                                onTap(AnnotatedString(translatedText))
+                            }
+                        )
                     }
                     .padding(horizontal = 12.dp, vertical = 12.dp)
             ) {
