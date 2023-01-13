@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import supports.CurrentPlatform
 
 class OnboardingViewModel(
     private val coroutineScope: CoroutineScope,
@@ -57,6 +58,15 @@ class OnboardingViewModel(
                             sourceLanguage = selectedSourceLanguage!!,
                             targetLanguage = selectedTargetLanguage!!
                         )
+                    }
+            }
+
+            launch {
+                onboardingSlideState
+                    .filter { it == OnboardingSlide.RequirePermission }
+                    .collectLatest {
+                        if (CurrentPlatform.isWindows)
+                            increaseCurrentIndex()
                     }
             }
         }

@@ -49,6 +49,8 @@ fun TranslationWindow(
             viewModel = viewModel,
             onShowPreferences = onShowPreferences
         )
+
+
         MenuBar {
             Menu(text = "Window") {
                 Item(

@@ -15,10 +15,6 @@ fun main() {
     DesktopKoin.startKoin()
     val viewModel by inject<MainViewModel>(MainViewModel::class.java)
 
-//    System.setProperty("apple.awt.UIElement", "true")
-//    val isMac = System.getProperty("os.name").toLowerCase().contains("mac")
-    println(System.getProperty("os.name"))
-
     application {
         TranserTheme {
             val visibleOnboardingWindow by viewModel.visibleOnboardingWindow.collectAsState()
