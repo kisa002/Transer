@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import com.haeyum.android.presentation.main.component.EmptyScreen
 import com.haeyum.android.presentation.main.component.LazyTranslatesColumn
 import com.haeyum.common.presentation.component.Header
 import org.koin.androidx.compose.koinViewModel
@@ -19,8 +20,12 @@ fun RecentTranslateScreen(modifier: Modifier, viewModel: RecentTranslateViewMode
     Column(modifier = modifier) {
         Header(title = "Recent")
 
-        LazyTranslatesColumn(translates = pairTranslates) {
-            clipboardManager.setText(it)
+        if (recentTranslates.isEmpty()) {
+            EmptyScreen(text = "Empty Recent")
+        } else {
+            LazyTranslatesColumn(translates = pairTranslates) {
+                clipboardManager.setText(it)
+            }
         }
     }
 }

@@ -6,10 +6,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,8 +70,8 @@ fun TranslateSuccessSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ActionButton(
-            imageVector = Icons.Default.Settings,
-            contentDescription = "Preferences",
+            imageVector = Icons.Default.ArrowCircleRight,
+            contentDescription = "Open App",
             modifier = Modifier.offset(x = (-12).dp),
             onClick = onRequestOpen
         )
