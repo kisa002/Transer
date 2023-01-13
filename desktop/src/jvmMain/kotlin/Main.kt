@@ -37,7 +37,7 @@ fun main() {
                     isForeground = isForeground,
                     onChangeVisibleRequest = viewModel::setVisibleTranslationWindow,
                     onShowPreferences = {
-                        viewModel.setVisibleOnboardingWindow(true)
+                        viewModel.setVisiblePreferencesWindow(true)
                     },
                     onCloseRequest = ::exitApplication
                 )
