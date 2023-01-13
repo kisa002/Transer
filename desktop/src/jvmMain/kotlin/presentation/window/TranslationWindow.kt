@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import com.github.kwhat.jnativehook.GlobalScreen
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
 import presentation.window.translation.TranslationScreen
@@ -33,6 +35,8 @@ fun TranslationWindow(
 ) {
     val isForeground by rememberUpdatedState(isForeground)
     val visible by rememberUpdatedState(visible)
+    var alwaysOnTop by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Window(
         onCloseRequest = onCloseRequest,
@@ -40,7 +44,8 @@ fun TranslationWindow(
         title = title,
         undecorated = true,
         transparent = true,
-        resizable = false
+        resizable = false,
+        alwaysOnTop = alwaysOnTop
     ) {
         val viewModel by remember {
             KoinJavaComponent.inject<TranslationViewModel>(TranslationViewModel::class.java)
@@ -48,7 +53,8 @@ fun TranslationWindow(
 
         TranslationScreen(
             viewModel = viewModel,
-            onShowPreferences = onShowPreferences
+            onShowPreferences = onShowPreferences,
+            alwaysOnTop = alwaysOnTop
         )
 
         if (CurrentPlatform.isMac) {
@@ -71,11 +77,22 @@ fun TranslationWindow(
 
                 },
                 onTriggerKeyPressed = {
-                    if (isForeground && visible) {
+                    if ((CurrentPlatform.isWindows || isForeground) && visible) {
                         onChangeVisibleRequest(false)
                     } else {
                         onChangeVisibleRequest(true)
-                        Desktop.getDesktop().requestForeground(true)
+
+                        if (Desktop.getDesktop().isSupported(Desktop.Action.APP_REQUEST_FOREGROUND)) {
+                            Desktop.getDesktop().requestForeground(true)
+                        } else {
+                            // TODO move to view model
+                            coroutineScope.launch {
+                                // TODO It's just bring to front, need focus
+                                alwaysOnTop = true
+                                delay(500)
+                                alwaysOnTop = false
+                            }
+                        }
                     }
                 }
             )

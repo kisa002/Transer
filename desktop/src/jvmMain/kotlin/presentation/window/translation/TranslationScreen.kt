@@ -23,7 +23,7 @@ import presentation.window.translation.section.search.TranslateSearchSection
 import presentation.window.translation.section.sub.*
 
 @Composable
-fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> Unit = {}) {
+fun TranslationScreen(viewModel: TranslationViewModel, alwaysOnTop: Boolean, onShowPreferences: () -> Unit = {}) {
     val query by viewModel.query.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
     val isRequesting by viewModel.isRequesting.collectAsState()
@@ -119,6 +119,12 @@ fun TranslationScreen(viewModel: TranslationViewModel, onShowPreferences: () -> 
 
     LaunchedEffect(query) {
         if (query.isEmpty()) {
+            focusRequester.requestFocus()
+        }
+    }
+
+    LaunchedEffect(alwaysOnTop) {
+        if (alwaysOnTop) {
             focusRequester.requestFocus()
         }
     }

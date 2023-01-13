@@ -61,7 +61,7 @@ fun OnboardingScreen(viewModel: OnboardingViewModel) {
                 visibleContent = onboardingSlideState == OnboardingSlide.RequirePermission,
                 onRequestNext = increaseCurrentIndex
             )
-
+// TODO WINDOWS
             BasicOnboardingSlide(
                 title = "⌥ + Space",
                 description = "Great! You can run TRANSER by pressing the shortcut key after you restart it.",
