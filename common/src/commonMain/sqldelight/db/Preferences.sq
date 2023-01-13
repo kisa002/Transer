@@ -1,0 +1,13 @@
+CREATE TABLE preferences (
+    id INTEGER NOT NULL PRIMARY KEY DEFAULT 0,
+    sourceLanguage TEXT NOT NULL,
+    sourceName TEXT NOT NULL,
+    targetLanguage TEXT NOT NULL,
+    targetName TEXT NOT NULL
+);
+
+select:
+SELECT sourceLanguage, sourceName, targetLanguage, targetName FROM preferences;
+
+set:
+REPLACE INTO preferences (id, sourceLanguage, sourceName, targetLanguage, targetName) VALUES (0, ?, ?, ?, ?);

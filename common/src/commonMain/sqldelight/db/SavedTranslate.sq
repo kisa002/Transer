@@ -1,0 +1,23 @@
+CREATE TABLE savedTranslate (
+    idx INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    originalText TEXT NOT NULL,
+    translatedText TEXT NOT NULL
+);
+
+select:
+SELECT * FROM savedTranslate WHERE translatedText = ? ORDER BY idx DESC;
+
+selectAll:
+SELECT * FROM savedTranslate ORDER BY idx DESC;
+
+insert:
+INSERT INTO savedTranslate (originalText, translatedText) VALUES (?, ?);
+
+deleteByIdx:
+DELETE FROM savedTranslate WHERE idx = ?;
+
+deleteByTranslatedText:
+DELETE FROM savedTranslate WHERE translatedText = ?;
+
+deleteAll:
+DELETE FROM savedTranslate;

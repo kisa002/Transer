@@ -1,6 +1,5 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -9,7 +8,6 @@ plugins {
 
 group = "com.haeyum"
 version = "1.0-SNAPSHOT"
-
 
 kotlin {
     jvm {
@@ -33,9 +31,26 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "Transer"
             packageVersion = "1.0.0"
+            copyright = "HAEYUM"
+            description = "Transer"
+            modules("java.sql")
+
+            macOS {
+                dockName = "Transer"
+                appCategory = "public.app-category.utilities"
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.icns"))
+            }
+
+            windows {
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.ico"))
+            }
+
+            linux {
+                iconFile.set(project.file("src/jvmMain/resources/drawable/icon.icns"))
+            }
         }
     }
 }
