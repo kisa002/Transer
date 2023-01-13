@@ -41,42 +41,42 @@ TRANSER automatically translates text when you select the text and click TRANSER
 
 - Onboarding
 
-  ![Desktop Onboarding](https://user-images.githubusercontent.com/4679634/212265744-28a19a8f-d059-40f7-8e74-cac5d1065e7b.gif)
+  ![Desktop-Onboarding](https://user-images.githubusercontent.com/4679634/212265744-28a19a8f-d059-40f7-8e74-cac5d1065e7b.gif)
 
 - Translate & Recent & Saved
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265754-73ae4047-069c-4048-b185-8e392ffbf6b4.gif)
+  ![Desktop-Translate & Recent & Saved](https://user-images.githubusercontent.com/4679634/212265754-73ae4047-069c-4048-b185-8e392ffbf6b4.gif)
 
 - Preferences
 
-  ![Untitled](httpshttps://user-images.githubusercontent.com/4679634/212265747-d00f9f5e-c02b-4af9-a9e5-fbcb55cc606b.gif)
+  ![Desktop-Preferences](https://user-images.githubusercontent.com/4679634/212265747-d00f9f5e-c02b-4af9-a9e5-fbcb55cc606b.gif)
 
 - Light Theme
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265741-c68b4b22-d1b9-4bd9-9932-49e5b2af99f5.gif)
+  ![Desktop-Light Theme](https://user-images.githubusercontent.com/4679634/212265741-c68b4b22-d1b9-4bd9-9932-49e5b2af99f5.gif)
 
 
 ### Android
 
 - Translate
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265736-7a497a00-8cb8-4b34-a27a-3c4bf74ba50d.gif)
+  ![Android-Translate](https://user-images.githubusercontent.com/4679634/212265736-7a497a00-8cb8-4b34-a27a-3c4bf74ba50d.gif)
 
 - Recent
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265726-3a3bc92c-e193-48f7-9b64-b30a883d315b.gif)
+  ![Android-Recent](https://user-images.githubusercontent.com/4679634/212265726-3a3bc92c-e193-48f7-9b64-b30a883d315b.gif)
 
 - Saved
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265734-d4c24848-d0c1-4816-979c-ecaf55d9bb60.gif)
+  ![Android-Saved](https://user-images.githubusercontent.com/4679634/212265734-d4c24848-d0c1-4816-979c-ecaf55d9bb60.gif)
 
 - Preferences
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265719-cc7e2f1b-ba90-431d-9177-41b372bb0960.gif)
+  ![Android-Preferences](https://user-images.githubusercontent.com/4679634/212265719-cc7e2f1b-ba90-431d-9177-41b372bb0960.gif)
 
 - Light Theme
 
-  ![Untitled](https://user-images.githubusercontent.com/4679634/212265656-7bad5f08-a44c-4662-8130-c2b608bc28be.gif)
+  ![Android-Light Theme](https://user-images.githubusercontent.com/4679634/212265656-7bad5f08-a44c-4662-8130-c2b608bc28be.gif)
 
 
 ### Features
