@@ -15,6 +15,7 @@ import org.koin.java.KoinJavaComponent
 import presentation.TranserShortcutListener
 import presentation.window.translation.TranslationScreen
 import presentation.window.translation.TranslationViewModel
+import supports.CurrentPlatform
 import java.awt.Desktop
 
 @Composable
@@ -50,16 +51,17 @@ fun TranslationWindow(
             onShowPreferences = onShowPreferences
         )
 
-
-        MenuBar {
-            Menu(text = "Window") {
-                Item(
-                    text = "Hide",
-                    shortcut = KeyShortcut(Key.W, meta = true),
-                    onClick = {
-                        onChangeVisibleRequest(false)
-                    }
-                )
+        if (CurrentPlatform.isMac) {
+            MenuBar {
+                Menu(text = "Window") {
+                    Item(
+                        text = "Hide",
+                        shortcut = KeyShortcut(Key.W, meta = true),
+                        onClick = {
+                            onChangeVisibleRequest(false)
+                        }
+                    )
+                }
             }
         }
 
