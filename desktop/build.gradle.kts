@@ -35,7 +35,7 @@ compose.desktop {
             packageName = "Transer"
             packageVersion = "1.0.0"
             copyright = "HAEYUM"
-            description = "Translation utility made of kotlin multiplatform"
+            description = "Transer"
             modules("java.sql")
 
             macOS {
