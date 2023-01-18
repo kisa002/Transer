@@ -26,10 +26,10 @@ I think the Kotlin Multiplatform is more powerful than other cross-platforms whe
 
 It's simple, just type it in the TRANSER then it is translated.
 
-If your platform is mac, you can use a shortcut (⌥+ Space) to appear on the top while running TRANSER.
-(Will be supported windows and linux platforms too.)
+If your platform is mac, you can use a shortcut (⌥ + Space) to appear on the top while running TRANSER.
+Or other platforms, you can use Control + Space.
 
-Currently, mac is safety version. windows required to more test.
+Currently, mac is safety version. windows, linux required to more test.
 
 ### Android
 
