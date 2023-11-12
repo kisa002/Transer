@@ -2,8 +2,8 @@ package com.haeyum.android.presentation.main.recent
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haeyum.common.domain.usecase.recent.DeleteRecentTranslateByTranslatedTextUseCase
-import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
+import com.haeyum.shared.domain.usecase.recent.DeleteRecentTranslateByTranslatedTextUseCase
+import com.haeyum.shared.domain.usecase.recent.GetRecentTranslatesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

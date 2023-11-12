@@ -1,4 +1,4 @@
-import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.shared.domain.usecase.preferences.GetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*

@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.haeyum.android.presentation.main.preferences.AndroidPreferencesScreen
 import com.haeyum.android.presentation.main.recent.RecentTranslateScreen
 import com.haeyum.android.presentation.main.saved.SavedScreen
-import com.haeyum.common.presentation.theme.ColorBackground
-import com.haeyum.common.presentation.theme.ColorLightBlue
-import com.haeyum.common.presentation.theme.White
+import com.haeyum.shared.presentation.theme.ColorBackground
+import com.haeyum.shared.presentation.theme.ColorLightBlue
+import com.haeyum.shared.presentation.theme.White
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

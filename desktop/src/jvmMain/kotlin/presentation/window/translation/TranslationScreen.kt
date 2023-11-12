@@ -16,8 +16,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.presentation.theme.ColorDivider
-import com.haeyum.common.presentation.theme.ColorBackground
+import com.haeyum.shared.presentation.theme.ColorDivider
+import com.haeyum.shared.presentation.theme.ColorBackground
 import presentation.component.EventSnackBar
 import presentation.window.translation.section.search.TranslateSearchSection
 import presentation.window.translation.section.sub.*

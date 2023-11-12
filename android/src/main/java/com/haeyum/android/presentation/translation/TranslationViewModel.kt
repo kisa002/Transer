@@ -2,12 +2,12 @@ package com.haeyum.android.presentation.translation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haeyum.common.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
-import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.translation.TranslateUseCase
+import com.haeyum.shared.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
+import com.haeyum.shared.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
+import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
 import io.ktor.util.network.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers

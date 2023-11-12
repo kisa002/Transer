@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorError
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorError
 
 @Composable
 fun TranslateFailureSection(title: String, description: String) {

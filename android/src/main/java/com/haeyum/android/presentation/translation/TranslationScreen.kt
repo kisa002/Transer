@@ -20,10 +20,10 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import com.haeyum.android.presentation.translation.section.TranslateFailureSection
 import com.haeyum.android.presentation.translation.section.TranslateSuccessSection
-import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
-import com.haeyum.common.presentation.theme.ColorIcon
-import com.haeyum.common.presentation.theme.Transparent
-import com.haeyum.common.presentation.theme.White
+import com.haeyum.shared.presentation.component.RainbowCircularProgressIndicator
+import com.haeyum.shared.presentation.theme.ColorIcon
+import com.haeyum.shared.presentation.theme.Transparent
+import com.haeyum.shared.presentation.theme.White
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.koinViewModel

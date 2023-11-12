@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import com.haeyum.android.presentation.main.component.ConfirmDeleteAlertDialog
 import com.haeyum.android.presentation.main.component.EmptyScreen
 import com.haeyum.android.presentation.main.component.LazyTranslatesColumn
-import com.haeyum.common.presentation.component.Header
+import com.haeyum.shared.presentation.component.Header
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

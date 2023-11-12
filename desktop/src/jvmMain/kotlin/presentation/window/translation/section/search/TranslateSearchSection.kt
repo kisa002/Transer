@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorHint
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorHint
 import presentation.window.translation.Command
 import presentation.window.translation.TranslationViewModel
 

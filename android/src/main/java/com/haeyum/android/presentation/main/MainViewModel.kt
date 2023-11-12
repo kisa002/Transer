@@ -2,9 +2,9 @@ package com.haeyum.android.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haeyum.common.domain.model.translation.languages.Language
-import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
-import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
+import com.haeyum.shared.domain.model.translation.languages.Language
+import com.haeyum.shared.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.shared.domain.usecase.preferences.SetPreferencesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull

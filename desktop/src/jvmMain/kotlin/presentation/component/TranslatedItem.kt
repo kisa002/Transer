@@ -13,10 +13,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorSelected
-import com.haeyum.common.presentation.theme.ColorSelectedAction
-import com.haeyum.common.presentation.theme.Transparent
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorSelected
+import com.haeyum.shared.presentation.theme.ColorSelectedAction
+import com.haeyum.shared.presentation.theme.Transparent
 import supports.TranserFunctionKey
 
 @Composable

@@ -21,11 +21,11 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import com.haeyum.common.presentation.component.Header
-import com.haeyum.common.presentation.preferences.PreferencesScreen
-import com.haeyum.common.presentation.preferences.PreferencesViewModel
-import com.haeyum.common.presentation.theme.ColorSecondaryDivider
-import com.haeyum.common.presentation.theme.White
+import com.haeyum.shared.presentation.component.Header
+import com.haeyum.shared.presentation.preferences.PreferencesScreen
+import com.haeyum.shared.presentation.preferences.PreferencesViewModel
+import com.haeyum.shared.presentation.theme.ColorSecondaryDivider
+import com.haeyum.shared.presentation.theme.White
 import org.koin.java.KoinJavaComponent
 import supports.CurrentPlatform
 import java.awt.Desktop

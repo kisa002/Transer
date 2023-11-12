@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.ColorLightBlue
-import com.haeyum.common.presentation.theme.White
+import com.haeyum.shared.presentation.theme.ColorLightBlue
+import com.haeyum.shared.presentation.theme.White
 
 @Composable
 fun BoxScope.EventSnackBar(snackbarState: String?) {

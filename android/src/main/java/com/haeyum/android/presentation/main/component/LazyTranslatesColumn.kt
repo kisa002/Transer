@@ -17,9 +17,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorDivider
-import com.haeyum.common.presentation.theme.ColorText
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorDivider
+import com.haeyum.shared.presentation.theme.ColorText
 
 @Composable
 fun LazyTranslatesColumn(

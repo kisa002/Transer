@@ -1,9 +1,9 @@
 package com.haeyum.android.di
 
 import android.content.Context
-import com.haeyum.common.di.commonApiModule
-import com.haeyum.common.di.commonDataModule
-import com.haeyum.common.di.coroutineScopesModule
+import com.haeyum.shared.di.commonApiModule
+import com.haeyum.shared.di.commonDataModule
+import com.haeyum.shared.di.coroutineScopesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 

@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.haeyum.common.presentation.component.Header
-import com.haeyum.common.presentation.preferences.PreferencesScreen
-import com.haeyum.common.presentation.preferences.PreferencesViewModel
-import com.haeyum.common.presentation.theme.White
+import com.haeyum.shared.presentation.component.Header
+import com.haeyum.shared.presentation.preferences.PreferencesScreen
+import com.haeyum.shared.presentation.preferences.PreferencesViewModel
+import com.haeyum.shared.presentation.theme.White
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable

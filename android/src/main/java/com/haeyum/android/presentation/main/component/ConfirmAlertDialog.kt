@@ -7,9 +7,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorError
-import com.haeyum.common.presentation.theme.ColorIcon
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorError
+import com.haeyum.shared.presentation.theme.ColorIcon
 
 @Composable
 fun ConfirmDeleteAlertDialog(
