@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val coroutineScopesModule = module {
     factory(named("MainScope")) { CoroutineScope(SupervisorJob() +  Dispatchers.Main) }
-    factory(named("IOScope")) { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+//    factory(named("IOScope")) { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
     factory(named("DefaultScope")) { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
     factory(named("UnconfinedScope")) { CoroutineScope(SupervisorJob() + Dispatchers.Unconfined) }
 }

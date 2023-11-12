@@ -35,23 +35,12 @@ kotlin {
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
         ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
+            isStatic = true
         }
     }
-    
-//    sourceSets {
-//        val commonMain by getting {
-//            dependencies {
-//                //put your multiplatform dependencies here
-//            }
-//        }
-//        val commonTest by getting {
-//            dependencies {
-//                implementation(kotlin("test"))
-//            }
-//        }
-//    }
 
     sourceSets {
         val commonMain by getting {
@@ -116,6 +105,16 @@ kotlin {
             }
         }
         val desktopTest by getting
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by getting {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
     }
 }
 
