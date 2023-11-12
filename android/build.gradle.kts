@@ -17,17 +17,19 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(33)
+    namespace = "com.haeyum.android"
+
+    compileSdkVersion(34)
     defaultConfig {
         applicationId = "com.haeyum.android"
         minSdkVersion(28)
-        targetSdkVersion(33)
+        targetSdkVersion(34)
         versionCode = 1
         versionName = "1.0-SNAPSHOT"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     buildTypes {
         getByName("release") {

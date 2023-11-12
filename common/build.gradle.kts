@@ -13,7 +13,7 @@ kotlin {
     android()
     jvm("desktop") {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = "19"
         }
     }
     sourceSets {
@@ -66,7 +66,7 @@ kotlin {
                 api("com.squareup.sqldelight:android-driver:${extra["sqldelight.version"]}")
             }
         }
-        val androidTest by getting {
+        val androidUnitTest by getting {
             dependencies {
                 implementation("junit:junit:4.13")
             }
@@ -83,7 +83,9 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(33)
+    namespace = "com.haeyum.android"
+
+    compileSdkVersion(34)
     sourceSets["main"].apply {
         manifest.srcFile("src/androidMain/AndroidManifest.xml")
         res.srcDirs(
@@ -93,11 +95,11 @@ android {
     }
     defaultConfig {
         minSdkVersion(28)
-        targetSdkVersion(33)
+        targetSdkVersion(34)
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
 }
 
