@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
 package presentation.window
 
 import androidx.compose.foundation.background
@@ -9,18 +7,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.BiasAlignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.*
+import androidx.compose.ui.window.MenuBar
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.rememberWindowState
 import com.haeyum.shared.presentation.component.Header
 import com.haeyum.shared.presentation.preferences.PreferencesScreen
 import com.haeyum.shared.presentation.preferences.PreferencesViewModel
@@ -51,8 +52,12 @@ fun PreferencesWindow(
             transparent = true,
             resizable = false
         ) {
-            val preferencesViewModel by remember {
-                KoinJavaComponent.inject<PreferencesViewModel>(PreferencesViewModel::class.java)
+            val preferencesViewModel: PreferencesViewModel by produceState(
+                initialValue = KoinJavaComponent.get(
+                    PreferencesViewModel::class.java
+                )
+            ) {
+                awaitDispose(value::onCleared)
             }
 
             PreferencesScreen(
@@ -60,7 +65,11 @@ fun PreferencesWindow(
                     .fillMaxSize()
                     .clip(RoundedCornerShape(8.dp))
                     .background(color = White)
-                    .border(width = 1.dp, color = ColorSecondaryDivider, shape = RoundedCornerShape(8.dp)),
+                    .border(
+                        width = 1.dp,
+                        color = ColorSecondaryDivider,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
                 header = {
                     Header(
                         title = "Preferences",
@@ -77,9 +86,7 @@ fun PreferencesWindow(
                     ?: "-",
                 onSelectedSourceLanguage = preferencesViewModel::setSelectedSourceLanguage,
                 onSelectedTargetLanguage = preferencesViewModel::setSelectedTargetLanguage,
-                onClickClearData = {
-                    preferencesViewModel.clearData()
-                },
+                onClickClearData = preferencesViewModel::clearData,
                 onClickContact = {
                     Desktop.getDesktop().browse(URI("mailto:vnycall74@naver.com"))
                 }
@@ -96,12 +103,6 @@ fun PreferencesWindow(
                             shortcut = KeyShortcut(Key.W, meta = true)
                         )
                     }
-                }
-            }
-
-            DisposableEffect(Unit) {
-                onDispose {
-                    preferencesViewModel.onDestroy()
                 }
             }
         }

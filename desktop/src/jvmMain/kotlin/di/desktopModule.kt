@@ -45,7 +45,6 @@ val desktopModule = module {
 
     factory {
         PreferencesViewModel(
-            get(named("DefaultScope")),
             get(),
             get(),
             get(),

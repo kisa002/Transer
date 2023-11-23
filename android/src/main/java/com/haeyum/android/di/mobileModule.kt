@@ -37,17 +37,8 @@ val mobileModule = module {
     factoryOf(::GetPreferencesUseCase)
     factoryOf(::SetPreferencesUseCase)
 
-    factory {
-        PreferencesViewModel(
-            get(named("DefaultScope")),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-
     viewModelOf(::MainViewModel)
+    viewModelOf(::PreferencesViewModel)
     viewModelOf(::TranslationViewModel)
     viewModelOf(::RecentTranslateViewModel)
     viewModelOf(::SavedViewModel)
