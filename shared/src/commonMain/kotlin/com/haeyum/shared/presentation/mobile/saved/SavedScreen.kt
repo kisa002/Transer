@@ -1,17 +1,21 @@
-package com.haeyum.android.presentation.main.saved
+package com.haeyum.shared.presentation.mobile.saved
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import com.haeyum.android.presentation.main.component.ConfirmDeleteAlertDialog
-import com.haeyum.android.presentation.main.component.EmptyScreen
-import com.haeyum.android.presentation.main.component.LazyTranslatesColumn
 import com.haeyum.shared.presentation.component.Header
-import org.koin.androidx.compose.koinViewModel
+import com.haeyum.shared.presentation.mobile.component.ConfirmDeleteAlertDialog
+import com.haeyum.shared.presentation.mobile.component.EmptyScreen
+import com.haeyum.shared.presentation.mobile.component.LazyTranslatesColumn
 
 @Composable
-fun SavedScreen(modifier: Modifier, viewModel: SavedViewModel = koinViewModel()) {
+fun SavedScreen(modifier: Modifier, viewModel: SavedViewModel) {
     val savedTranslates by viewModel.savedTranslates.collectAsState()
     val pairTranslates by remember(savedTranslates) {
         mutableStateOf(savedTranslates.map { it.translatedText to it.originalText })

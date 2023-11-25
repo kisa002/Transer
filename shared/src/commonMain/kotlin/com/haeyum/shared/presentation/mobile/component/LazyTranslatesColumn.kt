@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main.component
+package com.haeyum.shared.presentation.mobile.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures

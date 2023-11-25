@@ -23,6 +23,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.shared.domain.model.translation.languages.Language
+import com.haeyum.shared.getPlatform
+import com.haeyum.shared.presentation.Platform
 import com.haeyum.shared.presentation.component.Header
 import com.haeyum.shared.presentation.theme.*
 
@@ -74,7 +76,8 @@ fun SelectLanguageScreen(
     }
 
     LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
+        if (getPlatform() == Platform.Desktop)
+            focusRequester.requestFocus()
     }
 }
 

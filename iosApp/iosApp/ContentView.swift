@@ -16,7 +16,7 @@ struct ContentView: View {
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        PresentationsKt.PreferencesScreen()
+        MainUI_ios_ktKt.MainUIViewController()
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}

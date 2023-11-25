@@ -1,17 +1,21 @@
-package com.haeyum.android.presentation.main.saved
+package com.haeyum.shared.presentation.mobile.saved
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
+import com.haeyum.shared.presentation.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SavedViewModel(
     getSavedTranslatesUseCase: GetSavedTranslatesUseCase,
     private val deleteSavedTranslateUseCase: DeleteSavedTranslateUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     val savedTranslates = channelFlow {
         getSavedTranslatesUseCase().collectLatest {
             send(it)

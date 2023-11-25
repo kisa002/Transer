@@ -1,17 +1,21 @@
-package com.haeyum.android.presentation.main.recent
+package com.haeyum.shared.presentation.mobile.recent
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.haeyum.shared.domain.usecase.recent.DeleteRecentTranslateByTranslatedTextUseCase
 import com.haeyum.shared.domain.usecase.recent.GetRecentTranslatesUseCase
+import com.haeyum.shared.presentation.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RecentTranslateViewModel(
     private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
     private val deleteRecentTranslateByTranslatedTextUseCase: DeleteRecentTranslateByTranslatedTextUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     val recentTranslates = channelFlow {
         getRecentTranslatesUseCase().collectLatest {
             send(it)

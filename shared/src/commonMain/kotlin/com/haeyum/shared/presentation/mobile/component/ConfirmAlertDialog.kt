@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main.component
+package com.haeyum.shared.presentation.mobile.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
