@@ -114,6 +114,11 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                api("io.ktor:ktor-client-darwin:${extra["ktor.version"]}")
+                implementation("com.squareup.sqldelight:native-driver:${extra["sqldelight.version"]}")
+            }
         }
     }
 }
