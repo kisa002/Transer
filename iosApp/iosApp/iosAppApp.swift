@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import shared
 
 @main
 struct iosAppApp: App {
+    init() {
+        MobileKoinKt.startKoin()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .ignoresSafeArea(.all, edges: .bottom)
         }
     }
-
 }
