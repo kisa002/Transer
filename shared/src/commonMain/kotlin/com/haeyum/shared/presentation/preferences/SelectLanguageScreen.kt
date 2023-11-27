@@ -14,7 +14,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -26,7 +31,11 @@ import com.haeyum.shared.domain.model.translation.languages.Language
 import com.haeyum.shared.getPlatform
 import com.haeyum.shared.presentation.Platform
 import com.haeyum.shared.presentation.component.Header
-import com.haeyum.shared.presentation.theme.*
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorBackground
+import com.haeyum.shared.presentation.theme.ColorIcon
+import com.haeyum.shared.presentation.theme.ColorSecondaryDivider
+import com.haeyum.shared.presentation.theme.White
 
 @Composable
 fun SelectLanguageScreen(
@@ -52,6 +61,7 @@ fun SelectLanguageScreen(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
+                .padding(top = 16.dp)
                 .padding(horizontal = 8.dp)
                 .background(
                     color = ColorBackground,
@@ -61,8 +71,9 @@ fun SelectLanguageScreen(
             textStyle = TextStyle(color = Black, fontSize = 14.sp),
             cursorBrush = SolidColor(Black)
         ) { innerTextField ->
-            if (keyword.isEmpty())
+            if (keyword.isEmpty()) {
                 Text(text = "Search language", color = ColorIcon, fontSize = 14.sp)
+            }
 
             innerTextField()
         }

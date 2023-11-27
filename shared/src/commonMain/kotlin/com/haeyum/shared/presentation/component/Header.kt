@@ -14,19 +14,29 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.shared.getPlatform
+import com.haeyum.shared.presentation.Platform
 import com.haeyum.shared.presentation.theme.*
 import com.haeyum.shared.presentation.theme.ColorSecondaryBackground
 
 @Composable
-fun Header(title: String, imageVector: ImageVector? = null, onClick: () -> Unit = {}) {
+fun Header(
+    title: String,
+    imageVector: ImageVector? = null,
+    enabledRoundedCorner: Boolean = getPlatform() == Platform.Desktop,
+    onClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .background(color = White, shape = if (enabledRoundedCorner) RoundedCornerShape(8.dp) else RoundedCornerShape(0.dp))
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
-                .background(color = ColorSecondaryBackground, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                .background(
+                    color = ColorSecondaryBackground,
+                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                )
                 .padding(8.dp)
         ) {
             Text(
@@ -44,13 +54,12 @@ fun Header(title: String, imageVector: ImageVector? = null, onClick: () -> Unit 
                         tint = ColorIcon
                     )
                 }
-            }
-            else {
+            } else {
                 Spacer(modifier = Modifier.size(48.dp))
             }
         }
 
         Divider(color = ColorSecondaryDivider)
-        Spacer(modifier = Modifier.height(16.dp))
+//        Spacer(modifier = Modifier.height(16.dp))
     }
 }
