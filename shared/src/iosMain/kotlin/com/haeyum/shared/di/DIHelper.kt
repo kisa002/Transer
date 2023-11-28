@@ -1,7 +1,6 @@
 package com.haeyum.shared.di
 
-import com.haeyum.shared.domain.usecase.recent.AddRecentTranslateUseCase
-import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
+import TranslateViewModel
 import com.haeyum.shared.presentation.MainViewModel
 import com.haeyum.shared.presentation.mobile.recent.RecentTranslateViewModel
 import com.haeyum.shared.presentation.mobile.saved.SavedViewModel
@@ -22,9 +21,6 @@ class DIHelper : KoinComponent {
     val preferencesViewModel
         get() = get<PreferencesViewModel>()
 
-    val translateUseCase
-        get() = get<TranslateUseCase>()
-    
-    val addRecentTranslateUseCase
-        get() = get<AddRecentTranslateUseCase>()
+    val translateViewModel
+        get() = get<TranslateViewModel>()
 }

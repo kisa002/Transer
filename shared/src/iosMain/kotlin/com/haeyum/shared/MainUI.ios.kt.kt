@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.haeyum.shared.component.CustomBottomNavigation
 import com.haeyum.shared.di.DIHelper
+import com.haeyum.shared.presentation.iOSPreferencesScreen
 import com.haeyum.shared.presentation.iOSRecentTranslateScreen
 import com.haeyum.shared.presentation.iOSSavedScreen
 import com.haeyum.shared.presentation.iOSTranslateScreen
@@ -32,7 +33,7 @@ fun MainUIViewController() = ComposeUIViewController {
 
     Column(modifier = Modifier.fillMaxSize()) {
         when (viewModel.screenState.collectAsState().value) {
-            MainScreenState.Translate -> iOSTranslateScreen(modifier = Modifier.weight(1f))
+            MainScreenState.Translate -> iOSTranslateScreen(modifier = Modifier.weight(1f), viewModel = DIHelper().translateViewModel)
             MainScreenState.Recent -> iOSRecentTranslateScreen(modifier = Modifier.weight(1f))
             MainScreenState.Saved -> iOSSavedScreen(modifier = Modifier.weight(1f))
             MainScreenState.Preferences -> iOSPreferencesScreen(modifier = Modifier.weight(1f))

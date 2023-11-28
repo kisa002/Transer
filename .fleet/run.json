@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "iosApp-PangMoo",
+            "type": "xcode-app",
+            "workingDir": "$PROJECT_DIR$",
+            "buildTarget": {
+                "project": "iosApp",
+                "target": "iosApp"
+            },
+            "configuration": "Debug",
+            "destination": "iOS Device"
+        }
+    ]
+}

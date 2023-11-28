@@ -1,5 +1,6 @@
 package com.haeyum.shared
 
+import TranslateViewModel
 import com.haeyum.shared.data.repository.PreferencesRepositoryImpl
 import com.haeyum.shared.data.repository.preferences.PreferencesDataSource
 import com.haeyum.shared.data.repository.preferences.PreferencesDataSourceImpl
@@ -38,12 +39,10 @@ val mobileModule = module {
 
     factoryOf(::GetPreferencesUseCase)
     factoryOf(::SetPreferencesUseCase)
-//    factoryOf(::GetSupportedLanguagesUseCase)
-//    factoryOf(::ClearDataUseCase)
 
     factoryOf(::MainViewModel)
     factoryOf(::PreferencesViewModel)
-//    factoryOf(TranslationViewModel)
     factoryOf(::RecentTranslateViewModel)
     factoryOf(::SavedViewModel)
+    factoryOf(::TranslateViewModel)
 }
