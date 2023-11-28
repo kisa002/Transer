@@ -1,4 +1,4 @@
-package com.haeyum.shared
+package com.haeyum.shared.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -7,7 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import com.haeyum.shared.di.DIHelper
+import com.haeyum.shared.presentation.component.Header
 import com.haeyum.shared.presentation.preferences.PreferencesScreen
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
 
 @Composable
 fun iOSPreferencesScreen(modifier: Modifier = Modifier) {
@@ -21,7 +24,9 @@ fun iOSPreferencesScreen(modifier: Modifier = Modifier) {
 
     Box(modifier = modifier) {
         PreferencesScreen(
-            header = {},
+            header = {
+                Header(title = "Preferences")
+            },
             supportedLanguages = viewModel.supportedLanguages.collectAsState().value,
             selectedSourceLanguage = viewModel.selectedSourceLanguage.collectAsState().value?.name
                 ?: "-",
@@ -30,7 +35,13 @@ fun iOSPreferencesScreen(modifier: Modifier = Modifier) {
             onSelectedSourceLanguage = viewModel::setSelectedSourceLanguage,
             onSelectedTargetLanguage = viewModel::setSelectedTargetLanguage,
             onClickClearData = viewModel::clearData,
-            onClickContact = { },
+            onClickContact = {
+                NSURL.URLWithString("mailto:vnycall74@naver.com")?.let {
+                    UIApplication.sharedApplication.openURL(
+                        url = it
+                    )
+                } ?: run(::println)
+            },
         )
     }
 }
