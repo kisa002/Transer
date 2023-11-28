@@ -29,4 +29,6 @@ class TranslateViewModel(
     fun setText(text: String) {
         _text.value = text
     }
+
+    fun clearText() = setText("")
 }
