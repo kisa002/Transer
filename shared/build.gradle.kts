@@ -55,8 +55,8 @@ kotlin {
                 api("io.ktor:ktor-client-logging:${extra["ktor.version"]}")
                 api("io.ktor:ktor-client-content-negotiation:${extra["ktor.version"]}")
                 api("io.ktor:ktor-serialization-kotlinx-json:${extra["ktor.version"]}")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
                 // Koin Core features
                 api("io.insert-koin:koin-core:${extra["koin.version"]}")
