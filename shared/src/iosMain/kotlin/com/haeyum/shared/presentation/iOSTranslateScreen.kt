@@ -3,9 +3,7 @@ package com.haeyum.shared.presentation
 import TranslateViewModel
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
@@ -15,15 +13,21 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,14 +35,34 @@ import androidx.compose.ui.unit.sp
 import com.haeyum.shared.presentation.component.Header
 import com.haeyum.shared.presentation.theme.ColorHint
 import com.haeyum.shared.presentation.theme.ColorSecondaryDivider
+import com.haeyum.shared.presentation.theme.ColorText
+import com.haeyum.shared.presentation.vector.ContentCopy
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
+    val clipboardManager = LocalClipboardManager.current
 
     val text by viewModel.text.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
+
+    val scrollState = rememberScrollState()
+    val colorSecondaryDivider = ColorSecondaryDivider
+
+    val backgroundColor = remember(scrollState.canScrollBackward, scrollState.canScrollForward) {
+        if (scrollState.maxValue == 0) {
+            Color.White
+        } else if (!scrollState.canScrollBackward) {
+            colorSecondaryDivider
+        } else if (!scrollState.canScrollForward) {
+            Color(0xFF79AFFF)
+        } else {
+            Color.White
+        }
+    }
+
+    val isExistsSavedTranslate by viewModel.isExistsSavedTranslate.collectAsState()
 
     Column(
         modifier = modifier.pointerInput(Unit) {
@@ -57,7 +81,8 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .verticalScroll(state = rememberScrollState())
+                .background(color = backgroundColor)
+                .verticalScroll(state = scrollState)
         ) {
             Box(
                 modifier = Modifier
@@ -97,19 +122,56 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = Color(0xFF79AFFF))
-                        .padding(horizontal = 24.dp, vertical = 36.dp)
+                        .padding(start = 24.dp, end = 8.dp, top = 36.dp, bottom = 12.dp)
                 ) {
                     Text(
                         text = translatedText,
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 20.sp
                     )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 18.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            ActionButton(
+                                imageVector = Icons.Filled.ContentCopy,
+                                contentDescription = "Copy",
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(translatedText))
+                                }
+                            )
+
+                            ActionButton(
+                                imageVector = if (isExistsSavedTranslate) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
+                                contentDescription = if (isExistsSavedTranslate) "Delete Saved" else "Save",
+                                onClick = viewModel::toggleSave
+                            )
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ActionButton(
+    imageVector: ImageVector,
+    contentDescription: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    IconButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = contentDescription,
+            tint = ColorText
+        )
     }
 }

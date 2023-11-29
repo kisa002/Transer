@@ -75,14 +75,6 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		185C07AF98F4CB9D6C5AAA05 /* xcschemes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = xcschemes;
-			path = "Pods.xcodeproj/xcuserdata/holy-knight.xcuserdatad/xcschemes";
-			sourceTree = "<group>";
-		};
 		1F86AA6785DF34AFD5A71790761717DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,7 +162,6 @@
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
 				1F86AA6785DF34AFD5A71790761717DE /* Products */,
 				11C970DEAE48C6D0282DFE54684F53F1 /* Targets Support Files */,
-				185C07AF98F4CB9D6C5AAA05 /* xcschemes */,
 			);
 			sourceTree = "<group>";
 		};
