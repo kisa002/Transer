@@ -88,11 +88,24 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = ColorSecondaryDivider)
+                    .padding(bottom = 32.dp)
             ) {
+                if (text.isNotEmpty()) {
+                    IconButton(
+                        onClick = viewModel::clearText,
+                        modifier = Modifier.align(alignment = Alignment.TopEnd).padding(4.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Clear text")
+                    }
+                }
+
                 BasicTextField(
                     value = text,
                     onValueChange = viewModel::setText,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 36.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .padding(top = 48.dp),
                     textStyle = TextStyle(
                         fontSize = 20.sp,
                         textAlign = TextAlign.Start
@@ -107,14 +120,6 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                         innerTextField()
                     }
                 )
-                if (text.isNotEmpty()) {
-                    IconButton(
-                        onClick = viewModel::clearText,
-                        modifier = Modifier.align(alignment = Alignment.TopEnd).padding(12.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Clear text")
-                    }
-                }
             }
 
             AnimatedVisibility(
@@ -126,7 +131,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = Color(0xFF79AFFF))
-                        .padding(start = 24.dp, end = 8.dp, top = 36.dp, bottom = 12.dp)
+                        .padding(start = 24.dp, end = 8.dp, top = 32.dp, bottom = 12.dp)
                 ) {
                     Text(
                         text = translatedText,
