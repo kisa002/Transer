@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.translation
+package com.haeyum.transer.presentation.translation
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.view.WindowCompat
-import com.haeyum.android.presentation.main.MainActivity
+import com.haeyum.transer.presentation.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @OptIn(ExperimentalMaterialApi::class)

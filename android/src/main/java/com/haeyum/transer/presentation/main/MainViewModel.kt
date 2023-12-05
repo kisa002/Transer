@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.transer.presentation.main
 
 import com.haeyum.shared.domain.model.translation.languages.Language
 import com.haeyum.shared.domain.usecase.preferences.GetPreferencesUseCase

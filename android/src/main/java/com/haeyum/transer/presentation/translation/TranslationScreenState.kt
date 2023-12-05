@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.translation
+package com.haeyum.transer.presentation.translation
 
 sealed class TranslationScreenState {
     object Translating : TranslationScreenState()

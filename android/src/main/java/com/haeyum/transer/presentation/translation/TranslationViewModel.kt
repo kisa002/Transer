@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.translation
+package com.haeyum.transer.presentation.translation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

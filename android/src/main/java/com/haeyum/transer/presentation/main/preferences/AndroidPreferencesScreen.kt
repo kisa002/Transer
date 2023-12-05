@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main.preferences
+package com.haeyum.transer.presentation.main.preferences
 
 import android.content.Intent
 import android.net.Uri

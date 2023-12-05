@@ -1,8 +1,8 @@
-package com.haeyum.android.di
+package com.haeyum.transer.di
 
-import com.haeyum.android.presentation.main.MainViewModel
+import com.haeyum.transer.presentation.main.MainViewModel
 import com.haeyum.shared.presentation.mobile.recent.RecentTranslateViewModel
-import com.haeyum.android.presentation.translation.TranslationViewModel
+import com.haeyum.transer.presentation.translation.TranslationViewModel
 import com.haeyum.shared.TranserDatabase
 import com.haeyum.shared.data.repository.PreferencesRepositoryImpl
 import com.haeyum.shared.data.repository.preferences.PreferencesDataSource

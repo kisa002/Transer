@@ -1,7 +1,7 @@
-package com.haeyum.android
+package com.haeyum.transer
 
 import android.app.Application
-import com.haeyum.android.di.MobileKoin
+import com.haeyum.transer.di.MobileKoin
 
 class TranserApp: Application() {
     override fun onCreate() {

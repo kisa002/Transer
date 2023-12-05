@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.translation.section
+package com.haeyum.transer.presentation.translation.section
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

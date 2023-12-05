@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.transer.presentation.main
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -16,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.haeyum.android.presentation.main.preferences.AndroidPreferencesScreen
-import com.haeyum.android.presentation.main.recent.AndroidRecentTranslateScreen
-import com.haeyum.android.presentation.main.saved.AndroidSavedScreen
+import com.haeyum.transer.presentation.main.preferences.AndroidPreferencesScreen
+import com.haeyum.transer.presentation.main.recent.AndroidRecentTranslateScreen
+import com.haeyum.transer.presentation.main.saved.AndroidSavedScreen
 import com.haeyum.shared.presentation.mobile.MainBottomNavigationItem
 import com.haeyum.shared.presentation.theme.ColorLightBlue
 import com.haeyum.shared.presentation.theme.White

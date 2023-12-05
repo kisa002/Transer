@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.haeyum.android.presentation.translation
+package com.haeyum.transer.presentation.translation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
-import com.haeyum.android.presentation.translation.section.TranslateFailureSection
-import com.haeyum.android.presentation.translation.section.TranslateSuccessSection
+import com.haeyum.transer.presentation.translation.section.TranslateFailureSection
+import com.haeyum.transer.presentation.translation.section.TranslateSuccessSection
 import com.haeyum.shared.presentation.component.RainbowCircularProgressIndicator
 import com.haeyum.shared.presentation.theme.ColorIcon
 import com.haeyum.shared.presentation.theme.Transparent

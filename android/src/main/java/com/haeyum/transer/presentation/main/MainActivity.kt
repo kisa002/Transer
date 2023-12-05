@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.transer.presentation.main
 
 import android.os.Bundle
 import androidx.activity.compose.setContent

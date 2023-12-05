@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main
+package com.haeyum.transer.presentation.main
 
 sealed class MainScreenState {
     object Recent : MainScreenState()

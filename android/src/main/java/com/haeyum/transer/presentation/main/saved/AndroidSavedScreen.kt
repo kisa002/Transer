@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main.saved
+package com.haeyum.transer.presentation.main.saved
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

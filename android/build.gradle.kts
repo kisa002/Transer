@@ -17,11 +17,11 @@ dependencies {
 }
 
 android {
-    namespace = "com.haeyum.android"
+    namespace = "com.haeyum.transer"
 
     compileSdkVersion(34)
     defaultConfig {
-        applicationId = "com.haeyum.android"
+        applicationId = "com.haeyum.transer"
         minSdkVersion(28)
         targetSdkVersion(34)
         versionCode = 1

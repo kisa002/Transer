@@ -1,4 +1,4 @@
-package com.haeyum.android.di
+package com.haeyum.transer.di
 
 import android.content.Context
 import com.haeyum.shared.di.commonApiModule

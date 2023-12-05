@@ -1,4 +1,4 @@
-package com.haeyum.android.presentation.main.recent
+package com.haeyum.transer.presentation.main.recent
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BorderAll
