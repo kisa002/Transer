@@ -8,5 +8,5 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AndroidSavedScreen(modifier: Modifier, viewModel: SavedViewModel = koinViewModel()) {
-    SavedScreen(modifier = modifier, viewModel = viewModel)
+    SavedScreen(modifier = modifier, viewModel = viewModel, onCopiedEvent = {})
 }

@@ -16,8 +16,8 @@ class TranslateViewModel(
     private val getSavedTranslateUseCase: GetSavedTranslatesUseCase,
     private val addSavedTranslateUseCase: AddSavedTranslateUseCase,
     private val deleteSavedTranslateUseCase: DeleteSavedTranslateUseCase,
-    ) : BaseViewModel() {
-        private val _text = MutableStateFlow("")
+) : BaseViewModel() {
+    private val _text = MutableStateFlow("")
     val text = _text.asStateFlow()
 
     val translatedText = text.transformLatest { text ->

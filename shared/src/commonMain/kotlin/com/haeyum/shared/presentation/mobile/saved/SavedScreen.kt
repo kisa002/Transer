@@ -15,7 +15,7 @@ import com.haeyum.shared.presentation.mobile.component.EmptyScreen
 import com.haeyum.shared.presentation.mobile.component.LazyTranslatesColumn
 
 @Composable
-fun SavedScreen(modifier: Modifier, viewModel: SavedViewModel) {
+fun SavedScreen(modifier: Modifier, viewModel: SavedViewModel, onCopiedEvent: (String?) -> Unit) {
     val savedTranslates by viewModel.savedTranslates.collectAsState()
     val pairTranslates by remember(savedTranslates) {
         mutableStateOf(savedTranslates.map { it.translatedText to it.originalText })
@@ -40,6 +40,7 @@ fun SavedScreen(modifier: Modifier, viewModel: SavedViewModel) {
                 },
                 onTap = {
                     clipboardManager.setText(it)
+                    onCopiedEvent("Copied to clipboard.")
                 }
             )
         }

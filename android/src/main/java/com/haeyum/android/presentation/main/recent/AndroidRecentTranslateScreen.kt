@@ -16,7 +16,7 @@ fun AndroidRecentTranslateScreen(
 ) {
     RecentTranslateScreen(
         modifier = modifier,
-        viewModel = viewModel
+        viewModel = viewModel,
+        onCopiedEvent = {}
     )
-    Icons.Default.BorderAll
 }

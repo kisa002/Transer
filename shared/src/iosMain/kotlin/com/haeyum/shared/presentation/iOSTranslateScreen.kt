@@ -15,10 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -40,9 +38,12 @@ import com.haeyum.shared.presentation.vector.ContentCopy
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel) {
+fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel, onCopiedEvent: (String?) -> Unit) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
     val clipboardManager = LocalClipboardManager.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val focusManager = LocalFocusManager.current
 
     val text by viewModel.text.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
@@ -68,6 +69,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
         modifier = modifier.pointerInput(Unit) {
             detectTapGestures(
                 onTap = {
+                    focusManager.clearFocus()
                     softwareKeyboardController?.hide()
                 }
             )
@@ -149,6 +151,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                                 contentDescription = "Copy",
                                 onClick = {
                                     clipboardManager.setText(AnnotatedString(translatedText))
+                                    onCopiedEvent("Copied to clipboard.")
                                 }
                             )
 
