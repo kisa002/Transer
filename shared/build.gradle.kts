@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     id("kotlinx-serialization")
     id("com.squareup.sqldelight")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 group = "com.haeyum"
@@ -39,6 +40,8 @@ kotlin {
         framework {
             baseName = "shared"
             isStatic = true
+            export("dev.icerock.moko:resources:0.23.0")
+            export("dev.icerock.moko:graphics:0.9.0")
         }
     }
 
@@ -65,6 +68,9 @@ kotlin {
 
                 // SQLDelight
                 api("com.squareup.sqldelight:coroutines-extensions:1.5.4")
+
+                api("dev.icerock.moko:resources:0.23.0")
+                api("dev.icerock.moko:resources-compose:0.23.0")
             }
         }
         val commonTest by getting {
@@ -91,6 +97,7 @@ kotlin {
 
                 api("com.squareup.sqldelight:android-driver:${extra["sqldelight.version"]}")
             }
+            dependsOn(commonMain)
         }
         val androidUnitTest by getting {
             dependencies {
@@ -124,7 +131,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.haeyum.android"
+    namespace = "com.haeyum.transer"
 
     compileSdkVersion(34)
     sourceSets["main"].apply {
@@ -143,13 +150,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_19
     }
 }
-//dependencies {
-//    implementation("androidx.compose.ui:ui-graphics-android:1.5.4")
-//    implementation("androidx.compose.foundation:foundation-desktop:1.6.0-alpha08")
-//}
+
+dependencies {
+    commonMainApi("dev.icerock.moko:resources:0.23.0")
+    commonMainApi("dev.icerock.moko:resources-compose:0.23.0")
+}
 
 sqldelight {
     database("TranserDatabase") {
         packageName = "com.haeyum.shared"
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.haeyum.transer"
 }

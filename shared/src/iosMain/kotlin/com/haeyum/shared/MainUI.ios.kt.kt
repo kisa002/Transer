@@ -26,6 +26,7 @@ import com.haeyum.shared.presentation.iOSRecentTranslateScreen
 import com.haeyum.shared.presentation.iOSSavedScreen
 import com.haeyum.shared.presentation.iOSTranslateScreen
 import com.haeyum.shared.presentation.mobile.MainScreenState
+import com.haeyum.shared.presentation.theme.TranserTheme
 import com.haeyum.shared.presentation.theme.White
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
@@ -57,36 +58,39 @@ fun MainUIViewController() = ComposeUIViewController {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f)) {
-            when (viewModel.screenState.collectAsState().value) {
-                MainScreenState.Translate -> iOSTranslateScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    viewModel = DIHelper().translateViewModel,
-                    onCopiedEvent = showSnackbar
-                )
 
-                MainScreenState.Recent -> iOSRecentTranslateScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    onCopiedEvent = showSnackbar
-                )
+    TranserTheme {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.weight(1f)) {
+                when (viewModel.screenState.collectAsState().value) {
+                    MainScreenState.Translate -> iOSTranslateScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        viewModel = DIHelper().translateViewModel,
+                        onCopiedEvent = showSnackbar
+                    )
 
-                MainScreenState.Saved -> iOSSavedScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    onCopiedEvent = showSnackbar
-                )
+                    MainScreenState.Recent -> iOSRecentTranslateScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onCopiedEvent = showSnackbar
+                    )
 
-                MainScreenState.Preferences -> iOSPreferencesScreen(modifier = Modifier.fillMaxSize())
+                    MainScreenState.Saved -> iOSSavedScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onCopiedEvent = showSnackbar
+                    )
+
+                    MainScreenState.Preferences -> iOSPreferencesScreen(modifier = Modifier.fillMaxSize())
+                }
+
+                EventSnackBar(snackbarState)
             }
 
-            EventSnackBar(snackbarState)
+            CustomBottomNavigation(
+                viewModel = viewModel,
+                screenState = viewModel.screenState.collectAsState().value,
+                safeAreaBottomHeight = safeAreaSize?.second?.dp,
+            )
         }
-
-        CustomBottomNavigation(
-            viewModel = viewModel,
-            screenState = viewModel.screenState.collectAsState().value,
-            safeAreaBottomHeight = safeAreaSize?.second?.dp,
-        )
     }
 }
 
