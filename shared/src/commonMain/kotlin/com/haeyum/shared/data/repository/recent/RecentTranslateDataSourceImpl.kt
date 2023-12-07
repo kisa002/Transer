@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class RecentTranslateDataSourceImpl(private val database: TranserDatabase) : RecentTranslateDataSource {
-    override suspend fun getRecentTranslates(): Flow<List<RecentTranslate>> =
+    override fun getRecentTranslates(): Flow<List<RecentTranslate>> =
         database.recentTranslateQueries.selectAll().asFlow().mapToList().map {
             it.map { recentTranslate ->
                 RecentTranslate(

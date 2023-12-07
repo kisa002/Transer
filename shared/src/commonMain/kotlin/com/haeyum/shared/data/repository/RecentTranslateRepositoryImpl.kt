@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class RecentTranslateRepositoryImpl(
     private val recentTranslateDataSource: RecentTranslateDataSource
 ) : RecentTranslateRepository {
-    override suspend fun getRecentTranslates(): Flow<List<RecentTranslate>> =
+    override fun getRecentTranslates(): Flow<List<RecentTranslate>> =
         recentTranslateDataSource.getRecentTranslates()
             .map(List<com.haeyum.shared.data.model.recent.RecentTranslate>::toDomain)
 

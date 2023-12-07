@@ -5,6 +5,6 @@ import com.haeyum.shared.domain.model.translation.preferences.Preferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
-    suspend fun getPreferences(): Flow<Preferences?>
+    fun getPreferences(): Flow<Preferences?>
     suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language)
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PreferencesDataSourceImpl(private val database: TranserDatabase) : PreferencesDataSource {
-    override suspend fun getPreferences(): Flow<Preferences?> =
+    override fun getPreferences(): Flow<Preferences?> =
         database.preferencesQueries.select().asFlow().mapToOneOrNull().map {
             it?.let {
                 Preferences(Language(it.sourceLanguage, it.sourceName), Language(it.targetLanguage, it.targetName))

@@ -5,5 +5,5 @@ import com.haeyum.shared.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetPreferencesUseCase(private val preferencesRepository: PreferencesRepository) {
-    suspend operator fun invoke(): Flow<Preferences?> = preferencesRepository.getPreferences()
+    operator fun invoke(): Flow<Preferences?> = preferencesRepository.getPreferences()
 }

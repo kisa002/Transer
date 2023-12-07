@@ -39,11 +39,11 @@ class TranslateViewModel(
         }
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = "")
 
-    private val savedTranslates = channelFlow {
-        getSavedTranslateUseCase().collectLatest {
-            send(it)
-        }
-    }.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    private val savedTranslates = getSavedTranslateUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
     val isExistsSavedTranslate = translatedText.combine(savedTranslates) { translatedText, savedTranslates ->
         translatedText

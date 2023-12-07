@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PreferencesRepositoryImpl(private val preferencesDataSource: PreferencesDataSource) : PreferencesRepository {
-    override suspend fun getPreferences(): Flow<Preferences?> =
+    override fun getPreferences(): Flow<Preferences?> =
         preferencesDataSource.getPreferences().map { it?.toDomain() }
 
     override suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language) =

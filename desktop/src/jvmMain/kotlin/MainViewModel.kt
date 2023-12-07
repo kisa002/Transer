@@ -19,11 +19,8 @@ class MainViewModel(
     val visibleTranslationWindow = _visibleTranslationWindow.asStateFlow()
     val visiblePreferencesWindow = _visiblePreferencesWindow.asStateFlow()
 
-    val isExistsPreferences = channelFlow {
-        getPreferencesUseCase().collectLatest {
-            send(it != null)
-        }
-    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
+    val isExistsPreferences =
+        getPreferencesUseCase().map { it != null }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     val isForeground = callbackFlow {
         val listener = object : AppForegroundListener {

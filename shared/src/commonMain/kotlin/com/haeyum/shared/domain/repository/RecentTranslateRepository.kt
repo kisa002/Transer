@@ -4,7 +4,7 @@ import com.haeyum.shared.domain.model.recent.RecentTranslate
 import kotlinx.coroutines.flow.Flow
 
 interface RecentTranslateRepository {
-    suspend fun getRecentTranslates(): Flow<List<RecentTranslate>>
+    fun getRecentTranslates(): Flow<List<RecentTranslate>>
     suspend fun addRecentTranslate(
         originalText: String,
         translatedText: String

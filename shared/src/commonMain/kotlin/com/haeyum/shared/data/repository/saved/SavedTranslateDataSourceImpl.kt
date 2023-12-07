@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SavedTranslateDataSourceImpl(private val database: TranserDatabase) : SavedTranslateDataSource {
-    override suspend fun selectSavedTranslate(translatedText: String): Flow<SavedTranslate?> =
+    override fun selectSavedTranslate(translatedText: String): Flow<SavedTranslate?> =
         database.savedTranslateQueries.select(translatedText).asFlow().mapToOneOrNull().map { savedTranslate ->
             savedTranslate?.let {
                 SavedTranslate(
@@ -20,7 +20,7 @@ class SavedTranslateDataSourceImpl(private val database: TranserDatabase) : Save
             }
         }
 
-    override suspend fun selectAllSavedTranslateList(): Flow<List<SavedTranslate>> =
+    override fun selectAllSavedTranslateList(): Flow<List<SavedTranslate>> =
         database.savedTranslateQueries.selectAll().asFlow().mapToList().map {
             it.map { savedTranslate ->
                 SavedTranslate(

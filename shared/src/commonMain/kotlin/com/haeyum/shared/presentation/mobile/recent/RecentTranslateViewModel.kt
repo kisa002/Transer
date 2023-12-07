@@ -12,11 +12,7 @@ class RecentTranslateViewModel(
     private val getRecentTranslatesUseCase: GetRecentTranslatesUseCase,
     private val deleteRecentTranslateByTranslatedTextUseCase: DeleteRecentTranslateByTranslatedTextUseCase
 ) : BaseViewModel() {
-    val recentTranslates = channelFlow {
-        getRecentTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }
+    val recentTranslates = getRecentTranslatesUseCase()
         .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 

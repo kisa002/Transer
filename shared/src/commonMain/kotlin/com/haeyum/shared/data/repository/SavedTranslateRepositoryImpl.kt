@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.map
 class SavedTranslateRepositoryImpl(
     private val savedTranslateDataSource: SavedTranslateDataSource
 ) : SavedTranslateRepository {
-    override suspend fun isExists(translatedText: String): Flow<Boolean> =
+    override fun isExists(translatedText: String): Flow<Boolean> =
         savedTranslateDataSource.selectSavedTranslate(translatedText).map {
             it != null
         }
 
-    override suspend fun getSavedTranslateList(): Flow<List<com.haeyum.shared.domain.model.saved.SavedTranslate>> =
+    override fun getSavedTranslateList(): Flow<List<com.haeyum.shared.domain.model.saved.SavedTranslate>> =
         savedTranslateDataSource.selectAllSavedTranslateList().map {
             it.map(SavedTranslate::toDomain)
         }

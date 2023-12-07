@@ -118,17 +118,17 @@ class TranslationViewModel(
             it.printStackTrace()
         }.stateIn(coroutineScope, SharingStarted.Lazily, "")
 
-    val recentTranslates = channelFlow {
-        getRecentTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    val recentTranslates = getRecentTranslatesUseCase().stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
-    val savedTranslates = channelFlow {
-        getSavedTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    val savedTranslates = getSavedTranslatesUseCase().stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
     val isExistsSavedTranslate = combine(
         screenState,

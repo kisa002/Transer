@@ -12,11 +12,7 @@ class SavedViewModel(
     getSavedTranslatesUseCase: GetSavedTranslatesUseCase,
     private val deleteSavedTranslateUseCase: DeleteSavedTranslateUseCase
 ) : BaseViewModel() {
-    val savedTranslates = channelFlow {
-        getSavedTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }
+    val savedTranslates = getSavedTranslatesUseCase()
         .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
