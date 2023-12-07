@@ -4,6 +4,7 @@ import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
 import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
+import com.haeyum.shared.extensions.decodeHtmlEntities
 import com.haeyum.shared.presentation.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -24,7 +25,7 @@ class TranslateViewModel(
         if (text.isNotEmpty()) {
             delay(700)
 
-            val (originalText, translatedText) = text to translateUseCase(text).translatedText
+            val (originalText, translatedText) = text to translateUseCase(text).translatedText.decodeHtmlEntities()
             emit(translatedText)
 
             addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)

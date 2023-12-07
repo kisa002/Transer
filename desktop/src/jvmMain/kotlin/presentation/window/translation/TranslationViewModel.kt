@@ -1,17 +1,17 @@
 package presentation.window.translation
 
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
-import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
 import com.haeyum.shared.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
 import com.haeyum.shared.domain.usecase.recent.GetRecentTranslatesUseCase
 import com.haeyum.shared.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
 import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
+import com.haeyum.shared.extensions.decodeHtmlEntities
 import io.ktor.util.network.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
@@ -109,15 +109,14 @@ class TranslationViewModel(
                 }.getOrDefault("")
             }
         )
-    }.map {
-        it.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&quot;", "\"")
-            .replace("&apos;", "'").replace("&#39;", "'")
-    }.onEach {
-        _isRequesting.value = false
-    }.catch {
-        _isRequesting.value = false
-        it.printStackTrace()
-    }.stateIn(coroutineScope, SharingStarted.Lazily, "")
+    }
+        .map(String::decodeHtmlEntities)
+        .onEach {
+            _isRequesting.value = false
+        }.catch {
+            _isRequesting.value = false
+            it.printStackTrace()
+        }.stateIn(coroutineScope, SharingStarted.Lazily, "")
 
     val recentTranslates = channelFlow {
         getRecentTranslatesUseCase().collectLatest {

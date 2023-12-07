@@ -8,6 +8,7 @@ import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
 import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
+import com.haeyum.shared.extensions.decodeHtmlEntities
 import io.ktor.util.network.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,7 @@ class TranslationViewModel(
         .filter { it.isNotEmpty() }
         .map {
             runCatching {
-                translateUseCase(it).translatedText
+                translateUseCase(it).translatedText.decodeHtmlEntities()
             }.onFailure { exception ->
                 if (exception !is CancellationException) {
                     _screenState.value = when (exception) {
