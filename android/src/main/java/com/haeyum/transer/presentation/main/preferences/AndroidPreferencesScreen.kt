@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -16,11 +15,11 @@ import com.haeyum.shared.presentation.theme.White
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AndroidPreferencesScreen(viewModel: PreferencesViewModel = koinViewModel()) {
+fun AndroidPreferencesScreen(modifier: Modifier = Modifier, viewModel: PreferencesViewModel = koinViewModel()) {
     val context = LocalContext.current
 
     PreferencesScreen(
-        modifier = Modifier.fillMaxSize().background(color = White),
+        modifier = modifier.background(color = White),
         header = {
             Header(title = "Preferences")
         },

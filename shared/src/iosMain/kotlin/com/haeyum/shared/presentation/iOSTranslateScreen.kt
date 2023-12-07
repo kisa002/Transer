@@ -38,10 +38,9 @@ import com.haeyum.shared.presentation.vector.ContentCopy
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel, onCopiedEvent: (String?) -> Unit) {
+fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel, onCopiedEvent: (String) -> Unit) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
     val clipboardManager = LocalClipboardManager.current
-    val coroutineScope = rememberCoroutineScope()
 
     val focusManager = LocalFocusManager.current
 

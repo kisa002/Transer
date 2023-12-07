@@ -65,6 +65,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		185C0DFE95800952759C5B90 /* xcschemes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = xcschemes;
+			path = "Pods.xcodeproj/xcuserdata/holy-knight.xcuserdatad/xcschemes";
+			sourceTree = "<group>";
+		};
 		1F86AA6785DF34AFD5A71790761717DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +155,7 @@
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
 				1F86AA6785DF34AFD5A71790761717DE /* Products */,
 				C9F6DDEE5D76F65BB478A349731F54F4 /* Targets Support Files */,
+				185C0DFE95800952759C5B90 /* xcschemes */,
 			);
 			sourceTree = "<group>";
 		};

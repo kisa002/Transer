@@ -8,7 +8,7 @@ import com.haeyum.shared.di.DIHelper
 import com.haeyum.shared.presentation.mobile.recent.RecentTranslateScreen
 
 @Composable
-fun iOSRecentTranslateScreen(modifier: Modifier = Modifier, onCopiedEvent: (String?) -> Unit) {
+fun iOSRecentTranslateScreen(modifier: Modifier = Modifier, onCopiedEvent: (String) -> Unit) {
     val viewModel by produceState(initialValue = DIHelper().recentTranslateViewModel) {
         awaitDispose {
             value.onCleared()

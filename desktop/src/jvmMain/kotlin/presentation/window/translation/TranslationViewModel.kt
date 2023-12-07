@@ -18,7 +18,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import java.net.SocketException
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class TranslationViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
@@ -80,15 +80,9 @@ class TranslationViewModel(
     )
     val screenEvent = _screenEvent.asSharedFlow()
 
-    private val snackbarEvent = MutableSharedFlow<String>(
+    val snackbarEvent = MutableSharedFlow<String>(
         replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-
-    val snackbarState = snackbarEvent.transformLatest { message ->
-        emit(message)
-        delay(1500)
-        emit(null)
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
     private val _currentSelectedIndex = MutableStateFlow(0)
     val currentSelectedIndex = _currentSelectedIndex.asStateFlow()

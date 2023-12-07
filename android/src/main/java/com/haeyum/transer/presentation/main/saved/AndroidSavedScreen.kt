@@ -7,6 +7,10 @@ import com.haeyum.shared.presentation.mobile.saved.SavedViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AndroidSavedScreen(modifier: Modifier, viewModel: SavedViewModel = koinViewModel()) {
-    SavedScreen(modifier = modifier, viewModel = viewModel, onCopiedEvent = {})
+fun AndroidSavedScreen(
+    modifier: Modifier,
+    viewModel: SavedViewModel = koinViewModel(),
+    onCopiedEvent: (String) -> Unit
+) {
+    SavedScreen(modifier = modifier, viewModel = viewModel, onCopiedEvent = onCopiedEvent)
 }
