@@ -16,7 +16,7 @@ class PreferencesDataSourceImpl(private val database: TranserDatabase) : Prefere
             }
         }
 
-    override suspend fun insertPreferences(sourceLanguage: Language, targetLanguage: Language) {
+    override suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language) {
         database.preferencesQueries.set(
             sourceLanguage = sourceLanguage.language,
             sourceName = sourceLanguage.name,

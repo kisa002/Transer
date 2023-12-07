@@ -13,7 +13,7 @@ class PreferencesRepositoryImpl(private val preferencesDataSource: PreferencesDa
         preferencesDataSource.getPreferences().map { it?.toDomain() }
 
     override suspend fun setPreferences(sourceLanguage: Language, targetLanguage: Language) =
-        preferencesDataSource.insertPreferences(
+        preferencesDataSource.setPreferences(
             sourceLanguage = com.haeyum.shared.data.model.languages.Language(
                 sourceLanguage.language,
                 sourceLanguage.name
