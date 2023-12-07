@@ -7,6 +7,7 @@ import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
 import com.haeyum.shared.extensions.decodeHtmlEntities
 import com.haeyum.shared.presentation.BaseViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -28,7 +29,11 @@ class TranslateViewModel(
             val (originalText, translatedText) = text to translateUseCase(text).translatedText.decodeHtmlEntities()
             emit(translatedText)
 
-            addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
+            runCatching {
+                addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
+            }.onFailure {
+                _snackbarEvent.emit("Please check your network connection.") // TODO: More Seperate Error State
+            }
         } else {
             emit("")
         }
@@ -50,6 +55,11 @@ class TranslateViewModel(
         .flowOn(Dispatchers.IO)
         .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = false)
 
+    private val _snackbarEvent =
+        MutableSharedFlow<String>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    val snackbarEvent = _snackbarEvent.asSharedFlow()
+
     fun setText(text: String) {
         _text.value = text
     }
@@ -58,7 +68,7 @@ class TranslateViewModel(
 
     fun toggleSave() {
         viewModelScope.launch {
-            translatedText.first()?.let {
+            translatedText.firstOrNull()?.let {
                 if (isExistsSavedTranslate.first())
                     deleteSavedTranslateUseCase(it)
                 else

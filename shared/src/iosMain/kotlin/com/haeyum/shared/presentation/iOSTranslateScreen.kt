@@ -1,9 +1,9 @@
 package com.haeyum.shared.presentation
 
-import TranslateViewModel
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
@@ -30,35 +30,44 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.haeyum.shared.di.DIHelper
 import com.haeyum.shared.presentation.component.Header
 import com.haeyum.shared.presentation.theme.ColorHint
 import com.haeyum.shared.presentation.theme.ColorSecondaryDivider
 import com.haeyum.shared.presentation.theme.ColorText
+import com.haeyum.shared.presentation.theme.White
 import com.haeyum.shared.presentation.vector.ContentCopy
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewModel, onCopiedEvent: (String) -> Unit) {
+fun iOSTranslateScreen(modifier: Modifier = Modifier, onShowSnackbar: (String) -> Unit) {
+    val viewModel by produceState(initialValue = DIHelper().translateViewModel) {
+        awaitDispose {
+            value.onCleared()
+        }
+    }
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
-    val clipboardManager = LocalClipboardManager.current
 
+    val clipboardManager = LocalClipboardManager.current
     val focusManager = LocalFocusManager.current
+
+    val scrollState = rememberScrollState()
 
     val text by viewModel.text.collectAsState()
     val translatedText by viewModel.translatedText.collectAsState()
 
-    val scrollState = rememberScrollState()
+    val colorWhite = White
     val colorSecondaryDivider = ColorSecondaryDivider
 
-    val backgroundColor = remember(scrollState.canScrollBackward, scrollState.canScrollForward) {
+    val backgroundColor = remember(isSystemInDarkTheme(), scrollState.canScrollBackward, scrollState.canScrollForward) {
         if (scrollState.maxValue == 0) {
-            Color.White
+            colorWhite
         } else if (!scrollState.canScrollBackward) {
             colorSecondaryDivider
         } else if (!scrollState.canScrollForward) {
             Color(0xFF79AFFF)
         } else {
-            Color.White
+            colorWhite
         }
     }
 
@@ -108,6 +117,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                         .padding(horizontal = 24.dp)
                         .padding(top = 48.dp),
                     textStyle = TextStyle(
+                        color = ColorText,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Start
                     ),
@@ -150,7 +160,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                                 contentDescription = "Copy",
                                 onClick = {
                                     clipboardManager.setText(AnnotatedString(translatedText))
-                                    onCopiedEvent("Copied to clipboard.")
+                                    onShowSnackbar("Copied to clipboard.")
                                 }
                             )
 
@@ -163,6 +173,12 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, viewModel: TranslateViewMo
                     }
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.snackbarEvent.collect {
+            onShowSnackbar(it)
         }
     }
 }
@@ -178,7 +194,7 @@ private fun ActionButton(
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
-            tint = ColorText
+            tint = Color.Black
         )
     }
 }

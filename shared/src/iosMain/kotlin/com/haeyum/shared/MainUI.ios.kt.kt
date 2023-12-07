@@ -2,6 +2,7 @@
 
 package com.haeyum.shared
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import com.haeyum.shared.presentation.iOSSavedScreen
 import com.haeyum.shared.presentation.iOSTranslateScreen
 import com.haeyum.shared.presentation.mobile.MainScreenState
 import com.haeyum.shared.presentation.theme.TranserTheme
+import com.haeyum.shared.presentation.theme.White
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import platform.UIKit.UIApplication
@@ -40,13 +42,12 @@ fun MainUIViewController() = ComposeUIViewController {
     val eventSnackbarState = rememberEventSnackbraState()
 
     TranserTheme {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().background(White)) {
             Box(modifier = Modifier.weight(1f)) {
                 when (viewModel.screenState.collectAsState().value) {
                     MainScreenState.Translate -> iOSTranslateScreen(
                         modifier = Modifier.fillMaxSize(),
-                        viewModel = DIHelper().translateViewModel,
-                        onCopiedEvent = eventSnackbarState::showSnackbar
+                        onShowSnackbar = eventSnackbarState::showSnackbar
                     )
 
                     MainScreenState.Recent -> iOSRecentTranslateScreen(
