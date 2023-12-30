@@ -35,6 +35,10 @@ Currently, mac is safety version. windows, linux required to more test.
 
 TRANSER automatically translates text when you select the text and click TRANSER in the menu that comes out.
 
+### iOS
+
+Just enter text in the app and it will be automatically translated.
+
 ## Captures
 
 ### Desktop
@@ -77,6 +81,29 @@ TRANSER automatically translates text when you select the text and click TRANSER
 - Light Theme
 
   ![Android-Light Theme](https://user-images.githubusercontent.com/4679634/212265656-7bad5f08-a44c-4662-8130-c2b608bc28be.gif)
+
+
+### iOS
+
+- Translate
+
+https://github.com/kisa002/Transer/assets/4679634/d2112a01-be89-4602-b949-ddb5e0fd89ee
+
+- Recent
+
+https://github.com/kisa002/Transer/assets/4679634/9c51d341-eb9d-4b72-a792-701e0392c42d
+
+- Saved
+
+https://github.com/kisa002/Transer/assets/4679634/bfc025e3-b4b0-4919-8750-1ede4ce6298f
+
+- Preferences
+
+https://github.com/kisa002/Transer/assets/4679634/21b84564-b6ff-4ba1-b957-d8a440b94207
+
+- Theme
+
+https://github.com/kisa002/Transer/assets/4679634/e7a6dace-8ded-4fd1-99f3-3478790e0cee
 
 
 ### Features
@@ -146,7 +173,7 @@ TRANSER automatically translates text when you select the text and click TRANSER
     - Shortcut
         - with JNativeHook
     - Onboarding
-- Mobile
+- Android
     - Translate flow
         - Mobile flow is like a bottom sheet that showed up on dragging the text and clicking the menu.
 
