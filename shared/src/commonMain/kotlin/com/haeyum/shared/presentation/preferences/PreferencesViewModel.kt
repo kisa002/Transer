@@ -18,10 +18,10 @@ class PreferencesViewModel(
     val supportedLanguages = flow {
         emit(getSupportedLanguagesUseCase(target = "en"))
     }.catch {
+        /* TODO */
+    }.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
-    }.stateIn(scope = viewModelScope, started = SharingStarted.Lazily, initialValue = emptyList())
-
-    val preferences = getPreferencesUseCase().shareIn(viewModelScope, SharingStarted.Eagerly, 1)
+    private val preferences = getPreferencesUseCase().shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
     val selectedSourceLanguage = preferences.filterNotNull().map { preferences ->
         preferences.sourceLanguage

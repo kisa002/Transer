@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haeyum.shared.di.DIHelper
 import com.haeyum.shared.presentation.component.Header
+import com.haeyum.shared.presentation.theme.Black
 import com.haeyum.shared.presentation.theme.ColorHint
 import com.haeyum.shared.presentation.theme.ColorSecondaryDivider
 import com.haeyum.shared.presentation.theme.ColorText
@@ -105,7 +106,7 @@ fun iOSTranslateScreen(modifier: Modifier = Modifier, onShowSnackbar: (String) -
                         onClick = viewModel::clearText,
                         modifier = Modifier.align(alignment = Alignment.TopEnd).padding(4.dp)
                     ) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Clear text")
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Clear text", tint = Black)
                     }
                 }
 

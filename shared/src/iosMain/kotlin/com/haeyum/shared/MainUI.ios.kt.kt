@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -22,6 +23,7 @@ import com.haeyum.shared.presentation.iOSRecentTranslateScreen
 import com.haeyum.shared.presentation.iOSSavedScreen
 import com.haeyum.shared.presentation.iOSTranslateScreen
 import com.haeyum.shared.presentation.mobile.MainScreenState
+import com.haeyum.shared.presentation.theme.ColorSecondaryBackground
 import com.haeyum.shared.presentation.theme.TranserTheme
 import com.haeyum.shared.presentation.theme.White
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -46,21 +48,31 @@ fun MainUIViewController() = ComposeUIViewController {
             Box(modifier = Modifier.weight(1f)) {
                 when (viewModel.screenState.collectAsState().value) {
                     MainScreenState.Translate -> iOSTranslateScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
+                            .background(ColorSecondaryBackground)
+                            .padding(top = safeAreaSize?.first?.dp ?: 0.dp),
                         onShowSnackbar = eventSnackbarState::showSnackbar
                     )
 
                     MainScreenState.Recent -> iOSRecentTranslateScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
+                            .background(ColorSecondaryBackground)
+                            .padding(top = safeAreaSize?.first?.dp ?: 0.dp),
                         onCopiedEvent = eventSnackbarState::showSnackbar
                     )
 
                     MainScreenState.Saved -> iOSSavedScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
+                            .background(ColorSecondaryBackground)
+                            .padding(top = safeAreaSize?.first?.dp ?: 0.dp),
                         onCopiedEvent = eventSnackbarState::showSnackbar
                     )
 
-                    MainScreenState.Preferences -> iOSPreferencesScreen(modifier = Modifier.fillMaxSize())
+                    MainScreenState.Preferences -> iOSPreferencesScreen(
+                        modifier = Modifier.fillMaxSize()
+                            .background(ColorSecondaryBackground)
+                            .padding(top = safeAreaSize?.first?.dp ?: 0.dp)
+                    )
                 }
 
                 EventSnackBar(

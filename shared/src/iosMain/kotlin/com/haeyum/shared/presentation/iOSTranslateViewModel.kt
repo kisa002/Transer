@@ -1,4 +1,4 @@
-import com.haeyum.shared.domain.usecase.recent.AddRecentTranslateUseCase
+import com.haeyum.shared.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.AddSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
@@ -6,14 +6,30 @@ import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
 import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
 import com.haeyum.shared.extensions.decodeHtmlEntities
 import com.haeyum.shared.presentation.BaseViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TranslateViewModel(
     private val translateUseCase: TranslateUseCase,
-    private val addRecentTranslateUseCase: AddRecentTranslateUseCase,
+    private val deleteAndAddRecentTranslateUseCase: DeleteAndAddRecentTranslateUseCase,
     private val isExistsSavedTranslateUseCase: IsExistsSavedTranslateUseCase,
     private val getSavedTranslateUseCase: GetSavedTranslatesUseCase,
     private val addSavedTranslateUseCase: AddSavedTranslateUseCase,
@@ -26,13 +42,13 @@ class TranslateViewModel(
         if (text.isNotEmpty()) {
             delay(700)
 
-            val (originalText, translatedText) = text to translateUseCase(text).translatedText.decodeHtmlEntities()
-            emit(translatedText)
-
             runCatching {
-                addRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
+                val (originalText, translatedText) = text to translateUseCase(text).translatedText.decodeHtmlEntities()
+
+                emit(translatedText)
+                deleteAndAddRecentTranslateUseCase(originalText = originalText, translatedText = translatedText)
             }.onFailure {
-                _snackbarEvent.emit("Please check your network connection.") // TODO: More Seperate Error State
+                _snackbarEvent.emit("Please check your network connection.") // TODO: More Separate Error State
             }
         } else {
             emit("")

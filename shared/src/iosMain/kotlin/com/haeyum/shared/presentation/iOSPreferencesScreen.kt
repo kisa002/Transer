@@ -36,11 +36,9 @@ fun iOSPreferencesScreen(modifier: Modifier = Modifier) {
             onSelectedTargetLanguage = viewModel::setSelectedTargetLanguage,
             onClickClearData = viewModel::clearData,
             onClickContact = {
-                NSURL.URLWithString("mailto:vnycall74@naver.com")?.let {
-                    UIApplication.sharedApplication.openURL(
-                        url = it
-                    )
-                } ?: run(::println)
+                NSURL.URLWithString("mailto:vnycall74@naver.com")
+                    ?.let(UIApplication.sharedApplication::openURL)
+                    ?: run(::println)
             },
         )
     }

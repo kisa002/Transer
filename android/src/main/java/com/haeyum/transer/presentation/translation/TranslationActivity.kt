@@ -17,11 +17,17 @@ class TranslationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setBackgroundDrawable(ColorDrawable(0))
-        window.statusBarColor = 0x00000000
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(
+            window.apply {
+                setBackgroundDrawable(ColorDrawable(0))
+                statusBarColor = 0x00000000
+            },
+            false
+        )
 
-        viewModel.requestTranslation(intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString())
+        viewModel.requestTranslation(
+            intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString()
+        )
 
         setContent {
             TranslationScreen(

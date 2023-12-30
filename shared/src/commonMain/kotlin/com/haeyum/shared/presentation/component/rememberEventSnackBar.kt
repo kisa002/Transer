@@ -24,12 +24,9 @@ class EventSnackbarState(
         }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = null)
 
     val visibility = _messages
-        .map {
-            it.getOrNull(0)
-        }
+        .map(List<String>::firstOrNull)
         .filterNotNull()
         .transform {
-            println("_messages.value: ${_messages.value}")
             emit(true)
             delay(2000)
             emit(false)
