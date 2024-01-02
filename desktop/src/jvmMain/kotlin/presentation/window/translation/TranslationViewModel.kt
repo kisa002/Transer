@@ -1,24 +1,24 @@
 package presentation.window.translation
 
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
-import com.haeyum.common.domain.usecase.translation.TranslateUseCase
-import com.haeyum.common.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
-import com.haeyum.common.domain.usecase.recent.GetRecentTranslatesUseCase
-import com.haeyum.common.domain.usecase.saved.AddSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.DeleteSavedTranslateUseCase
-import com.haeyum.common.domain.usecase.saved.GetSavedTranslatesUseCase
-import com.haeyum.common.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.recent.DeleteAndAddRecentTranslateUseCase
+import com.haeyum.shared.domain.usecase.recent.GetRecentTranslatesUseCase
+import com.haeyum.shared.domain.usecase.saved.AddSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.saved.DeleteSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.saved.GetSavedTranslatesUseCase
+import com.haeyum.shared.domain.usecase.saved.IsExistsSavedTranslateUseCase
+import com.haeyum.shared.domain.usecase.translation.TranslateUseCase
+import com.haeyum.shared.extensions.decodeHtmlEntities
 import io.ktor.util.network.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import java.net.SocketException
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class TranslationViewModel(
     private val coroutineScope: CoroutineScope,
     private val translateUseCase: TranslateUseCase,
@@ -80,15 +80,9 @@ class TranslationViewModel(
     )
     val screenEvent = _screenEvent.asSharedFlow()
 
-    private val snackbarEvent = MutableSharedFlow<String>(
+    val snackbarEvent = MutableSharedFlow<String>(
         replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-
-    val snackbarState = snackbarEvent.transformLatest { message ->
-        emit(message)
-        delay(1500)
-        emit(null)
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Lazily, initialValue = null)
 
     private val _currentSelectedIndex = MutableStateFlow(0)
     val currentSelectedIndex = _currentSelectedIndex.asStateFlow()
@@ -115,27 +109,26 @@ class TranslationViewModel(
                 }.getOrDefault("")
             }
         )
-    }.map {
-        it.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&quot;", "\"")
-            .replace("&apos;", "'").replace("&#39;", "'")
-    }.onEach {
-        _isRequesting.value = false
-    }.catch {
-        _isRequesting.value = false
-        it.printStackTrace()
-    }.stateIn(coroutineScope, SharingStarted.Lazily, "")
+    }
+        .map(String::decodeHtmlEntities)
+        .onEach {
+            _isRequesting.value = false
+        }.catch {
+            _isRequesting.value = false
+            it.printStackTrace()
+        }.stateIn(coroutineScope, SharingStarted.Lazily, "")
 
-    val recentTranslates = channelFlow {
-        getRecentTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    val recentTranslates = getRecentTranslatesUseCase().stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
-    val savedTranslates = channelFlow {
-        getSavedTranslatesUseCase().collectLatest {
-            send(it)
-        }
-    }.stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = emptyList())
+    val savedTranslates = getSavedTranslatesUseCase().stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
     val isExistsSavedTranslate = combine(
         screenState,

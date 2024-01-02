@@ -12,22 +12,24 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(":shared"))
     implementation("androidx.activity:activity-compose:1.3.0")
 }
 
 android {
-    compileSdkVersion(33)
+    namespace = "com.haeyum.transer"
+
+    compileSdkVersion(34)
     defaultConfig {
-        applicationId = "com.haeyum.android"
+        applicationId = "com.haeyum.transer"
         minSdkVersion(28)
-        targetSdkVersion(33)
+        targetSdkVersion(34)
         versionCode = 1
         versionName = "1.0-SNAPSHOT"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     buildTypes {
         getByName("release") {

@@ -10,8 +10,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.Black
-import com.haeyum.common.presentation.theme.ColorError
+import com.haeyum.shared.presentation.theme.Black
+import com.haeyum.shared.presentation.theme.ColorError
 import presentation.component.SectionHeader
 import presentation.window.translation.TranslationScreenErrorEvent
 import presentation.window.translation.TranslationScreenState
