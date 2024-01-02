@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.ColorText
+import com.haeyum.shared.presentation.theme.ColorText
 import presentation.component.SectionHeader
 import supports.CurrentPlatform
 import supports.TranserFunctionKey

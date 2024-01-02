@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.presentation.component.RainbowCircularProgressIndicator
+import com.haeyum.shared.presentation.component.RainbowCircularProgressIndicator
 import presentation.component.SectionHeader
 import presentation.component.TranslatedItem
 

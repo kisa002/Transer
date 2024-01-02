@@ -1,9 +1,9 @@
 package presentation.window.onboarding
 
 import com.github.kwhat.jnativehook.GlobalScreen
-import com.haeyum.common.domain.model.translation.languages.Language
-import com.haeyum.common.domain.usecase.preferences.SetPreferencesUseCase
-import com.haeyum.common.domain.usecase.translation.GetSupportedLanguagesUseCase
+import com.haeyum.shared.domain.model.translation.languages.Language
+import com.haeyum.shared.domain.usecase.preferences.SetPreferencesUseCase
+import com.haeyum.shared.domain.usecase.translation.GetSupportedLanguagesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow

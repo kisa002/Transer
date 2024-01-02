@@ -1,15 +1,15 @@
 package di
 
-import com.haeyum.common.TranserDatabase
-import com.haeyum.common.data.repository.PreferencesRepositoryImpl
-import com.haeyum.common.data.repository.RecentTranslateRepositoryImpl
-import com.haeyum.common.data.repository.preferences.PreferencesDataSource
-import com.haeyum.common.data.repository.preferences.PreferencesDataSourceImpl
-import com.haeyum.common.data.repository.recent.RecentTranslateDataSource
-import com.haeyum.common.data.repository.recent.RecentTranslateDataSourceImpl
-import com.haeyum.common.domain.repository.PreferencesRepository
-import com.haeyum.common.domain.repository.RecentTranslateRepository
-import com.haeyum.common.presentation.preferences.PreferencesViewModel
+import com.haeyum.shared.TranserDatabase
+import com.haeyum.shared.data.repository.PreferencesRepositoryImpl
+import com.haeyum.shared.data.repository.RecentTranslateRepositoryImpl
+import com.haeyum.shared.data.repository.preferences.PreferencesDataSource
+import com.haeyum.shared.data.repository.preferences.PreferencesDataSourceImpl
+import com.haeyum.shared.data.repository.recent.RecentTranslateDataSource
+import com.haeyum.shared.data.repository.recent.RecentTranslateDataSourceImpl
+import com.haeyum.shared.domain.repository.PreferencesRepository
+import com.haeyum.shared.domain.repository.RecentTranslateRepository
+import com.haeyum.shared.presentation.preferences.PreferencesViewModel
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -45,7 +45,6 @@ val desktopModule = module {
 
     factory {
         PreferencesViewModel(
-            get(named("DefaultScope")),
             get(),
             get(),
             get(),

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
 package presentation.window.translation
 
 import androidx.compose.foundation.background
@@ -10,15 +8,17 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.presentation.theme.ColorDivider
-import com.haeyum.common.presentation.theme.ColorBackground
-import presentation.component.EventSnackBar
+import com.haeyum.shared.presentation.component.EventSnackBar
+import com.haeyum.shared.presentation.component.rememberEventSnackbraState
+import com.haeyum.shared.presentation.theme.ColorBackground
+import com.haeyum.shared.presentation.theme.ColorDivider
+import com.haeyum.shared.presentation.theme.ColorLightBlue
+import kotlinx.coroutines.launch
 import presentation.window.translation.section.search.TranslateSearchSection
 import presentation.window.translation.section.sub.*
 
@@ -36,7 +36,7 @@ fun TranslationScreen(viewModel: TranslationViewModel, alwaysOnTop: Boolean, onS
     val isExistsSavedTranslate by viewModel.isExistsSavedTranslate.collectAsState()
     val currentSelectedIndex by viewModel.currentSelectedIndex.collectAsState()
 
-    val snackbarState by viewModel.snackbarState.collectAsState()
+    val eventSnackbarState = rememberEventSnackbraState()
 
     val focusRequester = remember { FocusRequester() }
     val clipboardManager = LocalClipboardManager.current
@@ -88,23 +88,7 @@ fun TranslationScreen(viewModel: TranslationViewModel, alwaysOnTop: Boolean, onS
             }
         }
 
-        EventSnackBar(snackbarState)
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.screenEvent.collect { screenEvent ->
-            when (screenEvent) {
-                is TranslationScreenEvent.CopyEvent -> {
-                    clipboardManager.setText(AnnotatedString(screenEvent.text))
-                    viewModel.setQuery("")
-                }
-
-                TranslationScreenEvent.ShowPreferences -> {
-                    onShowPreferences()
-                    viewModel.setQuery("")
-                }
-            }
-        }
+        EventSnackBar(backgroundColor = ColorLightBlue, eventSnackbarState = eventSnackbarState)
     }
 
     LaunchedEffect(desktopScreenState, currentSelectedIndex) {
@@ -126,6 +110,30 @@ fun TranslationScreen(viewModel: TranslationViewModel, alwaysOnTop: Boolean, onS
     LaunchedEffect(alwaysOnTop) {
         if (alwaysOnTop) {
             focusRequester.requestFocus()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        launch {
+            viewModel.screenEvent.collect { screenEvent ->
+                when (screenEvent) {
+                    is TranslationScreenEvent.CopyEvent -> {
+                        clipboardManager.setText(AnnotatedString(screenEvent.text))
+                        viewModel.setQuery("")
+                    }
+
+                    TranslationScreenEvent.ShowPreferences -> {
+                        onShowPreferences()
+                        viewModel.setQuery("")
+                    }
+                }
+            }
+        }
+
+        launch {
+            viewModel.snackbarEvent.collect {
+                eventSnackbarState.showSnackbar(it)
+            }
         }
     }
 }

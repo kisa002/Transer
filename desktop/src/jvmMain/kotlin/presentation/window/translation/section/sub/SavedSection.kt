@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.haeyum.common.domain.model.saved.SavedTranslate
+import com.haeyum.shared.domain.model.saved.SavedTranslate
 import presentation.component.SectionHeader
 import presentation.component.TranslatedItem
 

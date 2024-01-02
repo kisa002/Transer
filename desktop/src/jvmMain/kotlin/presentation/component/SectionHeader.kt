@@ -9,7 +9,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.presentation.theme.ColorLightBlue
+import com.haeyum.shared.presentation.theme.ColorLightBlue
 
 @Composable
 fun SectionHeader(text: String, textColor: Color = ColorLightBlue) {
