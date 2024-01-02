@@ -1,0 +1,7 @@
+package com.haeyum.shared.domain.usecase.recent
+
+import com.haeyum.shared.domain.repository.RecentTranslateRepository
+
+class DeleteRecentTranslateByIdxUseCase(private val recentTranslateRepository: RecentTranslateRepository) {
+    suspend operator fun invoke(idx: Int) = recentTranslateRepository.deleteRecentTranslateByIdx(idx)
+}

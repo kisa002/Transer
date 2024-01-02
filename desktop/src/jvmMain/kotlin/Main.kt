@@ -3,7 +3,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
-import com.haeyum.common.presentation.theme.TranserTheme
+import com.haeyum.shared.presentation.theme.TranserTheme
 import di.DesktopKoin
 import org.koin.java.KoinJavaComponent.inject
 import presentation.window.OnboardingWindow

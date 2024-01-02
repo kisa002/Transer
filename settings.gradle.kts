@@ -21,3 +21,4 @@ pluginManagement {
 rootProject.name = "Transer"
 
 include(":android", ":desktop", ":common")
+include(":shared")

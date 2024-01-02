@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haeyum.common.domain.model.translation.languages.Language
-import com.haeyum.common.presentation.theme.*
+import com.haeyum.shared.domain.model.translation.languages.Language
+import com.haeyum.shared.presentation.theme.*
 import supports.CurrentPlatform
 import supports.TranserFunctionKey
 

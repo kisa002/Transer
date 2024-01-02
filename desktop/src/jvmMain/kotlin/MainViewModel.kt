@@ -1,4 +1,4 @@
-import com.haeyum.common.domain.usecase.preferences.GetPreferencesUseCase
+import com.haeyum.shared.domain.usecase.preferences.GetPreferencesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -19,11 +19,8 @@ class MainViewModel(
     val visibleTranslationWindow = _visibleTranslationWindow.asStateFlow()
     val visiblePreferencesWindow = _visiblePreferencesWindow.asStateFlow()
 
-    val isExistsPreferences = channelFlow {
-        getPreferencesUseCase().collectLatest {
-            send(it != null)
-        }
-    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
+    val isExistsPreferences =
+        getPreferencesUseCase().map { it != null }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     val isForeground = callbackFlow {
         val listener = object : AppForegroundListener {
